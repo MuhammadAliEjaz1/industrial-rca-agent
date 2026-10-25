@@ -1,0 +1,11 @@
+{
+  "0": "Heat Dissipation Failure",
+  "1": "Heat Dissipation Failure + Overstrain Failure",
+  "2": "Multiple Failure Causes (rare combination)",
+  "3": "No Failure",
+  "4": "Overstrain Failure",
+  "5": "Power Failure",
+  "6": "Power Failure + Overstrain Failure",
+  "7": "Tool Wear Failure",
+  "8": "Unknown"
+}
