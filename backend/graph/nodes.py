@@ -423,7 +423,10 @@ predicted_class={anomaly.get('predicted_class')}, confidence={anomaly.get('confi
 reliability_warning={anomaly.get('reliability_warning')}: {anomaly.get('reliability_note')}
 
 Separate observed facts (directly from sensor/maintenance/incident records or the computed checks) from ML
-predictions from unsupported speculation. Never write a number that is not in the material above. If no
+predictions from unsupported speculation. Never write a number that is not in the material above.
+Observed facts must be plain facts with NO interpretation (no "indicating...", "suggesting..."). Do not repeat the
+computed checks, and never say a value is "within range" by comparing it with the min/max of the same window:
+that is always true. If no
 hypothesis has strong, specific support, say so explicitly - do not present a weakly-supported guess as a
 confident conclusion, and do not name a cause that none of the hypotheses above supports."""
 
@@ -466,6 +469,17 @@ confident conclusion, and do not name a cause that none of the hypotheses above 
         if ORDER.index(root["confidence_level"]) > ORDER.index(best):
             notes.append(f"final confidence capped from {root['confidence_level']} to {best}")
             root["confidence_level"] = best
+
+    # 'unsupported_speculation' is built by code from the hypotheses that were ACTUALLY evaluated and not chosen
+    # (in live runs the LLM left it empty, or listed hypotheses nobody had evaluated).
+    chosen = root["most_supported_cause"]
+    rejected = []
+    for e in evaluations:
+        if e["cause"] == chosen or (e["cause"] == H_NO_FAULT and chosen.startswith("No fault identified")):
+            continue
+        against = (e.get("contradicting_evidence") or ["no direct supporting evidence found"])[0]
+        rejected.append(f"{e['cause']} (confidence {e['confidence']}): {against[:200]}")
+    root["unsupported_speculation"] = rejected
 
     # ML predictions are written by code, so the runner-up class cannot be mis-described.
     root["ml_predictions"] = _ml_prediction_lines(anomaly)

@@ -93,6 +93,8 @@ assert "Gremlins" in log(s) and "dropped" in log(s) and "gather_more_evidence" n
 assert any("11.3" in f and "UNVERIFIED" in f for f in r["observed_facts"])         # invented number flagged
 assert not any(f == "Speed 1589 rpm" for f in r["observed_facts"])                  # duplicate of a computed fact dropped
 assert "CONFIDENCE CAPS" in log(s) and any("[capped from" in e["reasoning"] for e in r["candidate_root_causes"])
+assert [x.split(" (")[0] for x in r["unsupported_speculation"]] == [H_SENSOR, H_TOOL_WEAR]   # only evaluated ones, built by code
+assert not any(x == "x" for x in r["unsupported_speculation"])
 
 # C2: heat-dissipation limit really violated; the LLM forgets to propose it -> forced in, and HIGH is allowed
 setup(HOT, anomaly=dict(predicted_class="Heat Dissipation Failure", confidence=0.97, close_second_class=None,
@@ -103,6 +105,7 @@ r = s["final_report"]; c = causes(r)
 print("C2 ->", r["mode"], "|", r["most_supported_cause"], "|", r["confidence_level"], "|", c)
 assert r["mode"] == "failure_investigation" and c[H_HEAT] == "high" and r["confidence_level"] == "high"
 assert "added 'Heat dissipation failure'" in log(s)
+assert all(not x.startswith(H_HEAT) for x in r["unsupported_speculation"]) and len(r["unsupported_speculation"]) == 2
 
 # C3: ML predicts Tool Wear with a reliability warning, nothing violated: never above medium, retries until MAX
 setup(HEALTHY, anomaly=dict(predicted_class="Tool Wear Failure", confidence=0.6, reliability_warning=True,
