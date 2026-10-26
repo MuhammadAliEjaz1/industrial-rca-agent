@@ -154,4 +154,9 @@ print("C8 ->", r["mode"], "|", r["most_supported_cause"], "|", r["confidence_lev
 assert r["mode"] == "failure_investigation" and causes(r)[H_TOOL_WEAR] == "medium" and r["confidence_level"] == "medium"
 assert "added 'Tool wear failure'" in log(s)
 
-print("\nALL STUB CONTROL-FLOW TESTS PASSED (8 cases)")
+# _shorten: never stops mid-word, marks the cut
+long = "All computed limit checks are within documented normal ranges (heat dissipation gap 9.7 K > 8.6 K, speed 1589 rpm, power 5674 W within range, tool wear 174 min, tool wear x torque 5933 below limit)"
+short = N._shorten(long)
+assert short.endswith(" ...") and len(short) <= 165 and long.startswith(short[:-4]) and not short[:-4].endswith(" ")
+assert N._shorten("short text") == "short text"
+print("\nALL STUB CONTROL-FLOW TESTS PASSED (8 cases + shorten)")

@@ -92,6 +92,14 @@ def _failure_reported(state: dict) -> bool:
     return True if value is None else bool(value)
 
 
+def _shorten(text: str, limit: int = 160) -> str:
+    """Cut at a word boundary and say so, instead of stopping mid-sentence."""
+    text = " ".join(str(text).split())
+    if len(text) <= limit:
+        return text
+    return text[:limit].rsplit(" ", 1)[0].rstrip(",;:-\u2011") + " ..."
+
+
 def _facts_block(checks: dict) -> str:
     return "\n".join(f"- {f}" for f in limit_check_facts(checks))
 
@@ -478,7 +486,7 @@ confident conclusion, and do not name a cause that none of the hypotheses above 
         if e["cause"] == chosen or (e["cause"] == H_NO_FAULT and chosen.startswith("No fault identified")):
             continue
         against = (e.get("contradicting_evidence") or ["no direct supporting evidence found"])[0]
-        rejected.append(f"{e['cause']} (confidence {e['confidence']}): {against[:200]}")
+        rejected.append(f"{e['cause']} (confidence {e['confidence']}): {_shorten(against)}")
     root["unsupported_speculation"] = rejected
 
     # ML predictions are written by code, so the runner-up class cannot be mis-described.

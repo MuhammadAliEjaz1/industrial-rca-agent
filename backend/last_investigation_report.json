@@ -122,21 +122,36 @@
   ],
   "candidate_root_causes": [
     {
-      "cause": "Sensor fault or data-quality problem",
+      "cause": "Tool wear failure",
       "supporting_evidence": [
-        "The ML classifier predicts \u201cNo Failure\u201d with very high confidence (\u22480.9998), consistent with the absence of a real fault.",
-        "All measured parameters sit comfortably inside their documented safe operating envelopes, leaving little room for a hidden physical fault."
+        "One of the last 20 tool\u2011wear readings was at or above the 200\u202fmin failure threshold.",
+        "Technical documentation recommends proactive replacement at about 180\u2011200\u202fmin, and the current reading of 174\u202fmin is close to that range.",
+        "The mean tool\u2011wear over the window is 100.7\u202fmin with a high standard deviation (64.4), indicating variability that could include periods above the limit."
       ],
       "contradicting_evidence": [
-        "All computed limit checks are within documented normal ranges (heat\u2011dissipation gap 9.7\u202fK > 8.6\u202fK, speed 1589\u202frpm > 1380\u202frpm, power 5674\u202fW within 3500\u20119000\u202fW, tool wear 174\u202fmin < 200\u202fmin, tool\u2011wear\u202f\u00d7\u202ftorque 5933 < lowest over\u2011strain limit 11000).",
-        "Across the 20 most recent readings, none of the rules were violated (heat\u2011dissipation met in 0, power out of range in 0, wear\u202f\u00d7\u202ftorque above limit in 0, tool wear at/above 200 in only 1 reading).",
-        "Sensor statistics show the latest values are well within the observed mean\u202f\u00b1\u202f2\u202f\u03c3 ranges for each channel (e.g., air_temperature latest 298.6\u202fK vs mean 299.934\u202fK, std 2.065).",
-        "The Sensor Interpretation Guide states that a physically implausible jump in one channel while others stay stable suggests a sensor fault; no such jump is present in the data.",
-        "The Random Failure manual notes that \u201cEvery logged channel is inside its normal window and no limit \u2026 is violated,\u201d indicating no sensor\u2011signature of failure.",
-        "Maintenance history contains no recent sensor calibrations or repairs, and no record of sensor issues."
+        "Latest tool wear reading is 174\u202fmin, which is below the documented failure onset at ~200\u202fmin.",
+        "Across the 20 most recent readings, only one instance reached the 200\u202fmin threshold; the other 19 readings were below it.",
+        "No other diagnostic limits (heat\u2011dissipation, power, wear\u202f\u00d7\u202ftorque) are violated.",
+        "No operator reports of vibration, chatter, or poor surface finish are provided."
       ],
       "confidence": "low",
-      "reasoning": "The candidate cause posits that a sensor or data\u2011quality problem could explain the routine health\u2011check flag despite normal readings. However, the evidence shows no anomalous sensor behavior: every limit check is satisfied, recent sensor values lie within normal statistical bounds, and the documentation explicitly says that a sensor fault would manifest as an implausible isolated jump\u2014which is not observed. The only indication of a problem is the health\u2011check flag itself, but without any corroborating sensor anomaly, the hypothesis lacks direct support. Consequently, confidence in a sensor fault or data\u2011quality issue as the root cause is low."
+      "reasoning": "The candidate cause is plausible because tool wear is approaching the documented failure limit and there is an isolated exceedance in the recent window, which aligns with the manual's recommendation to inspect or replace tools near 180\u2011200\u202fmin. However, the most recent reading is still below the failure threshold, the exceedance is singular, and no other failure indicators (heat\u2011dissipation, power, wear\u202f\u00d7\u202ftorque, operator symptoms) are present. Therefore the evidence is mixed, leading to a medium confidence assessment. [capped from medium to low: the classifier predicts No Failure with high confidence and no documented limit is violated]",
+      "confidence_before_cap": "medium",
+      "confidence_note": "capped from medium to low: the classifier predicts No Failure with high confidence and no documented limit is violated"
+    },
+    {
+      "cause": "Sensor fault or data-quality problem",
+      "supporting_evidence": [
+        "The routine health check flagged the machine even though the computed limits are comfortably within normal ranges, creating a discrepancy between the health\u2011check flag and the \"No Failure\" prediction."
+      ],
+      "contradicting_evidence": [
+        "All computed limits (heat\u2011dissipation gap, power, tool_wear x torque, tool wear) are within their normal ranges according to the provided limit checks.",
+        "Sensor statistics show each channel (air_temperature, process_temperature, rotational_speed, torque, tool_wear) has mean, std, min, max and latest values all inside typical windows; no out\u2011of\u2011range or extreme values are reported.",
+        "The Sensor Interpretation Guide states that an implausible jump in one channel while others stay stable suggests a sensor fault, but no such jump is observed in the data.",
+        "The Random Failure manual notes that \"Every logged channel is inside its normal window and no limit for tool wear, heat dissipation, power or overstrain is violated,\" indicating no sensor\u2011related anomaly."
+      ],
+      "confidence": "low",
+      "reasoning": "While the health\u2011check flag despite normal computed limits could be explained by faulty or stale sensor data, the concrete evidence does not show any sensor anomalies: all raw sensor readings lie within expected ranges, there is no sudden jump in any channel, and documentation explicitly states that no sensor\u2011related signatures are present. Therefore the hypothesis lacks direct supporting data and is contradicted by multiple pieces of evidence, leading to a low confidence assessment."
     },
     {
       "cause": "No fault: normal variation",
@@ -151,21 +166,27 @@
   ],
   "most_supported_cause": "No fault identified (ML predicts No Failure; no documented limit violated)",
   "confidence_level": "medium",
-  "justification": "The classifier predicts No Failure and no documented operating limit is violated in the 20 recent readings. None of the 1 candidate faults reached more than low confidence. This is an absence of evidence of a fault, not proof that none exists; the timestamps, maintenance records and manuals are synthetic, which limits what can be concluded.",
+  "justification": "The classifier predicts No Failure and no documented operating limit is violated in the 20 recent readings. None of the 2 candidate faults reached more than low confidence. This is an absence of evidence of a fault, not proof that none exists; the timestamps, maintenance records and manuals are synthetic, which limits what can be concluded.",
   "observed_facts": [
     "[computed] Latest reading: process minus air temperature = 9.7 K at 1589 rpm. Heat-dissipation failure needs the gap below 8.6 K AND speed below 1380 rpm (met: no).",
     "[computed] Latest derived power = 5674 W (documented normal range 3500-9000 W; outside range: no).",
     "[computed] Latest tool_wear x torque = 5933 (overstrain limits by product quality: L 11000, M 12000, H 13000; above the lowest limit: no).",
     "[computed] Latest tool wear = 174 min (tool-wear failures are documented from about 200 min; at or above: no).",
     "[computed] Across the 20 most recent readings: heat-dissipation rule met in 0, power out of range in 0, wear x torque above the lowest limit in 0, tool wear at or above 200 in 1.",
-    "Air temperature latest = 298.6\u202fK, mean = 299.934\u202fK, standard deviation = 2.065\u202fK",
-    "Maintenance history contains no recent sensor calibrations or repairs, and no record of sensor issues"
+    "Mean tool\u2011wear over the window is 100.7\u202fmin.",
+    "Standard deviation of tool\u2011wear over the window is 64.4\u202fmin.",
+    "All computed limits are within normal ranges according to limit checks.",
+    "Sensor statistics for each channel (air_temperature, process_temperature, rotational_speed, torque, tool_wear) are within typical windows; no out\u2011of\u2011range values reported.",
+    "No operator reports of vibration, chatter, or poor surface finish are provided.",
+    "Routine health check flagged the machine despite limits being within normal ranges.",
+    "ML classifier predicted class No Failure with confidence 0.9997751116752625."
   ],
   "ml_predictions": [
     "PREDICTION: No Failure (confidence 0.9998) - reliability_warning: none"
   ],
   "unsupported_speculation": [
-    "Sensor fault or data-quality problem (confidence low): All computed limit checks are within documented normal ranges (heat\u2011dissipation gap 9.7\u202fK > 8.6\u202fK, speed 1589\u202frpm > 1380\u202frpm, power 5674\u202fW within 3500\u20119000\u202fW, tool wear 174\u202fmin < 200\u202fmin, tool\u2011wear\u202f\u00d7\u202f"
+    "Tool wear failure (confidence low): Latest tool wear reading is 174 min, which is below the documented failure onset at ~200 min.",
+    "Sensor fault or data-quality problem (confidence low): All computed limits (heat\u2011dissipation gap, power, tool_wear x torque, tool wear) are within their normal ranges according to the provided limit checks."
   ],
   "evidence_sources": [
     "Incident 58 (M010, 2025-07-25 18:05:27.233991)",
@@ -179,37 +200,37 @@
       "step": "gather_context",
       "status": "done",
       "summary": "Loaded 20 recent readings for M001.",
-      "timestamp": "2026-10-26T05:25:58.561928+00:00"
+      "timestamp": "2026-10-26T05:29:06.731875+00:00"
     },
     {
       "step": "run_anomaly_model",
       "status": "done",
       "summary": "Predicted: No Failure (confidence 1.00)",
-      "timestamp": "2026-10-26T05:26:01.861220+00:00"
+      "timestamp": "2026-10-26T05:29:10.103239+00:00"
     },
     {
       "step": "gather_evidence",
       "status": "done",
       "summary": "4 maintenance records, 8 past incidents, 5 similar incidents.",
-      "timestamp": "2026-10-26T05:26:02.111254+00:00"
+      "timestamp": "2026-10-26T05:29:10.353254+00:00"
     },
     {
       "step": "generate_hypotheses",
       "status": "done",
-      "summary": "Mode: health check. Hypotheses: Sensor fault or data-quality problem, No fault: normal variation",
-      "timestamp": "2026-10-26T05:26:05.167655+00:00"
+      "summary": "Mode: health check. Hypotheses: Tool wear failure, Sensor fault or data-quality problem, No fault: normal variation",
+      "timestamp": "2026-10-26T05:29:13.991408+00:00"
     },
     {
       "step": "investigate_hypotheses",
       "status": "done",
-      "summary": "Evaluated 2 hypotheses: Sensor fault or data-quality problem (low), No fault: normal variation (medium)",
-      "timestamp": "2026-10-26T05:26:08.406290+00:00"
+      "summary": "Evaluated 3 hypotheses: Tool wear failure (low), Sensor fault or data-quality problem (low), No fault: normal variation (medium) | CONFIDENCE CAPS: 'Tool wear failure' capped from medium to low: the classifier predicts No Failure with high confidence and no documented limit is violated",
+      "timestamp": "2026-10-26T05:29:19.564028+00:00"
     },
     {
       "step": "determine_root_cause",
       "status": "done",
       "summary": "Most supported cause: No fault identified (ML predicts No Failure; no documented limit violated) (medium) | health-check outcome set by code",
-      "timestamp": "2026-10-26T05:26:10.874881+00:00"
+      "timestamp": "2026-10-26T05:29:22.571214+00:00"
     }
   ]
 }
