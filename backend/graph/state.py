@@ -18,6 +18,8 @@ class InvestigationState(TypedDict):
     incident_description: str
     incident_id: Optional[int]  # set when investigating a KNOWN historical incident (Phase 8 eval);
                                  # None for a fresh, live investigation
+    failure_reported: bool       # True = a failure/stoppage was reported (default if omitted);
+                                 # False = routine check, nothing reported -> health-check mode
 
     # Gathered evidence (filled in by gather_context / run_anomaly_model / gather_evidence)
     sensor_readings: list[dict]

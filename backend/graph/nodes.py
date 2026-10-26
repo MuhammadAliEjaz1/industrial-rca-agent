@@ -1,9 +1,20 @@
 """
-Phase 5: Graph nodes. Each node calls one or more Phase 4 tools directly as plain
-Python functions (NOT via LLM tool-calling) — this graph is the fixed investigation
-pipeline from Phase 0's design, not a dynamic ReAct loop where the LLM freely picks
-tools. The LLM is used for the three genuinely judgment-requiring steps: hypothesis
-generation, per-hypothesis evidence evaluation, and final root-cause determination.
+Phase 5: Graph nodes. Each node calls Phase 4 tools directly as plain Python functions
+(NOT via LLM tool-calling): this graph is a fixed investigation pipeline, not a ReAct loop.
+The LLM is used for three judgment steps: hypothesis generation, per-hypothesis evidence
+evaluation, and final root-cause determination.
+
+REVISION 2 (after the first real Groq runs on machine M001, ML = No Failure):
+  - Rules from the manuals (temperature gap, derived power, wear x torque, tool-wear range) are
+    computed in graph/checks.py and handed to the LLM as facts, instead of the LLM doing the maths.
+  - 'high' confidence needs a documented limit violation (capped in code, logged in the timeline).
+  - A healthy machine with nothing violated is a HEALTH CHECK, not a failure investigation.
+  - Retries only run when some hypothesis is 'medium' (promising); all-low means more of the
+    same evidence will not help.
+  - The final answer can never be more confident than the best hypothesis; if no hypothesis
+    reaches 'medium' the answer is 'Unresolved' (or 'No fault identified' for a health check).
+  - ML predictions in the report are written by code, and numbers in 'observed facts' that appear
+    nowhere in the evidence are tagged [UNVERIFIED NUMBER(S)].
 """
 
 import sys
@@ -11,6 +22,9 @@ from pathlib import Path
 from datetime import datetime, timezone
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
+from dotenv import load_dotenv
+load_dotenv()
 
 from langchain_groq import ChatGroq
 
@@ -20,8 +34,10 @@ from tools.investigation_tools import (
     calculate_sensor_statistics, search_similar_incidents,
 )
 from graph.state import HypothesisList, HypothesisEvaluation, RootCauseDetermination
-from dotenv import load_dotenv
-load_dotenv()
+from graph.checks import (
+    ORDER, DOC_CONSTANTS_TEXT, compute_limit_checks, limit_check_facts, near_tie,
+    is_health_check, is_null_hypothesis, cap_confidence, annotate_ungrounded,
+)
 
 MAX_RETRIES = 2
 
@@ -31,8 +47,28 @@ _llm = None
 def get_llm():
     global _llm
     if _llm is None:
-        _llm = ChatGroq(model="openai/gpt-oss-120b")
+        # temperature=0 narrows run-to-run variation (the default is 0.7); it does not make it deterministic.
+        _llm = ChatGroq(model="openai/gpt-oss-120b", temperature=0)
     return _llm
+
+
+def _invoke_structured(schema, prompt: str, attempts: int = 3):
+    """Structured output through Groq tool-calling sometimes fails with 'tool_use_failed': the model answers in
+    prose or a markdown table instead of calling the function (seen in a real run). Retry with a stricter
+    reminder; any other error is raised immediately."""
+    llm = get_llm().with_structured_output(schema)
+    last_error = None
+    for i in range(attempts):
+        text = prompt if i == 0 else (
+            prompt + "\n\nIMPORTANT: answer ONLY by calling the provided function with all required fields. "
+                     "No prose, no tables, no markdown.")
+        try:
+            return llm.invoke(text)
+        except Exception as e:  # noqa: BLE001 - we re-raise anything that is not this specific failure
+            if "tool_use_failed" not in str(e) and "did not call a tool" not in str(e):
+                raise
+            last_error = e
+    raise last_error
 
 
 def _log(step: str, status: str, summary: str) -> dict:
@@ -40,6 +76,21 @@ def _log(step: str, status: str, summary: str) -> dict:
         "step": step, "status": status, "summary": summary,
         "timestamp": datetime.now(timezone.utc).isoformat(),
     }]}
+
+
+def _checks_for(state: dict) -> dict:
+    return compute_limit_checks(state.get("sensor_readings", []))
+
+
+def _failure_reported(state: dict) -> bool:
+    """Defaults to True: if the caller does not say, assume a failure is being investigated.
+    Health-check mode only happens when the caller explicitly passes failure_reported=False."""
+    value = state.get("failure_reported")
+    return True if value is None else bool(value)
+
+
+def _facts_block(checks: dict) -> str:
+    return "\n".join(f"- {f}" for f in limit_check_facts(checks))
 
 
 # ─────────────────────────────────────────────
@@ -115,35 +166,56 @@ def gather_evidence(state: dict) -> dict:
 # ─────────────────────────────────────────────
 def generate_hypotheses(state: dict) -> dict:
     anomaly = state.get("anomaly_result", {})
+    checks = _checks_for(state)
+    health = is_health_check(anomaly, _failure_reported(state), checks)
     stats = state.get("sensor_statistics", {}).get("channels", {})
     trends = [f"{ch}: {s['trend']} (latest={s['latest']})" for ch, s in stats.items()]
 
-    prompt = f"""You are investigating a possible industrial machine failure. Propose candidate root causes.
+    warning_line = ("WARNING: " + (anomaly.get("reliability_note") or "")) if anomaly.get("reliability_warning") else ""
+    tie_line = (f"Close runner-up: {anomaly.get('close_second_class')} (margin {anomaly.get('close_second_margin')})"
+                if near_tie(anomaly) else "No close runner-up class: the top prediction is not a near-tie.")
 
-Incident description: {state.get('incident_description', '(none provided)')}
+    if health:
+        task = """This is a HEALTH CHECK, not a failure investigation. No failure has been reported; the machine was
+only flagged by a routine check. The classifier predicts no failure and no documented operating limit is
+violated, so do not assume the routine check found a fault. Propose 2-3 candidate explanations for any
+pattern that deserves a second look, using only the numbers above. ALWAYS include one candidate whose cause text starts with "No fault:" (normal
+variation, nothing to act on). Do not propose a fault unless specific numbers above point to it."""
+    else:
+        task = """Propose 2-4 distinct candidate causes. The ML prediction is a STARTING hypothesis, not a confirmed
+answer - if it carries a reliability warning, treat it with appropriate skepticism and still consider alternative
+explanations. If nothing clearly fits, include one candidate whose cause text starts with "Unexplained:"."""
+
+    prompt = f"""You are investigating an industrial machine.
+
+Incident description: {state.get('incident_description') or '(none provided)'}
 
 ML classifier prediction: {anomaly.get('predicted_class')} (confidence {anomaly.get('confidence')})
-{"WARNING: " + anomaly.get('reliability_note') if anomaly.get('reliability_warning') else ""}
-Close second prediction: {anomaly.get('close_second_class')} (margin {anomaly.get('close_second_margin')})
+{warning_line}
+{tie_line}
 
-Sensor trends:
+COMPUTED LIMIT CHECKS (calculated in code from the sensor readings - rely on these, do not recompute):
+{_facts_block(checks)}
+
+Sensor trends (computed over SYNTHETIC timestamps: a hint to look closer, never a physical fact):
 {chr(10).join(trends) if trends else "No trend data available."}
 
-Recent maintenance: {len(state.get('maintenance_records', []))} records on file.
+Recent maintenance: {len(state.get('maintenance_records', []))} records on file (synthetic).
 Past failures on this machine: {len(state.get('historical_incidents', []))} incidents on file.
 
-Propose 2-4 distinct candidate causes. The ML prediction is a STARTING hypothesis, not a confirmed
-answer — if it carries a reliability warning, treat it with appropriate skepticism and still consider
-alternative explanations. Include an "unexplained" hypothesis if nothing clearly fits."""
+{task}
 
-    llm = get_llm().with_structured_output(HypothesisList)
-    result: HypothesisList = llm.invoke(prompt)
+Format: each "cause" must be a SHORT label (at most 12 words). Put all explanation in "rationale"."""
+
+    result: HypothesisList = _invoke_structured(HypothesisList, prompt)
     hypotheses = [h.model_dump() for h in result.hypotheses]
 
+    mode = "health check" if health else "failure investigation"
     return {
         "hypotheses": hypotheses,
         **_log("generate_hypotheses", "done",
-               f"Generated {len(hypotheses)} hypotheses: " + ", ".join(h["cause"] for h in hypotheses)),
+               f"Mode: {mode}. Generated {len(hypotheses)} hypotheses: "
+               + ", ".join(h["cause"] for h in hypotheses)),
     }
 
 
@@ -151,6 +223,9 @@ alternative explanations. Include an "unexplained" hypothesis if nothing clearly
 # 5. investigate_hypotheses
 # ─────────────────────────────────────────────
 def investigate_hypotheses(state: dict) -> dict:
+    anomaly = state.get("anomaly_result", {})
+    checks = _checks_for(state)
+
     maintenance_text = "\n".join(
         f"- {r['date']}: {r['maintenance_type']} - {r['description']}"
         for r in state.get("maintenance_records", [])
@@ -165,7 +240,7 @@ def investigate_hypotheses(state: dict) -> dict:
     stats = state.get("sensor_statistics", {}).get("channels", {})
     stats_text = "\n".join(f"- {ch}: {s}" for ch, s in stats.items()) or "(none)"
 
-    evaluations = []
+    evaluations, cap_notes = [], []
     for hyp in state.get("hypotheses", []):
         docs = search_technical_documents.invoke({"query": hyp["cause"], "k": 3})
         docs_text = "\n".join(
@@ -173,32 +248,49 @@ def investigate_hypotheses(state: dict) -> dict:
             for d in docs.get("results", [])
         ) or "(no relevant documentation found)"
 
-        prompt = f"""Evaluate this candidate root cause against the evidence below. Be skeptical —
+        prompt = f"""Evaluate this candidate root cause against the evidence below. Be skeptical -
 only cite something as supporting or contradicting evidence if it specifically relates to this cause.
 
 CANDIDATE CAUSE: {hyp['cause']}
 Rationale given: {hyp['rationale']}
 
-SENSOR STATISTICS:
+COMPUTED LIMIT CHECKS (calculated in code - use these numbers for every threshold comparison, never recompute):
+{_facts_block(checks)}
+
+SENSOR STATISTICS (trends use SYNTHETIC timestamps: weak evidence, a hint only):
 {stats_text}
 
-TECHNICAL DOCUMENTATION (retrieved for this specific cause):
+TECHNICAL DOCUMENTATION (retrieved for this specific cause; synthetic manuals):
 {docs_text}
 
-MAINTENANCE HISTORY:
+MAINTENANCE HISTORY (synthetic; a MISSING record is not evidence of anything):
 {maintenance_text}
 
-SIMILAR PAST INCIDENTS (ranked by sensor-profile similarity):
+SIMILAR PAST INCIDENTS (ranked by sensor-profile similarity). These are drawn ONLY from past failures, so
+resemblance to a past failure is NOT evidence that this machine is failing:
 {similar_text}
 
+Rules for confidence:
+- low: no specific, direct evidence, or the evidence mostly contradicts the cause.
+- medium: some specific direct evidence, but also real gaps or contradictions.
+- high: a documented limit is violated AND other independent evidence agrees. A trend alone is never high.
 Evaluate: what supports this cause, what contradicts it, and how confident should we be?"""
 
-        llm = get_llm().with_structured_output(HypothesisEvaluation)
-        result: HypothesisEvaluation = llm.invoke(prompt)
-        evaluations.append(result.model_dump())
+        result: HypothesisEvaluation = _invoke_structured(HypothesisEvaluation, prompt)
+        ev = result.model_dump()
 
-    confidences = [e["confidence"] for e in evaluations]
+        new_conf, note = cap_confidence(ev["cause"], ev["confidence"], checks, anomaly)
+        if note:
+            ev["confidence_before_cap"] = ev["confidence"]
+            ev["confidence_note"] = note
+            ev["confidence"] = new_conf
+            ev["reasoning"] = f"{ev['reasoning']} [{note}]"
+            cap_notes.append(f"'{ev['cause']}' {note}")
+        evaluations.append(ev)
+
     summary = ", ".join(f"{e['cause']} ({e['confidence']})" for e in evaluations)
+    if cap_notes:
+        summary += " | CONFIDENCE CAPS: " + "; ".join(cap_notes)
 
     return {
         "hypothesis_evaluations": evaluations,
@@ -207,12 +299,17 @@ Evaluate: what supports this cause, what contradicts it, and how confident shoul
 
 
 def route_after_investigation(state: dict) -> str:
-    """Conditional edge: loop back for more evidence, or move on to a conclusion."""
+    """Conditional edge: loop back for more evidence, or move on to a conclusion.
+    Retrying only widens the similar-incident list, so it is only worth doing when some
+    hypothesis is 'medium' (promising but unproven). If everything is low, more of the same
+    evidence will not change the answer."""
     evaluations = state.get("hypothesis_evaluations", [])
-    has_high_confidence = any(e["confidence"] == "high" for e in evaluations)
+    confidences = [e["confidence"] for e in evaluations]
+    promising = [e["confidence"] for e in evaluations if not is_null_hypothesis(e["cause"])]
     retry_count = state.get("retry_count", 0)
 
-    if has_high_confidence or retry_count >= MAX_RETRIES:
+    # A 'medium' on a null hypothesis ("No fault" / "Unexplained") is not worth chasing.
+    if "high" in confidences or retry_count >= MAX_RETRIES or "medium" not in promising:
         return "sufficient"
     return "insufficient"
 
@@ -221,10 +318,8 @@ def route_after_investigation(state: dict) -> str:
 # 6. gather_more_evidence (only runs on the "insufficient" branch)
 # ─────────────────────────────────────────────
 def gather_more_evidence(state: dict) -> dict:
-    """Broaden the search: more documents per hypothesis, more similar incidents, and
-    widen the incident search beyond this one machine (other machines of the same
-    model can still be informative). Then loops back to investigate_hypotheses."""
-    machine_id = state["machine_id"]
+    """Widen the similar-incident search, then loop back to investigate_hypotheses.
+    HONEST LIMIT: this only adds more of the same kind of evidence (more failure look-alikes)."""
     retry_count = state.get("retry_count", 0) + 1
 
     broader_similar = {"results": []}
@@ -253,8 +348,36 @@ def gather_more_evidence(state: dict) -> dict:
 # ─────────────────────────────────────────────
 # 7. determine_root_cause
 # ─────────────────────────────────────────────
+def _evidence_text(state: dict, checks: dict) -> str:
+    return "\n".join([
+        str(state.get("sensor_statistics", {}).get("channels", {})),
+        str(state.get("sensor_readings", [])),
+        "\n".join(map(str, state.get("maintenance_records", []))),
+        "\n".join(map(str, state.get("similar_incidents", []))),
+        "\n".join(map(str, state.get("historical_incidents", []))),
+        str(state.get("anomaly_result", {})),
+        "\n".join(limit_check_facts(checks)),
+        DOC_CONSTANTS_TEXT,
+    ])
+
+
+def _ml_prediction_lines(anomaly: dict) -> list:
+    conf = anomaly.get("confidence")
+    conf_txt = f"{conf:.4f}" if isinstance(conf, (int, float)) else "unknown"
+    lines = [f"PREDICTION: {anomaly.get('predicted_class')} (confidence {conf_txt}) - "
+             f"reliability_warning: {'YES - ' + str(anomaly.get('reliability_note')) if anomaly.get('reliability_warning') else 'none'}"]
+    if near_tie(anomaly):
+        lines.append(f"Close runner-up: {anomaly.get('close_second_class')} "
+                     f"(margin {anomaly.get('close_second_margin')}) - the model is uncertain between these.")
+    return lines
+
+
 def determine_root_cause(state: dict) -> dict:
     evaluations = state.get("hypothesis_evaluations", [])
+    anomaly = state.get("anomaly_result", {})
+    checks = _checks_for(state)
+    health = is_health_check(anomaly, _failure_reported(state), checks)
+
     evaluations_text = "\n\n".join(
         f"Cause: {e['cause']}\nConfidence: {e['confidence']}\n"
         f"Supporting: {e['supporting_evidence']}\nContradicting: {e['contradicting_evidence']}\n"
@@ -262,56 +385,102 @@ def determine_root_cause(state: dict) -> dict:
         for e in evaluations
     ) or "(no hypotheses were evaluated)"
 
-    anomaly = state.get("anomaly_result", {})
-
     prompt = f"""Based on the investigated hypotheses below, determine the most likely root cause.
 
 HYPOTHESIS EVALUATIONS:
 {evaluations_text}
 
+COMPUTED LIMIT CHECKS (calculated in code - facts):
+{_facts_block(checks)}
+
 ML CLASSIFIER CONTEXT (a prediction, not a confirmed fact):
 predicted_class={anomaly.get('predicted_class')}, confidence={anomaly.get('confidence')}
 reliability_warning={anomaly.get('reliability_warning')}: {anomaly.get('reliability_note')}
 
-Separate observed facts (directly from sensor/maintenance/incident records) from ML predictions from
-unsupported speculation. If no hypothesis has strong, specific support, say so explicitly — do not
-present a weakly-supported guess as a confident conclusion."""
+Separate observed facts (directly from sensor/maintenance/incident records or the computed checks) from ML
+predictions from unsupported speculation. Never write a number that is not in the material above. If no
+hypothesis has strong, specific support, say so explicitly - do not present a weakly-supported guess as a
+confident conclusion, and do not name a cause that none of the hypotheses above supports."""
 
-    llm = get_llm().with_structured_output(RootCauseDetermination)
-    result: RootCauseDetermination = llm.invoke(prompt)
+    result: RootCauseDetermination = _invoke_structured(RootCauseDetermination, prompt)
+    root = result.model_dump()
 
-    return {
-        "root_cause": result.model_dump(),
-        **_log("determine_root_cause", "done",
-               f"Most supported cause: {result.most_supported_cause} ({result.confidence_level})"),
-    }
+    non_null = [e for e in evaluations if not is_null_hypothesis(e["cause"])]
+    best = ORDER[max((ORDER.index(e["confidence"]) for e in non_null), default=0)]
+    notes = []
+
+    if health and best == "low":
+        root["most_supported_cause"] = "No fault identified (ML predicts No Failure; no documented limit violated)"
+        root["confidence_level"] = "medium"
+        root["justification"] = (
+            f"The classifier predicts {anomaly.get('predicted_class')} and no documented operating limit is violated "
+            f"in the {checks['n_readings']} recent readings. None of the {len(non_null)} candidate faults reached more "
+            f"than low confidence. This is an absence of evidence of a fault, not proof that none exists; the "
+            f"timestamps, maintenance records and manuals are synthetic, which limits what can be concluded.")
+        notes.append("health-check outcome set by code")
+    elif best == "low":
+        null_evals = [e for e in evaluations if is_null_hypothesis(e["cause"])]
+        null_best = max(null_evals, key=lambda e: ORDER.index(e["confidence"]), default=None)
+        if null_best and null_best["confidence"] in ("medium", "high"):
+            # No specific fault is supported, but the 'unexplained' reading is. The manual says to report such a
+            # failure as unexplained and not to assign a confident cause.
+            root["most_supported_cause"] = null_best["cause"]
+            root["confidence_level"] = "medium"
+            root["justification"] = (
+                "Every specific fault hypothesis stayed at low confidence and no documented limit is violated, so the "
+                "'unexplained' reading is the best fit. That reflects an absence of evidence, not a diagnosed cause. "
+                "Model notes (NOT a conclusion): " + str(root.get("justification")))
+            notes.append("null hypothesis chosen: no specific fault supported")
+        else:
+            root["justification"] = ("No candidate cause reached more than low confidence. Model notes (NOT a conclusion): "
+                                     + str(root.get("justification")))
+            root["most_supported_cause"] = "Unresolved - insufficient evidence"
+            root["confidence_level"] = "low"
+            notes.append("forced to Unresolved: best hypothesis is low")
+    else:
+        if ORDER.index(root["confidence_level"]) > ORDER.index(best):
+            notes.append(f"final confidence capped from {root['confidence_level']} to {best}")
+            root["confidence_level"] = best
+
+    # ML predictions are written by code, so the runner-up class cannot be mis-described.
+    root["ml_predictions"] = _ml_prediction_lines(anomaly)
+
+    # Observed facts: computed facts first, then the LLM's, with unverifiable numbers tagged.
+    llm_facts, flagged = annotate_ungrounded(root.get("observed_facts", []), _evidence_text(state, checks))
+    root["observed_facts"] = [f"[computed] {f}" for f in limit_check_facts(checks)] + llm_facts
+    if flagged:
+        notes.append(f"{flagged} observed fact(s) contain numbers not found in the evidence")
+
+    summary = f"Most supported cause: {root['most_supported_cause']} ({root['confidence_level']})"
+    if notes:
+        summary += " | " + "; ".join(notes)
+    return {"root_cause": root, **_log("determine_root_cause", "done", summary)}
 
 
 # ─────────────────────────────────────────────
 # 8. generate_report
 # ─────────────────────────────────────────────
 def generate_report(state: dict) -> dict:
-    """Mostly programmatic assembly of already-structured data — no new LLM call needed,
-    since determine_root_cause already produced the key narrative judgment. Assembling
-    the report in code (not another LLM pass) guarantees it can't drift from the
-    structured facts we already validated."""
+    """Programmatic assembly of already-structured data - no extra LLM call, so the report
+    cannot drift from the validated structured facts."""
     anomaly = state.get("anomaly_result", {})
     root_cause = state.get("root_cause", {})
+    checks = _checks_for(state)
 
     evidence_sources = []
     for r in state.get("similar_incidents", []):
         evidence_sources.append(f"Incident {r['incident_id']} ({r['machine_id']}, {r['date']})")
-    seen_docs = set()
-    for hyp_eval in state.get("hypothesis_evaluations", []):
-        pass  # doc sources were already folded into supporting_evidence text by the LLM
 
     report = {
         "incident_summary": state.get("incident_description", "(no description provided)"),
+        "mode": "health_check" if is_health_check(anomaly, _failure_reported(state), checks)
+                else "failure_investigation",
         "machine_condition": {
             "machine_id": state["machine_id"],
             "latest_reading": state["sensor_readings"][0] if state.get("sensor_readings") else None,
             "sensor_statistics": state.get("sensor_statistics", {}).get("channels", {}),
         },
+        "limit_checks": checks,
         "ml_analysis": {
             "predicted_class": anomaly.get("predicted_class"),
             "confidence": anomaly.get("confidence"),

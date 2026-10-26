@@ -4,7 +4,8 @@ trained model, vector store, and Groq API key. This is the first time everything
 from Phases 1-5 runs together as one pipeline.
 
 Run from backend/:
-    python graph/05_test_agent.py <a_real_machine_id>
+    python graph/05_test_agent.py [machine_id] [--failure]
+(without --failure it is a routine check with no failure reported -> health-check mode)
 """
 
 import sys
@@ -28,13 +29,19 @@ def pick_machine_id() -> str:
 
 
 def main():
-    machine_id = sys.argv[1] if len(sys.argv) > 1 else pick_machine_id()
-    print(f"Running a full investigation for machine_id = {machine_id}\n")
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    machine_id = args[0] if args else pick_machine_id()
+    failure_reported = "--failure" in sys.argv[1:]   # default: routine health check, nothing reported
+    print(f"Running a full investigation for machine_id = {machine_id} "
+          f"({'FAILURE reported' if failure_reported else 'routine check, no failure reported'})\n")
 
     graph = build_graph()
     result = graph.invoke({
         "machine_id": machine_id,
-        "incident_description": "Routine automated check flagged this machine for investigation.",
+        "incident_description": ("The machine stopped unexpectedly; the operator requests a root-cause investigation."
+                                 if failure_reported else
+                                 "Routine automated check flagged this machine for investigation."),
+        "failure_reported": failure_reported,
         "incident_id": None,
         "retry_count": 0,
     })
