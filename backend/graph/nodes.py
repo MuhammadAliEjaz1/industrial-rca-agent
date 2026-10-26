@@ -4,6 +4,8 @@ Phase 5: Graph nodes. Each node calls Phase 4 tools directly as plain Python fun
 The LLM is used for three judgment steps: hypothesis generation, per-hypothesis evidence
 evaluation, and final root-cause determination.
 
+REVISION 3: hypotheses come from a CLOSED catalog (graph/checks.py), the evidence can force extra ones in,
+  trends are no longer shown to the LLM, and observed facts that only repeat computed numbers are dropped.
 REVISION 2 (after the first real Groq runs on machine M001, ML = No Failure):
   - Rules from the manuals (temperature gap, derived power, wear x torque, tool-wear range) are
     computed in graph/checks.py and handed to the LLM as facts, instead of the LLM doing the maths.
@@ -35,8 +37,9 @@ from tools.investigation_tools import (
 )
 from graph.state import HypothesisList, HypothesisEvaluation, RootCauseDetermination
 from graph.checks import (
-    ORDER, DOC_CONSTANTS_TEXT, compute_limit_checks, limit_check_facts, near_tie,
-    is_health_check, is_null_hypothesis, cap_confidence, annotate_ungrounded,
+    ORDER, DOC_CONSTANTS_TEXT, FAULT_CATALOG, H_NO_FAULT, compute_limit_checks, limit_check_facts, near_tie,
+    is_health_check, is_null_hypothesis, cap_confidence, annotate_ungrounded, finalize_hypotheses,
+    drop_redundant_facts,
 )
 
 MAX_RETRIES = 2
@@ -168,23 +171,21 @@ def generate_hypotheses(state: dict) -> dict:
     anomaly = state.get("anomaly_result", {})
     checks = _checks_for(state)
     health = is_health_check(anomaly, _failure_reported(state), checks)
-    stats = state.get("sensor_statistics", {}).get("channels", {})
-    trends = [f"{ch}: {s['trend']} (latest={s['latest']})" for ch, s in stats.items()]
 
     warning_line = ("WARNING: " + (anomaly.get("reliability_note") or "")) if anomaly.get("reliability_warning") else ""
     tie_line = (f"Close runner-up: {anomaly.get('close_second_class')} (margin {anomaly.get('close_second_margin')})"
                 if near_tie(anomaly) else "No close runner-up class: the top prediction is not a near-tie.")
+    catalog = "\n".join(f"- {c}" for c in FAULT_CATALOG)
 
     if health:
         task = """This is a HEALTH CHECK, not a failure investigation. No failure has been reported; the machine was
 only flagged by a routine check. The classifier predicts no failure and no documented operating limit is
-violated, so do not assume the routine check found a fault. Propose 2-3 candidate explanations for any
-pattern that deserves a second look, using only the numbers above. ALWAYS include one candidate whose cause text starts with "No fault:" (normal
-variation, nothing to act on). Do not propose a fault unless specific numbers above point to it."""
+violated, so do not assume the routine check found a fault. Choose 1-2 labels from the allowed list that
+deserve a second look, using only the numbers above. Do not include a 'no fault' option; the system adds it."""
     else:
-        task = """Propose 2-4 distinct candidate causes. The ML prediction is a STARTING hypothesis, not a confirmed
-answer - if it carries a reliability warning, treat it with appropriate skepticism and still consider alternative
-explanations. If nothing clearly fits, include one candidate whose cause text starts with "Unexplained:"."""
+        task = """Choose 2-4 labels from the allowed list. The ML prediction is a STARTING hypothesis, not a confirmed
+answer - if it carries a reliability warning, treat it with appropriate skepticism and still consider other labels.
+Do not include an 'unexplained' option; the system adds it."""
 
     prompt = f"""You are investigating an industrial machine.
 
@@ -197,26 +198,26 @@ ML classifier prediction: {anomaly.get('predicted_class')} (confidence {anomaly.
 COMPUTED LIMIT CHECKS (calculated in code from the sensor readings - rely on these, do not recompute):
 {_facts_block(checks)}
 
-Sensor trends (computed over SYNTHETIC timestamps: a hint to look closer, never a physical fact):
-{chr(10).join(trends) if trends else "No trend data available."}
-
 Recent maintenance: {len(state.get('maintenance_records', []))} records on file (synthetic).
 Past failures on this machine: {len(state.get('historical_incidents', []))} incidents on file.
 
+ALLOWED CANDIDATE CAUSES (the only failure modes this system's data and manuals can test):
+{catalog}
+
 {task}
 
-Format: each "cause" must be a SHORT label (at most 12 words). Put all explanation in "rationale"."""
+Rules: set "cause" to EXACTLY one label from the allowed list and put all explanation in "rationale". Do not
+invent other causes. The readings are independent samples with synthetic timestamps, so there is no real time
+ordering: do not reason about trends."""
 
     result: HypothesisList = _invoke_structured(HypothesisList, prompt)
-    hypotheses = [h.model_dump() for h in result.hypotheses]
+    hypotheses, notes = finalize_hypotheses([h.model_dump() for h in result.hypotheses], anomaly, checks, health)
 
     mode = "health check" if health else "failure investigation"
-    return {
-        "hypotheses": hypotheses,
-        **_log("generate_hypotheses", "done",
-               f"Mode: {mode}. Generated {len(hypotheses)} hypotheses: "
-               + ", ".join(h["cause"] for h in hypotheses)),
-    }
+    summary = f"Mode: {mode}. Hypotheses: " + ", ".join(h["cause"] for h in hypotheses)
+    if notes:
+        summary += " | " + "; ".join(notes)
+    return {"hypotheses": hypotheses, **_log("generate_hypotheses", "done", summary)}
 
 
 # ─────────────────────────────────────────────
@@ -225,6 +226,7 @@ Format: each "cause" must be a SHORT label (at most 12 words). Put all explanati
 def investigate_hypotheses(state: dict) -> dict:
     anomaly = state.get("anomaly_result", {})
     checks = _checks_for(state)
+    health = is_health_check(anomaly, _failure_reported(state), checks)
 
     maintenance_text = "\n".join(
         f"- {r['date']}: {r['maintenance_type']} - {r['description']}"
@@ -237,11 +239,16 @@ def investigate_hypotheses(state: dict) -> dict:
         for r in state.get("similar_incidents", [])
     ) or "(none)"
 
+    # Trend labels are left out on purpose: readings are independent samples with synthetic timestamps.
     stats = state.get("sensor_statistics", {}).get("channels", {})
-    stats_text = "\n".join(f"- {ch}: {s}" for ch, s in stats.items()) or "(none)"
+    stats_text = "\n".join(
+        f"- {ch}: " + ", ".join(f"{k}={v}" for k, v in s.items() if k != "trend") for ch, s in stats.items()
+    ) or "(none)"
 
     evaluations, cap_notes = [], []
     for hyp in state.get("hypotheses", []):
+        if health and hyp["cause"] == H_NO_FAULT:
+            continue  # the health-check null hypothesis is evaluated by code below
         docs = search_technical_documents.invoke({"query": hyp["cause"], "k": 3})
         docs_text = "\n".join(
             f"- [{d['source']} > {d['section']}] {d['content'][:400]}"
@@ -257,7 +264,8 @@ Rationale given: {hyp['rationale']}
 COMPUTED LIMIT CHECKS (calculated in code - use these numbers for every threshold comparison, never recompute):
 {_facts_block(checks)}
 
-SENSOR STATISTICS (trends use SYNTHETIC timestamps: weak evidence, a hint only):
+SENSOR STATISTICS over the recent window (no trend information: the readings are independent samples with
+synthetic timestamps, so there is no real time ordering):
 {stats_text}
 
 TECHNICAL DOCUMENTATION (retrieved for this specific cause; synthetic manuals):
@@ -273,7 +281,7 @@ resemblance to a past failure is NOT evidence that this machine is failing:
 Rules for confidence:
 - low: no specific, direct evidence, or the evidence mostly contradicts the cause.
 - medium: some specific direct evidence, but also real gaps or contradictions.
-- high: a documented limit is violated AND other independent evidence agrees. A trend alone is never high.
+- high: a documented limit is violated AND other independent evidence agrees.
 Evaluate: what supports this cause, what contradicts it, and how confident should we be?"""
 
         result: HypothesisEvaluation = _invoke_structured(HypothesisEvaluation, prompt)
@@ -287,6 +295,23 @@ Evaluate: what supports this cause, what contradicts it, and how confident shoul
             ev["reasoning"] = f"{ev['reasoning']} [{note}]"
             cap_notes.append(f"'{ev['cause']}' {note}")
         evaluations.append(ev)
+
+    if health:
+        top = max((ORDER.index(e["confidence"]) for e in evaluations), default=0)
+        conf = anomaly.get("confidence")
+        conf_txt = f"{conf:.4f}" if isinstance(conf, (int, float)) else "unknown"
+        evaluations.append({
+            "cause": H_NO_FAULT,
+            "supporting_evidence": [
+                f"The classifier predicts {anomaly.get('predicted_class')} (confidence {conf_txt}).",
+                f"No documented operating limit is violated in the {checks['n_readings']} recent readings.",
+            ],
+            "contradicting_evidence": [f"'{e['cause']}' was rated {e['confidence']}."
+                                       for e in evaluations if e["confidence"] != "low"],
+            "reasoning": "Set by code: 'medium' when every fault hypothesis stays at low confidence, otherwise 'low'. "
+                         "An absence of evidence of a fault, not proof that none exists.",
+            "confidence": "medium" if top == 0 else "low",
+        })
 
     summary = ", ".join(f"{e['cause']} ({e['confidence']})" for e in evaluations)
     if cap_notes:
@@ -447,6 +472,7 @@ confident conclusion, and do not name a cause that none of the hypotheses above 
 
     # Observed facts: computed facts first, then the LLM's, with unverifiable numbers tagged.
     llm_facts, flagged = annotate_ungrounded(root.get("observed_facts", []), _evidence_text(state, checks))
+    llm_facts = drop_redundant_facts(llm_facts, "\n".join(limit_check_facts(checks)))
     root["observed_facts"] = [f"[computed] {f}" for f in limit_check_facts(checks)] + llm_facts
     if flagged:
         notes.append(f"{flagged} observed fact(s) contain numbers not found in the evidence")

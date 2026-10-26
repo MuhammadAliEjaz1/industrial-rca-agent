@@ -1,6 +1,6 @@
 {
-  "incident_summary": "Routine automated check flagged this machine for investigation.",
-  "mode": "health_check",
+  "incident_summary": "The machine stopped unexpectedly; the operator requests a root-cause investigation.",
+  "mode": "failure_investigation",
   "machine_condition": {
     "machine_id": "M001",
     "latest_reading": {
@@ -122,82 +122,79 @@
   ],
   "candidate_root_causes": [
     {
-      "cause": "No fault: parameters within normal operating limits",
-      "supporting_evidence": [
-        "Latest temperature gap is 9.7\u202fK, which is greater than the required minimum of 8.6\u202fK.",
-        "Latest rotational speed is 1589\u202frpm, exceeding the minimum required 1380\u202frpm.",
-        "Latest derived power is 5674\u202fW, which lies within the documented normal range of 3500\u20119000\u202fW.",
-        "Latest tool wear is 174\u202fmin, below the documented failure threshold of about 200\u202fmin.",
-        "Latest tool_wear\u202f\u00d7\u202ftorque product is 5933, below the lowest over\u2011strain limit of 11\u202f000.",
-        "Sensor statistics show stable trends and values within normal windows for temperature, speed, torque, and tool wear.",
-        "Technical documentation states that when no documented limit is violated, the fault may be random, matching the current observations."
-      ],
+      "cause": "Sensor fault or data-quality problem",
+      "supporting_evidence": [],
       "contradicting_evidence": [
-        "Across the 20 most recent readings: tool wear at or above 200 in 1 reading (indicates a tool-wear limit violation)."
+        "All computed limit checks are nominal (heat\u2011dissipation gap 9.7\u202fK > 8.6\u202fK, speed 1589\u202frpm > 1380\u202frpm, power 5674\u202fW within 3500\u20119000\u202fW, tool_wear 174\u202fmin < 200\u202fmin, wear\u00d7torque 5933 below lowest limit).",
+        "Across the 20 most recent readings, none of the rules are violated (heat\u2011dissipation met in 0, power out of range in 0, wear\u00d7torque above limit in 0, tool wear at/above 200 in only 1).",
+        "Sensor statistics show each channel\u2019s latest value within its observed min\u2011max range and well within normal variation (e.g., air_temperature latest 298.6\u202fK within 295.4\u2011304.2\u202fK, process_temperature latest 308.3\u202fK within 305.8\u2011313.6\u202fK, rotational_speed latest 1589\u202frpm within 1227\u20112710\u202frpm).",
+        "The \"Sensor Signature\" section of the troubleshooting manual states that no logged channel is outside its normal window and no limit is violated, indicating no sensor anomaly.",
+        "The sensor interpretation guide notes that a physically implausible jump in one channel while others stay stable suggests a sensor fault; no such jump is present in the provided data."
       ],
       "confidence": "low",
-      "reasoning": "All computed limits for the latest reading are satisfied, and sensor trends are stable, which supports the hypothesis that the machine is operating within normal parameters. However, the record that one of the 20 most recent readings had tool wear at or above the 200\u202fmin failure threshold directly contradicts the claim that no limits are violated. This specific violation reduces confidence in the \"no fault\" explanation, leading to a low confidence assessment."
+      "reasoning": "The candidate cause relies on the premise that a sensor is providing inaccurate data while all computed checks appear normal. However, the evidence shows every sensor reading lies within expected ranges, there are no out\u2011of\u2011range values, no sudden isolated jumps, and the diagnostic documentation explicitly reports no sensor signature. Without any direct indication of sensor misbehavior, the hypothesis lacks concrete support and is contradicted by multiple pieces of evidence, leading to low confidence."
     },
     {
-      "cause": "Heat\u2011dissipation margin narrowing as air cools",
-      "supporting_evidence": [
-        "Air temperature trend is decreasing (Sensor Statistics), while process temperature is stable, reducing the temperature gap over time.",
-        "Current temperature gap (9.7\u202fK) is only 1.1\u202fK above the failure threshold, indicating the margin is narrowing.",
-        "Rotational speed is stable but not low; if speed were to drop, the margin could become critical (as noted in the rationale)."
-      ],
+      "cause": "Heat dissipation failure",
+      "supporting_evidence": [],
       "contradicting_evidence": [
-        "Latest temp_diff = 9.7\u202fK, which is above the 8.6\u202fK failure threshold (Computed Limit Checks).",
-        "Rotational speed = 1589\u202frpm, above the 1380\u202frpm low\u2011speed condition required for heat\u2011dissipation failure (Computed Limit Checks).",
-        "Across the 20 most recent readings, the heat\u2011dissipation rule was met in 0 cases (i.e., never violated).",
-        "No evidence of fan, coolant flow, or heat\u2011exchanger problems in the maintenance history or diagnostic checks."
+        "Latest temperature difference is 9.7\u202fK, which is above the 8.6\u202fK threshold required for a heat\u2011dissipation fault.",
+        "Rotational speed at the latest reading is 1589\u202frpm, above the 1380\u202frpm threshold; both conditions must hold simultaneously.",
+        "Across the 20 most recent readings, the heat\u2011dissipation rule (diff <\u202f8.6\u202fK AND speed <\u202f1380\u202frpm) was met in 0 cases.",
+        "Coolant system was inspected and topped up on 2025\u201106\u201126, indicating recent maintenance of the cooling subsystem.",
+        "Process temperature (308.3\u202fK) and air temperature (298.6\u202fK) are within normal operating ranges; no indication of rapid overheating."
       ],
       "confidence": "low",
-      "reasoning": "The documentation defines a heat\u2011dissipation failure only when the temperature gap falls below 8.6\u202fK *and* the spindle speed drops below 1380\u202frpm. Both conditions are currently unmet, and recent data show the rule has not been triggered in any of the last 20 readings. While the air\u2011temperature decreasing trend does narrow the gap, the gap remains safely above the limit and speed remains well above the low\u2011speed threshold. Therefore the evidence primarily contradicts the candidate cause, leaving only a weak, speculative support from the observed trend. Confidence in this cause being the root of any imminent failure is low."
+      "reasoning": "The documented operating limit for a heat\u2011dissipation failure requires the temperature differential to be below 8.6\u202fK while the rotational speed is below 1380\u202frpm. The latest sensor readings show a differential of 9.7\u202fK and a speed of 1589\u202frpm, and none of the recent 20 readings satisfy both conditions. There is no concrete evidence that the temperature sensor is faulty, and recent coolant maintenance further reduces the likelihood of a cooling\u2011system issue. While an abrupt machine stop could be consistent with overheating, the available temperature and speed data do not support that scenario. Consequently, the evidence largely contradicts the heat\u2011dissipation failure hypothesis, leading to a low confidence assessment."
     },
     {
-      "cause": "Tool wear approaching wear\u2011out threshold",
+      "cause": "Tool wear failure",
       "supporting_evidence": [
-        "Technical documentation states tools typically fail between 200\u2011240\u202fmin and recommends proactive replacement at about 180\u2011200\u202fmin; the current 174\u202fmin is close to that proactive window.",
-        "Across the 20 most recent readings, tool wear was at or above 200\u202fmin in one instance, indicating that the threshold has been crossed recently in the recent history.",
-        "Several past incidents with similar sensor profiles were classified as Tool Wear Failures, suggesting the pattern is consistent with wear\u2011related issues."
+        "Across the 20 most recent readings, tool wear at or above 200\u202fmin occurred in 1 case, indicating a possible exceedance in the recent window.",
+        "Maintenance history includes reactive tool replacements after operators flagged excessive vibration (2025-09-04 and 2025-04-23), which can be symptoms of incipient tool wear.",
+        "Several past incidents with high sensor\u2011profile similarity were classified as Tool Wear Failures (Incidents 58, 47, 321, 26, 46)."
       ],
       "contradicting_evidence": [
-        "Latest tool wear is 174\u202fmin, which is below the documented failure onset around 200\u202fmin (limit check: tool wear at or above 200\u202fmin: no).",
-        "Tool\u2011wear\u202f\u00d7\u202ftorque value (5933) is below the lowest over\u2011strain limit for product quality, so no over\u2011strain indication.",
-        "Heat\u2011dissipation and power metrics are all within normal ranges, providing no other failure signals.",
-        "Trend for tool_wear is reported as 'stable', not increasing toward the threshold."
+        "Latest tool wear reading is 174\u202fmin, which is below the documented failure onset of about 200\u202fmin (limit check: tool wear at or above 200: no).",
+        "Derived product of tool_wear and torque (5933) is below the lowest over\u2011strain limit (11000), so no over\u2011strain indication.",
+        "No heat\u2011dissipation or power anomalies are present, which are often associated with severe tool wear."
       ],
       "confidence": "low",
-      "reasoning": "The candidate cause is plausible because the tool wear counter is nearing the proactive replacement window (174\u202fmin vs. recommended 180\u2011200\u202fmin) and a recent reading within the last 20 samples did exceed the 200\u202fmin failure onset. However, the current reading is still below the documented failure threshold, no limit violations are observed for wear\u2011related metrics, and other monitored parameters are normal. The stable trend further weakens the immediacy of the risk. Consequently, the evidence provides some support but also notable contradictions, leading to a medium confidence assessment. [capped from medium to low: the classifier predicts No Failure with high confidence and no documented limit is violated]",
+      "reasoning": "The documented threshold for a tool\u2011wear failure is ~200\u202fmin. The latest reading (174\u202fmin) does not meet this threshold, and the computed limits (wear\u202f\u00d7\u202ftorque, power, heat\u2011dissipation) are all within normal ranges, which contradicts a clear tool\u2011wear failure. However, one of the last 20 readings did exceed the 200\u202fmin mark, and the maintenance logs show recent tool changes prompted by vibration\u2014an indicator that wear may be progressing. The similarity to past tool\u2011wear incidents adds circumstantial support but does not constitute direct proof. Because there is some specific evidence suggesting wear could be approaching failure, yet the primary quantitative limit is not violated, confidence is assessed as medium. [capped from medium to low: the classifier predicts No Failure with high confidence and no documented limit is violated]",
       "confidence_before_cap": "medium",
       "confidence_note": "capped from medium to low: the classifier predicts No Failure with high confidence and no documented limit is violated"
+    },
+    {
+      "cause": "Unexplained: random or undetected failure",
+      "supporting_evidence": [
+        "Heat\u2011dissipation rule not met (gap 9.7\u202fK > 8.6\u202fK and speed 1589\u202frpm > 1380\u202frpm).",
+        "Derived power 5674\u202fW within normal range 3500\u20119000\u202fW.",
+        "Tool_wear \u00d7 torque = 5933 below the lowest over\u2011strain limit (11000).",
+        "Tool wear 174\u202fmin below the documented failure onset around 200\u202fmin.",
+        "Across the 20 most recent readings, none triggered heat\u2011dissipation, power, wear\u00d7torque, and only 1 reading approached tool\u2011wear threshold (still below).",
+        "Sensor statistics (air temperature, process temperature, speed, torque, tool wear) are within typical operating bounds, showing no abnormal spikes.",
+        "Manual guidance: \"If every mechanism has been checked and none is supported by evidence, report the failure as unexplained.\""
+      ],
+      "contradicting_evidence": [],
+      "confidence": "medium",
+      "reasoning": "All documented failure mechanisms have been evaluated against the latest and recent sensor data and none meet their respective trigger thresholds (heat\u2011dissipation gap, power range, wear\u00d7torque limit, tool\u2011wear time). The sensor statistics show values within normal operating ranges, and recent maintenance actions do not point to a specific fault. The troubleshooting manual states that random/unexplained failures constitute about 0.1\u202f% of runs and leave no sensor signature. The absence of any sensor\u2011visible cause therefore aligns with the definition of an unexplained failure. Because the conclusion rests on the lack of evidence rather than a positive indicator, confidence is set to medium."
     }
   ],
-  "most_supported_cause": "No fault identified (ML predicts No Failure; no documented limit violated)",
+  "most_supported_cause": "Unexplained: random or undetected failure",
   "confidence_level": "medium",
-  "justification": "The classifier predicts No Failure and no documented operating limit is violated in the 20 recent readings. None of the 2 candidate faults reached more than low confidence. This is an absence of evidence of a fault, not proof that none exists; the timestamps, maintenance records and manuals are synthetic, which limits what can be concluded.",
+  "justification": "Every specific fault hypothesis stayed at low confidence and no documented limit is violated, so the 'unexplained' reading is the best fit. That reflects an absence of evidence, not a diagnosed cause. Model notes (NOT a conclusion): All evaluated failure mechanisms (sensor fault, heat\u2011dissipation failure, tool\u2011wear failure) are contradicted by the observed sensor data and limit checks. No limit is violated, and the sensor statistics show values within normal operating ranges. The troubleshooting manual defines an \"unexplained\" failure when no mechanism is supported by evidence, which matches the current situation. Therefore the most plausible root cause is the unexplained/random failure hypothesis.",
   "observed_facts": [
     "[computed] Latest reading: process minus air temperature = 9.7 K at 1589 rpm. Heat-dissipation failure needs the gap below 8.6 K AND speed below 1380 rpm (met: no).",
     "[computed] Latest derived power = 5674 W (documented normal range 3500-9000 W; outside range: no).",
     "[computed] Latest tool_wear x torque = 5933 (overstrain limits by product quality: L 11000, M 12000, H 13000; above the lowest limit: no).",
     "[computed] Latest tool wear = 174 min (tool-wear failures are documented from about 200 min; at or above: no).",
     "[computed] Across the 20 most recent readings: heat-dissipation rule met in 0, power out of range in 0, wear x torque above the lowest limit in 0, tool wear at or above 200 in 1.",
-    "Latest temperature gap is 9.7\u202fK, above the 8.6\u202fK failure threshold.",
-    "Latest rotational speed is 1589\u202frpm, above the 1380\u202frpm low\u2011speed condition.",
-    "Latest derived power is 5674\u202fW, within the normal range of 3500\u20119000\u202fW.",
-    "Latest tool wear is 174\u202fmin, below the documented failure onset around 200\u202fmin.",
-    "Tool\u2011wear\u00d7torque product is 5933, below the lowest over\u2011strain limit of 11\u202f000.",
-    "Sensor statistics show stable trends for temperature, speed, torque, and tool wear.",
-    "Across the 20 most recent readings, the heat\u2011dissipation rule was never violated, power was always in range, and tool\u2011wear\u00d7torque was never above the lowest limit.",
-    "One of the 20 most recent tool\u2011wear readings was at or above 200\u202fmin."
+    "Sensor statistics: air_temperature latest 298.6\u202fK within 295.4\u2011304.2\u202fK; process_temperature latest 308.3\u202fK within 305.8\u2011313.6\u202fK; rotational_speed latest 1589\u202frpm within 1227\u20112710\u202frpm; all channels within observed min\u2011max ranges and normal variation."
   ],
   "ml_predictions": [
     "PREDICTION: No Failure (confidence 0.9998) - reliability_warning: none"
   ],
-  "unsupported_speculation": [
-    "Heat\u2011dissipation margin narrowing as air cools (contradicted by speed and gap remaining above thresholds).",
-    "Tool wear approaching wear\u2011out threshold (contradicted by current wear below threshold and stable trend)."
-  ],
+  "unsupported_speculation": [],
   "evidence_sources": [
     "Incident 58 (M010, 2025-07-25 18:05:27.233991)",
     "Incident 47 (M030, 2025-05-24 02:43:25.905444)",
@@ -210,37 +207,37 @@
       "step": "gather_context",
       "status": "done",
       "summary": "Loaded 20 recent readings for M001.",
-      "timestamp": "2026-10-26T05:08:05.475316+00:00"
+      "timestamp": "2026-10-26T05:20:50.208270+00:00"
     },
     {
       "step": "run_anomaly_model",
       "status": "done",
       "summary": "Predicted: No Failure (confidence 1.00)",
-      "timestamp": "2026-10-26T05:08:08.880790+00:00"
+      "timestamp": "2026-10-26T05:20:53.474533+00:00"
     },
     {
       "step": "gather_evidence",
       "status": "done",
       "summary": "4 maintenance records, 8 past incidents, 5 similar incidents.",
-      "timestamp": "2026-10-26T05:08:09.122914+00:00"
+      "timestamp": "2026-10-26T05:20:53.740194+00:00"
     },
     {
       "step": "generate_hypotheses",
       "status": "done",
-      "summary": "Mode: health check. Generated 3 hypotheses: No fault: parameters within normal operating limits, Heat\u2011dissipation margin narrowing as air cools, Tool wear approaching wear\u2011out threshold",
-      "timestamp": "2026-10-26T05:08:12.865406+00:00"
+      "summary": "Mode: failure investigation. Hypotheses: Sensor fault or data-quality problem, Heat dissipation failure, Tool wear failure, Unexplained: random or undetected failure",
+      "timestamp": "2026-10-26T05:20:57.366144+00:00"
     },
     {
       "step": "investigate_hypotheses",
       "status": "done",
-      "summary": "Evaluated 3 hypotheses: No fault: parameters within normal operating limits (low), Heat\u2011dissipation margin narrowing as air cools (low), Tool wear approaching wear\u2011out threshold (low) | CONFIDENCE CAPS: 'Tool wear approaching wear\u2011out threshold' capped from medium to low: the classifier predicts No Failure with high confidence and no documented limit is violated",
-      "timestamp": "2026-10-26T05:08:20.791291+00:00"
+      "summary": "Evaluated 4 hypotheses: Sensor fault or data-quality problem (low), Heat dissipation failure (low), Tool wear failure (low), Unexplained: random or undetected failure (medium) | CONFIDENCE CAPS: 'Tool wear failure' capped from medium to low: the classifier predicts No Failure with high confidence and no documented limit is violated",
+      "timestamp": "2026-10-26T05:21:11.921379+00:00"
     },
     {
       "step": "determine_root_cause",
       "status": "done",
-      "summary": "Most supported cause: No fault identified (ML predicts No Failure; no documented limit violated) (medium) | health-check outcome set by code",
-      "timestamp": "2026-10-26T05:08:36.779555+00:00"
+      "summary": "Most supported cause: Unexplained: random or undetected failure (medium) | null hypothesis chosen: no specific fault supported",
+      "timestamp": "2026-10-26T05:21:32.552129+00:00"
     }
   ]
 }

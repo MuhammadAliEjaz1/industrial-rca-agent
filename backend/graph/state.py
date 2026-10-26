@@ -47,17 +47,16 @@ class InvestigationState(TypedDict):
 # ─────────────────────────────────────────────
 
 class HypothesisItem(BaseModel):
-    cause: str = Field(description="A specific candidate root cause, e.g. 'Heat dissipation failure "
-                                    "from reduced cooling airflow', not just a category name.")
-    rationale: str = Field(description="Why this is plausible given the anomaly prediction, sensor "
-                                        "trends, and incident description provided.")
+    cause: str = Field(description="EXACTLY one label from the allowed list given in the prompt. "
+                                    "No other wording, no explanation here.")
+    rationale: str = Field(description="Why this is plausible given the computed limit checks and the "
+                                        "ML prediction. All explanation goes here.")
 
 
 class HypothesisList(BaseModel):
     hypotheses: list[HypothesisItem] = Field(
-        description="2 to 4 distinct candidate causes. Include an 'unexplained / no clear mechanical "
-                    "cause' hypothesis when the evidence doesn't clearly point anywhere — do not force "
-                    "a confident-sounding cause when one isn't warranted."
+        description="1 to 4 distinct candidate causes, each an allowed label from the prompt. Do NOT "
+                    "include a 'no fault' or 'unexplained' entry; the system adds that itself."
     )
 
 

@@ -40,5 +40,27 @@ assert cw["violated"] == [] and cw["latest"]["tool_wear_at_failure_range"]
 assert not is_health_check(anom, False, cw)
 assert cap_confidence("Tool wear", "high", cw, anom)[0] == "medium"      # not squeezed to low
 assert cap_confidence("Tool wear", "high", c, anom)[0] == "low"         # healthy reading: still low
+# ---- closed catalog ----
+assert match_catalog("Tool Wear approaching wear-out threshold") == H_TOOL_WEAR
+assert match_catalog("Heat\u2011dissipation margin narrowing as air cools") == H_HEAT
+assert match_catalog("Sensor calibration drift") == H_SENSOR
+assert match_catalog("Unexplained: whatever") == H_UNEXPLAINED
+assert match_catalog("Control system/software fault or safety interlock") is None
+assert match_catalog("Mechanical jam or bearing seizure") is None
+req = dict(required_hypotheses({"predicted_class": "Power Failure + Overstrain Failure"}, c))
+assert set(req) == {H_POWER, H_OVERSTRAIN}
+assert dict(required_hypotheses(anom, c)) == {}                      # healthy: nothing forced
+assert H_HEAT in dict(required_hypotheses(anom, ch))                 # limit violated -> forced
+assert H_TOOL_WEAR in dict(required_hypotheses(anom, cw))            # wear in failure range -> forced
+hyps, notes = finalize_hypotheses([{"cause": "PLC glitch", "rationale": "r"},
+                                   {"cause": "Tool wear", "rationale": "x"}], anom, c, True)
+assert [h["cause"] for h in hyps] == [H_TOOL_WEAR, H_NO_FAULT] and any("dropped" in n for n in notes)
+hyps, _ = finalize_hypotheses([], anom, ch, False)
+assert [h["cause"] for h in hyps] == [H_HEAT, H_UNEXPLAINED]
+# ---- duplicate facts ----
+comp = " ".join(limit_check_facts(c))
+kept = drop_redundant_facts(["Speed 1589 rpm above 1380 rpm", "Air temperature latest 298.6 K",
+                             "Sensor statistics look normal", "Gap 11.3 K"], comp)
+assert kept == ["Air temperature latest 298.6 K", "Sensor statistics look normal", "Gap 11.3 K"], kept
 print("\n".join(limit_check_facts(c)))
 print("\nALL checks.py TESTS PASSED")

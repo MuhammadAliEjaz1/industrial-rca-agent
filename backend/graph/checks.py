@@ -169,3 +169,110 @@ def annotate_ungrounded(facts: list, evidence_text: str):
         else:
             out.append(f)
     return out, flagged
+
+
+# ---------- closed hypothesis catalog ----------
+# Only failure modes this system can actually test with its data (sensor limits, ML class, manuals).
+# Power sags, PLC interlocks, bearing seizures etc. cannot be confirmed or ruled out here, so they are not offered.
+H_TOOL_WEAR = "Tool wear failure"
+H_HEAT = "Heat dissipation failure"
+H_POWER = "Power failure"
+H_OVERSTRAIN = "Overstrain failure"
+H_SENSOR = "Sensor fault or data-quality problem"
+H_UNEXPLAINED = "Unexplained: random or undetected failure"   # failure reported, nothing supported
+H_NO_FAULT = "No fault: normal variation"                       # health check, nothing reported
+FAULT_CATALOG = [H_TOOL_WEAR, H_HEAT, H_POWER, H_OVERSTRAIN, H_SENSOR]
+
+_SHORTCUTS = [("tool wear", H_TOOL_WEAR), ("heat dissipation", H_HEAT), ("power", H_POWER),
+              ("overstrain", H_OVERSTRAIN), ("sensor", H_SENSOR), ("unexplained", H_UNEXPLAINED),
+              ("random", H_UNEXPLAINED), ("no fault", H_NO_FAULT)]
+
+
+def _norm(text: str) -> str:
+    return re.sub(r"[^a-z]+", " ", text.lower()).strip()
+
+
+def match_catalog(cause: str):
+    """Catalog label for an LLM-written cause, or None if it is outside the catalog."""
+    n = _norm(cause)
+    for label in FAULT_CATALOG + [H_UNEXPLAINED, H_NO_FAULT]:
+        if n == _norm(label):
+            return label
+    for key, label in _SHORTCUTS:
+        if n == key or n.startswith(key + " "):
+            return label
+    return None
+
+
+def required_hypotheses(anomaly: dict, checks: dict) -> list:
+    """(label, reason) pairs that are ALWAYS evaluated, whether or not the LLM proposed them."""
+    req = {}
+    violated = checks.get("violated", [])
+    if "heat_dissipation" in violated:
+        req[H_HEAT] = "the documented heat-dissipation rule is met in the recent readings"
+    if "power_out_of_range" in violated:
+        req[H_POWER] = "derived power is outside the documented range in the recent readings"
+    if "possible_overstrain" in violated:
+        req[H_OVERSTRAIN] = "wear x torque is above the lowest documented overstrain limit in the recent readings"
+    if (checks.get("latest") or {}).get("tool_wear_at_failure_range"):
+        req[H_TOOL_WEAR] = "the latest tool wear is in the documented failure range"
+    cls = str(anomaly.get("predicted_class") or "")
+    if cls.lower() != "no failure":
+        for word, label in (("heat dissipation", H_HEAT), ("overstrain", H_OVERSTRAIN),
+                            ("power", H_POWER), ("tool wear", H_TOOL_WEAR)):
+            if word in cls.lower():
+                req.setdefault(label, f"the classifier predicts {cls}")
+    return list(req.items())
+
+
+def finalize_hypotheses(llm_items: list, anomaly: dict, checks: dict, health: bool):
+    """Keeps only catalog hypotheses from the LLM, adds the ones the evidence forces, and appends the null
+    hypothesis. Returns (hypotheses, notes)."""
+    chosen, dropped, notes = {}, [], []
+    for h in llm_items:
+        label = match_catalog(h["cause"])
+        if label is None:
+            dropped.append(h["cause"])
+        elif label not in (H_UNEXPLAINED, H_NO_FAULT):
+            chosen.setdefault(label, h["rationale"])
+    for label, why in required_hypotheses(anomaly, checks):
+        if label not in chosen:
+            chosen[label] = f"Added by rule: {why}."
+            notes.append(f"added '{label}' because {why}")
+    hyps = [{"cause": k, "rationale": v} for k, v in chosen.items()]
+    if health:
+        hyps.append({"cause": H_NO_FAULT, "rationale":
+                     "No failure was reported, the classifier predicts no failure and no documented limit is "
+                     "violated, so normal variation is the default explanation."})
+    else:
+        hyps.append({"cause": H_UNEXPLAINED, "rationale":
+                     "The manual says to report a failure as unexplained when every mechanism has been checked and "
+                     "none is supported (random failures, about 0.1%, leave no sensor signature)."})
+    if dropped:
+        notes.append("dropped (outside the documented failure modes): " + "; ".join(dropped))
+    return hyps, notes
+
+
+# ---------- duplicate facts ----------
+
+def _significant_numbers(text: str) -> list:
+    out = []
+    for m in _NUM.findall(text.replace("\u202f", " ")):
+        digits = m.replace(",", "").rstrip(".")
+        if "." in digits or len(digits) >= 3:
+            v = _to_float(m)
+            if v is not None:
+                out.append(v)
+    return out
+
+
+def drop_redundant_facts(facts: list, computed_text: str) -> list:
+    """Drops facts whose every significant number already appears in the computed facts (they only repeat them)."""
+    known = _significant_numbers(computed_text)
+    keep = []
+    for f in facts:
+        nums = _significant_numbers(f)
+        if nums and all(any(abs(v - k) <= max(0.005 * abs(k), 0.05) for k in known) for v in nums):
+            continue
+        keep.append(f)
+    return keep
