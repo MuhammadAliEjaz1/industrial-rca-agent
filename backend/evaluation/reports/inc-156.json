@@ -1,0 +1,247 @@
+{
+ "incident_summary": "A failure was reported on this machine at 2025-10-29 09:56:16.786027. Investigate the root cause.",
+ "mode": "failure_investigation",
+ "machine_condition": {
+  "machine_id": "M025",
+  "latest_reading": {
+   "timestamp": "2025-10-29 09:56:16.786027",
+   "air_temperature": 302.0,
+   "process_temperature": 309.9,
+   "rotational_speed": 1308.0,
+   "torque": 57.6,
+   "tool_wear": 197.0
+  },
+  "sensor_statistics": {
+   "air_temperature": {
+    "mean": 299.414,
+    "std": 1.836,
+    "min": 295.5,
+    "max": 302.6,
+    "latest": 302.0,
+    "trend": "increasing"
+   },
+   "process_temperature": {
+    "mean": 309.14,
+    "std": 1.182,
+    "min": 306.0,
+    "max": 311.4,
+    "latest": 309.9,
+    "trend": "increasing"
+   },
+   "rotational_speed": {
+    "mean": 1548.557,
+    "std": 203.135,
+    "min": 1280.0,
+    "max": 2861.0,
+    "latest": 1308.0,
+    "trend": "stable"
+   },
+   "torque": {
+    "mean": 39.837,
+    "std": 10.515,
+    "min": 4.6,
+    "max": 65.7,
+    "latest": 57.6,
+    "trend": "stable"
+   },
+   "tool_wear": {
+    "mean": 107.608,
+    "std": 65.727,
+    "min": 0.0,
+    "max": 231.0,
+    "latest": 197.0,
+    "trend": "stable"
+   }
+  }
+ },
+ "limit_checks": {
+  "n_readings": 20,
+  "latest": {
+   "temp_diff_k": 7.899999999999977,
+   "power_w": 7889.670126519263,
+   "wear_x_torque": 11347.2,
+   "heat_dissipation": true,
+   "power_out_of_range": false,
+   "possible_overstrain": true,
+   "tool_wear_at_failure_range": false
+  },
+  "latest_raw": {
+   "timestamp": "2025-10-29 09:56:16.786027",
+   "air_temperature": 302.0,
+   "process_temperature": 309.9,
+   "rotational_speed": 1308.0,
+   "torque": 57.6,
+   "tool_wear": 197.0
+  },
+  "counts": {
+   "heat_dissipation": 5,
+   "power_out_of_range": 0,
+   "possible_overstrain": 1,
+   "tool_wear_at_failure_range": 2
+  },
+  "violated": [
+   "heat_dissipation",
+   "possible_overstrain"
+  ]
+ },
+ "ml_analysis": {
+  "predicted_class": "Heat Dissipation Failure + Overstrain Failure",
+  "confidence": 0.9548722505569458,
+  "anomaly_score": 0.9985715746879578,
+  "reliability_warning": false,
+  "reliability_note": null,
+  "close_second_class": "Heat Dissipation Failure",
+  "close_second_margin": 0.9116
+ },
+ "maintenance_history": [
+  {
+   "date": "2025-09-07 00:00:00",
+   "maintenance_type": "Reactive",
+   "description": "Investigated abnormal temperature reading; cleaned cooling fan.",
+   "technician": "S. Malik",
+   "parts_replaced": null
+  },
+  {
+   "date": "2025-07-28 00:00:00",
+   "maintenance_type": "Scheduled",
+   "description": "Coolant system inspection and top-up.",
+   "technician": "T. Ahmed",
+   "parts_replaced": null
+  },
+  {
+   "date": "2025-07-08 00:00:00",
+   "maintenance_type": "Scheduled",
+   "description": "Coolant system inspection and top-up.",
+   "technician": "T. Ahmed",
+   "parts_replaced": null
+  },
+  {
+   "date": "2025-05-09 00:00:00",
+   "maintenance_type": "Scheduled",
+   "description": "Coolant system inspection and top-up.",
+   "technician": "T. Ahmed",
+   "parts_replaced": null
+  }
+ ],
+ "candidate_root_causes": [
+  {
+   "cause": "Heat dissipation failure",
+   "supporting_evidence": [
+    "Latest reading: process\u2011minus\u2011air temperature gap = 7.9\u202fK (below 8.6\u202fK threshold) and rotational speed = 1308\u202frpm (below 1380\u202frpm threshold).",
+    "Across the 20 most recent readings the heat\u2011dissipation rule is met in 5 samples, showing recurring marginal cooling.",
+    "Full\u2011history sensor statistics: mean temperature gap \u2248 9.7\u202fK, latest gap 7.9\u202fK is significantly lower than typical.",
+    "Maintenance record shows a recent fan cleaning (2025\u201109\u201107) and multiple coolant system inspections, indicating prior cooling\u2011system attention."
+   ],
+   "contradicting_evidence": [],
+   "confidence": "high",
+   "reasoning": "The technical operating limit for heat\u2011dissipation failure is a process\u2011minus\u2011air temperature gap below 8.6\u202fK together with a rotational speed below 1380\u202frpm. The latest sample meets both criteria (gap\u202f=\u202f7.9\u202fK, speed\u202f=\u202f1308\u202frpm). The rule has been satisfied in 5 of the last 20 samples, indicating a recurring marginal cooling condition. Historical sensor statistics show the current temperature gap (7.9\u202fK) is well below the long\u2011term mean gap (~9.7\u202fK), reinforcing that the machine is operating in a cooler\u2011than\u2011usual regime. Recent maintenance (cooling\u2011fan cleaning and coolant top\u2011ups) further points to prior cooling\u2011system concerns. No evidence directly contradicts the heat\u2011dissipation failure criteria, and the documented limit is clearly violated, so confidence is high."
+  },
+  {
+   "cause": "Overstrain failure",
+   "supporting_evidence": [
+    "Computed tool_wear x torque = 11347, which exceeds the lowest limit of 11000, triggering the overstrain rule.",
+    "Across the last 20 readings, the wear\u2011x\u2011torque product was above the lowest limit in exactly 1 reading (the latest).",
+    "Latest torque = 57.6, which is near the maximum observed (65.7) and well above the mean (39.8), contributing to the high product.",
+    "Latest tool_wear = 197 min, far above the mean (107) and close to the documented wear\u2011related failure threshold (~200 min), raising the product value."
+   ],
+   "contradicting_evidence": [
+    "The tool_wear x torque product (11347) is below the medium (12000) and high (13000) limits, so if the machine is type M or H it would not be considered over the applicable limit."
+   ],
+   "confidence": "medium",
+   "reasoning": "The primary diagnostic check for overstrain is the tool_wear \u00d7 torque product. The current reading exceeds the lowest documented limit (11000) and is the only recent occurrence of such a breach, providing direct evidence of a strain\u2011related issue. However, the product does not exceed the medium or high limits, and the machine type (L, M, or H) is unspecified, leaving uncertainty about whether the breach is truly out\u2011of\u2011spec for this machine. Additionally, there is no corroborating evidence from other symptoms (e.g., tool deformation, spindle bearing play, clamping problems) or maintenance actions that would reinforce the diagnosis. Consequently, while the numeric breach supports the overstrain hypothesis, the lack of definitive machine\u2011type context and ancillary signs limits confidence to a medium level."
+  },
+  {
+   "cause": "Tool wear failure",
+   "supporting_evidence": [
+    "Tool wear is recorded at 197\u202fminutes, just shy of the documented failure onset around 200\u202fminutes, indicating the tool is nearing the wear\u2011related failure zone.",
+    "The product of tool_wear and torque is 11347, which exceeds the lowest overstrain limit (11000), suggesting the tool may be under excessive load as wear increases.",
+    "Two of the last 20 readings have tool wear at or above 200\u202fminutes, showing that the wear threshold has been reached in recent operation."
+   ],
+   "contradicting_evidence": [
+    "Latest tool wear reading is 197\u202fminutes, which is below the documented failure onset threshold of about 200\u202fminutes.",
+    "Across the 20 most recent readings, only 2 show tool wear at or above 200\u202fminutes, and the latest reading is not in that set."
+   ],
+   "confidence": "medium",
+   "reasoning": "The evidence shows the tool is close to the documented wear\u2011failure threshold and that the wear\u2011torque product exceeds the lowest overstrain limit, both of which could contribute to a wear\u2011related incident. However, the current tool wear value is still below the explicit failure limit, and other failure modes (e.g., heat\u2011dissipation failure) are fully satisfied, providing stronger alternative explanations. Consequently, the support for tool wear failure is present but not decisive, leading to a medium confidence assessment."
+  },
+  {
+   "cause": "Unexplained: random or undetected failure",
+   "supporting_evidence": [],
+   "contradicting_evidence": [
+    "Heat\u2011dissipation rule is satisfied (process\u2011air temperature gap 7.9\u202fK < 8.6\u202fK AND speed 1308\u202frpm < 1380\u202frpm), which according to the documentation triggers a heat\u2011dissipation failure.",
+    "Tool\u2011wear\u202f\u00d7\u202ftorque = 11347 exceeds the lowest over\u2011strain limit (L\u202f=\u202f11000), indicating an over\u2011strain failure.",
+    "Across the 20 most recent readings the heat\u2011dissipation condition was met 5 times and the over\u2011strain limit was exceeded once, showing recurring sensor\u2011based evidence for known failure modes."
+   ],
+   "confidence": "low",
+   "reasoning": "The candidate cause requires that every known mechanism be checked and found unsupported. The sensor data, however, clearly meets the documented thresholds for both heat\u2011dissipation and over\u2011strain failures, providing concrete evidence for those mechanisms. Because specific, rule\u2011based failures are indicated, the premise of an \"unexplained\" or random failure is contradicted. No sensor\u2011level evidence suggests a failure with no signature, and the manual\u2019s description of random failures (\u22480.1\u202f% incidence, no sensor signature) is not observed here. Therefore confidence that the root cause is truly \"unexplained\" is low."
+  }
+ ],
+ "most_supported_cause": "Heat dissipation failure",
+ "confidence_level": "high",
+ "justification": "The sensor data satisfy the documented heat\u2011dissipation failure criteria (process\u2011minus\u2011air temperature gap = 7.9\u202fK, rotational speed = 1308\u202frpm) and this condition has recurred in multiple recent samples, indicating a persistent marginal cooling condition. No contradictory evidence is present, and the hypothesis evaluation assigns high confidence to this cause.",
+ "observed_facts": [
+  "[computed] Latest reading: process minus air temperature = 7.9 K at 1308 rpm. Heat-dissipation failure needs the gap below 8.6 K AND speed below 1380 rpm (met: yes).",
+  "[computed] Latest derived power = 7890 W (documented normal range 3500-9000 W; outside range: no).",
+  "[computed] Latest tool_wear x torque = 11347 (overstrain limits by product quality: L 11000, M 12000, H 13000; above the lowest limit: yes).",
+  "[computed] Latest tool wear = 197 min (tool-wear failures are documented from about 200 min; at or above: no).",
+  "[computed] Across the 20 most recent readings: heat-dissipation rule met in 5, power out of range in 0, wear x torque above the lowest limit in 1, tool wear at or above 200 in 2.",
+  "heat\u2011dissipation rule met in 5 of the last 20 readings",
+  "mean temperature gap over full history \u2248 9.7\u202fK  [UNVERIFIED NUMBER(S): 9.7]",
+  "fan cleaning performed on 2025\u201109\u201107",
+  "multiple coolant system inspections recorded",
+  "torque = 57.6"
+ ],
+ "ml_predictions": [
+  "PREDICTION: Heat Dissipation Failure + Overstrain Failure (confidence 0.9549) - reliability_warning: none"
+ ],
+ "unsupported_speculation": [
+  "Overstrain failure (confidence medium): The tool_wear x torque product (11347) is below the medium (12000) and high (13000) limits, so if the machine is type M or H it would not be considered over ...",
+  "Tool wear failure (confidence medium): Latest tool wear reading is 197 minutes, which is below the documented failure onset threshold of about 200 minutes.",
+  "Unexplained: random or undetected failure (confidence low): Heat\u2011dissipation rule is satisfied (process\u2011air temperature gap 7.9 K < 8.6 K AND speed 1308 rpm < 1380 rpm), which according to the documentation triggers a ..."
+ ],
+ "evidence_sources": [
+  "Incident 79 (M022, 2025-09-09 05:58:53.000727)",
+  "Incident 144 (M010, 2025-11-02 19:13:53.793458)",
+  "Incident 114 (M013, 2025-09-06 22:38:15.668392)",
+  "Incident 183 (M030, 2025-11-07 18:42:19.698539)",
+  "Incident 81 (M019, 2025-10-07 16:40:21.386498)"
+ ],
+ "investigation_log": [
+  {
+   "step": "gather_context",
+   "status": "done",
+   "summary": "Loaded 20 recent readings for M025.",
+   "timestamp": "2026-10-27T05:13:26.907263+00:00"
+  },
+  {
+   "step": "run_anomaly_model",
+   "status": "done",
+   "summary": "Predicted: Heat Dissipation Failure + Overstrain Failure (confidence 0.95)",
+   "timestamp": "2026-10-27T05:13:26.922892+00:00"
+  },
+  {
+   "step": "gather_evidence",
+   "status": "done",
+   "summary": "4 maintenance records, 8 past incidents, 5 similar incidents.",
+   "timestamp": "2026-10-27T05:13:27.315260+00:00"
+  },
+  {
+   "step": "generate_hypotheses",
+   "status": "done",
+   "summary": "Mode: failure investigation. Hypotheses: Heat dissipation failure, Overstrain failure, Tool wear failure, Unexplained: random or undetected failure",
+   "timestamp": "2026-10-27T05:13:30.812482+00:00"
+  },
+  {
+   "step": "investigate_hypotheses",
+   "status": "done",
+   "summary": "Evaluated 4 hypotheses: Heat dissipation failure (high), Overstrain failure (medium), Tool wear failure (medium), Unexplained: random or undetected failure (low)",
+   "timestamp": "2026-10-27T05:13:55.246531+00:00"
+  },
+  {
+   "step": "determine_root_cause",
+   "status": "done",
+   "summary": "Most supported cause: Heat dissipation failure (high) | 1 observed fact(s) contain numbers not found in the evidence",
+   "timestamp": "2026-10-27T05:14:10.344965+00:00"
+  }
+ ]
+}

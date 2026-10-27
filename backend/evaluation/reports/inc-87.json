@@ -1,0 +1,246 @@
+{
+ "incident_summary": "A failure was reported on this machine at 2025-09-10 11:12:22.472227. Investigate the root cause.",
+ "mode": "failure_investigation",
+ "machine_condition": {
+  "machine_id": "M016",
+  "latest_reading": {
+   "timestamp": "2025-09-10 11:12:22.472227",
+   "air_temperature": 301.7,
+   "process_temperature": 310.9,
+   "rotational_speed": 1405.0,
+   "torque": 46.4,
+   "tool_wear": 207.0
+  },
+  "sensor_statistics": {
+   "air_temperature": {
+    "mean": 298.733,
+    "std": 1.498,
+    "min": 295.6,
+    "max": 301.9,
+    "latest": 301.7,
+    "trend": "increasing"
+   },
+   "process_temperature": {
+    "mean": 308.89,
+    "std": 1.067,
+    "min": 306.0,
+    "max": 311.0,
+    "latest": 310.9,
+    "trend": "increasing"
+   },
+   "rotational_speed": {
+    "mean": 1536.667,
+    "std": 188.467,
+    "min": 1305.0,
+    "max": 2421.0,
+    "latest": 1405.0,
+    "trend": "stable"
+   },
+   "torque": {
+    "mean": 40.65,
+    "std": 10.109,
+    "min": 14.2,
+    "max": 62.7,
+    "latest": 46.4,
+    "trend": "stable"
+   },
+   "tool_wear": {
+    "mean": 123.155,
+    "std": 56.134,
+    "min": 2.0,
+    "max": 227.0,
+    "latest": 207.0,
+    "trend": "stable"
+   }
+  }
+ },
+ "limit_checks": {
+  "n_readings": 20,
+  "latest": {
+   "temp_diff_k": 9.199999999999989,
+   "power_w": 6826.890275760859,
+   "wear_x_torque": 9604.8,
+   "heat_dissipation": false,
+   "power_out_of_range": false,
+   "possible_overstrain": false,
+   "tool_wear_at_failure_range": true
+  },
+  "latest_raw": {
+   "timestamp": "2025-09-10 11:12:22.472227",
+   "air_temperature": 301.7,
+   "process_temperature": 310.9,
+   "rotational_speed": 1405.0,
+   "torque": 46.4,
+   "tool_wear": 207.0
+  },
+  "counts": {
+   "heat_dissipation": 0,
+   "power_out_of_range": 0,
+   "possible_overstrain": 0,
+   "tool_wear_at_failure_range": 2
+  },
+  "violated": []
+ },
+ "ml_analysis": {
+  "predicted_class": "Tool Wear Failure",
+  "confidence": 0.597581148147583,
+  "anomaly_score": 0.6001906394958496,
+  "reliability_warning": true,
+  "reliability_note": "This model has weak historical accuracy (~5% precision, ~12% recall) on Tool Wear Failure. Treat as a weak hypothesis requiring evidence verification.",
+  "close_second_class": "No Failure",
+  "close_second_margin": 0.1978
+ },
+ "maintenance_history": [
+  {
+   "date": "2025-04-08 00:00:00",
+   "maintenance_type": "Reactive",
+   "description": "Replaced worn cutting tool after operator flagged excessive vibration.",
+   "technician": "R. Hussain",
+   "parts_replaced": "Cutting tool"
+  },
+  {
+   "date": "2025-04-08 00:00:00",
+   "maintenance_type": "Reactive",
+   "description": "Tightened loose motor mounting bolts.",
+   "technician": "R. Hussain",
+   "parts_replaced": null
+  }
+ ],
+ "candidate_root_causes": [
+  {
+   "cause": "Tool wear failure",
+   "supporting_evidence": [
+    "Latest tool wear = 207 min (>=200 min failure threshold) [Computed Limit Checks]",
+    "Across the 20 most recent readings, tool wear at or above 200 min in 2 instances [Computed Limit Checks]",
+    "Maintenance history has no tool replacement record after 2025-04-08, suggesting wear could accumulate",
+    "Sensor statistics: tool_wear max 227 min, latest 207 min, indicating high wear relative to historical values"
+   ],
+   "contradicting_evidence": [],
+   "confidence": "medium",
+   "reasoning": "The latest tool wear reading is 207 minutes, which exceeds the documented failure threshold of about 200 minutes. This direct violation satisfies the primary diagnostic criterion for a tool wear failure. Additionally, within the 20 most recent readings, the tool wear condition (>=200 min) was met in 2 instances, indicating the wear has repeatedly reached the critical level. The maintenance history shows no tool replacement since April 2025, so the tool could plausibly have accumulated wear to this extent. Sensor statistics show the tool wear maximum historically is 227 minutes and the latest reading of 207 minutes is near that maximum, further supporting that the tool is in a high\u2011wear state. No other diagnostic checks (heat\u2011dissipation, power, wear\u2011torque product) indicate a failure, and there is no evidence contradicting the tool wear hypothesis. Therefore, the evidence collectively and independently confirms the tool wear failure cause. [capped from high to medium: no documented operating limit is violated in the recent readings]",
+   "confidence_before_cap": "high",
+   "confidence_note": "capped from high to medium: no documented operating limit is violated in the recent readings"
+  },
+  {
+   "cause": "Sensor fault or data-quality problem",
+   "supporting_evidence": [
+    "The ML classifier predicts a tool\u2011wear failure but reports very low precision and recall, indicating uncertainty in the classification.",
+    "The data are synthetic and the model performance is weak, which raises a generic possibility of data\u2011quality issues."
+   ],
+   "contradicting_evidence": [
+    "All current sensor readings (air temperature 301.7\u202fK, process temperature 310.9\u202fK, rotational speed 1405\u202frpm, torque 46.4\u202fNm, tool wear 207\u202fmin) lie within their documented normal windows.",
+    "Limit checks show no violations for heat\u2011dissipation gap, power, or wear\u00d7torque; only tool wear meets the failure threshold, which is a legitimate failure indicator.",
+    "Sensor statistics over the full history show stable means and standard deviations with no outliers; the latest values are within one standard deviation of the mean.",
+    "Technical documentation states that a physically implausible jump in one channel while others stay stable suggests a sensor fault, but no such jump is observed in any channel.",
+    "The \"Sensor Signature\" manual notes that no logged channel is outside its normal window and no limit is violated, indicating no sensor\u2011fault signature.",
+    "Similar past incidents with close sensor\u2011profile distances include documented tool\u2011wear failures, supporting a real wear issue rather than a sensor anomaly."
+   ],
+   "confidence": "low",
+   "reasoning": "While the classifier's low confidence and the synthetic nature of the data could theoretically point to sensor or data\u2011quality problems, the concrete operational evidence does not show any sensor anomalies: all readings are within normal ranges, no limits are breached, and there are no abrupt jumps or inconsistencies across channels. Moreover, the tool\u2011wear metric alone exceeds the documented failure threshold and aligns with past tool\u2011wear incidents, suggesting a genuine wear failure rather than a sensor fault. Given the lack of direct sensor\u2011fault signatures and the presence of strong evidence for a real wear condition, confidence in the sensor\u2011fault hypothesis must be low."
+  },
+  {
+   "cause": "Unexplained: random or undetected failure",
+   "supporting_evidence": [],
+   "contradicting_evidence": [
+    "Latest tool wear = 207 min, which meets the documented tool-wear failure threshold of about 200 min.",
+    "Across the 20 most recent readings, tool wear was at or above 200 min in 2 instances."
+   ],
+   "confidence": "low",
+   "reasoning": "The unexplained cause is only appropriate when no known failure mechanism is supported by the data. While heat\u2011dissipation, power\u2011out\u2011of\u2011range, and over\u2011strain conditions are not met, the sensor data clearly indicate a tool\u2011wear condition that exceeds the documented failure threshold (>=200\u202fmin). This provides a concrete, documented root cause, contradicting the premise for an unexplained classification. Therefore confidence in the unexplained cause is low."
+  }
+ ],
+ "most_supported_cause": "Tool wear failure",
+ "confidence_level": "medium",
+ "justification": "The tool wear metric exceeds the documented failure threshold (207\u202fmin \u2265 200\u202fmin) and this condition is observed in multiple recent readings. Maintenance records show no tool replacement since 2025\u201104\u201108, allowing wear accumulation. No contradictory evidence is present, and other failure modes are not indicated by the data. Therefore, the tool wear failure hypothesis has the strongest support.",
+ "observed_facts": [
+  "[computed] Latest reading: process minus air temperature = 9.2 K at 1405 rpm. Heat-dissipation failure needs the gap below 8.6 K AND speed below 1380 rpm (met: no).",
+  "[computed] Latest derived power = 6827 W (documented normal range 3500-9000 W; outside range: no).",
+  "[computed] Latest tool_wear x torque = 9605 (overstrain limits by product quality: L 11000, M 12000, H 13000; above the lowest limit: no).",
+  "[computed] Latest tool wear = 207 min (tool-wear failures are documented from about 200 min; at or above: yes).",
+  "[computed] Across the 20 most recent readings: heat-dissipation rule met in 0, power out of range in 0, wear x torque above the lowest limit in 0, tool wear at or above 200 in 2.",
+  "Maintenance history has no tool replacement record after 2025-04-08",
+  "Sensor statistics: tool_wear max 227 min, latest 207 min"
+ ],
+ "ml_predictions": [
+  "PREDICTION: Tool Wear Failure (confidence 0.5976) - reliability_warning: YES - This model has weak historical accuracy (~5% precision, ~12% recall) on Tool Wear Failure. Treat as a weak hypothesis requiring evidence verification.",
+  "Close runner-up: No Failure (margin 0.1978) - the model is uncertain between these."
+ ],
+ "unsupported_speculation": [
+  "Sensor fault or data-quality problem (confidence low): All current sensor readings (air temperature 301.7 K, process temperature 310.9 K, rotational speed 1405 rpm, torque 46.4 Nm, tool wear 207 min) lie within ...",
+  "Unexplained: random or undetected failure (confidence low): Latest tool wear = 207 min, which meets the documented tool-wear failure threshold of about 200 min."
+ ],
+ "evidence_sources": [
+  "Incident 116 (M002, 2025-09-20 05:19:16.380018)",
+  "Incident 274 (M022, 2026-03-10 06:19:22.865520)",
+  "Incident 117 (M007, 2025-10-20 14:55:47.047302)",
+  "Incident 115 (M016, 2025-09-23 11:32:01.497942)",
+  "Incident 104 (M018, 2025-08-26 23:07:12.032892)",
+  "Incident 272 (M032, 2026-02-10 00:04:13.372535)",
+  "Incident 84 (M027, 2025-08-03 13:25:15.780698)",
+  "Incident 90 (M028, 2025-11-03 07:35:12.502028)",
+  "Incident 142 (M031, 2025-10-25 16:23:20.817052)",
+  "Incident 174 (M033, 2025-11-05 02:14:41.319733)"
+ ],
+ "investigation_log": [
+  {
+   "step": "gather_context",
+   "status": "done",
+   "summary": "Loaded 20 recent readings for M016.",
+   "timestamp": "2026-10-27T05:43:52.895153+00:00"
+  },
+  {
+   "step": "run_anomaly_model",
+   "status": "done",
+   "summary": "Predicted: Tool Wear Failure (confidence 0.60)",
+   "timestamp": "2026-10-27T05:43:52.910789+00:00"
+  },
+  {
+   "step": "gather_evidence",
+   "status": "done",
+   "summary": "2 maintenance records, 3 past incidents, 5 similar incidents.",
+   "timestamp": "2026-10-27T05:43:53.301430+00:00"
+  },
+  {
+   "step": "generate_hypotheses",
+   "status": "done",
+   "summary": "Mode: failure investigation. Hypotheses: Tool wear failure, Sensor fault or data-quality problem, Unexplained: random or undetected failure",
+   "timestamp": "2026-10-27T05:43:56.079387+00:00"
+  },
+  {
+   "step": "investigate_hypotheses",
+   "status": "done",
+   "summary": "Evaluated 3 hypotheses: Tool wear failure (medium), Sensor fault or data-quality problem (low), Unexplained: random or undetected failure (low) | CONFIDENCE CAPS: 'Tool wear failure' capped from high to medium: no documented operating limit is violated in the recent readings",
+   "timestamp": "2026-10-27T05:44:06.085020+00:00"
+  },
+  {
+   "step": "gather_more_evidence",
+   "status": "done",
+   "summary": "Retry 1/2: widened similar-incident search to 10 results.",
+   "timestamp": "2026-10-27T05:44:06.225366+00:00"
+  },
+  {
+   "step": "investigate_hypotheses",
+   "status": "done",
+   "summary": "Evaluated 3 hypotheses: Tool wear failure (medium), Sensor fault or data-quality problem (low), Unexplained: random or undetected failure (low) | CONFIDENCE CAPS: 'Tool wear failure' capped from high to medium: no documented operating limit is violated in the recent readings",
+   "timestamp": "2026-10-27T05:44:51.165630+00:00"
+  },
+  {
+   "step": "gather_more_evidence",
+   "status": "done",
+   "summary": "Retry 2/2: widened similar-incident search to 10 results.",
+   "timestamp": "2026-10-27T05:44:51.524646+00:00"
+  },
+  {
+   "step": "investigate_hypotheses",
+   "status": "done",
+   "summary": "Evaluated 3 hypotheses: Tool wear failure (medium), Sensor fault or data-quality problem (low), Unexplained: random or undetected failure (low) | CONFIDENCE CAPS: 'Tool wear failure' capped from high to medium: no documented operating limit is violated in the recent readings",
+   "timestamp": "2026-10-27T05:45:43.771324+00:00"
+  },
+  {
+   "step": "determine_root_cause",
+   "status": "done",
+   "summary": "Most supported cause: Tool wear failure (medium)",
+   "timestamp": "2026-10-27T05:46:00.404655+00:00"
+  }
+ ]
+}

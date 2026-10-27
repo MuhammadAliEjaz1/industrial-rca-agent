@@ -109,8 +109,9 @@ def _facts_block(checks: dict) -> str:
 # ─────────────────────────────────────────────
 def gather_context(state: dict) -> dict:
     machine_id = state["machine_id"]
-    sensor_data = get_sensor_data.invoke({"machine_id": machine_id, "limit": 20})
-    stats = calculate_sensor_statistics.invoke({"machine_id": machine_id})
+    as_of = state.get("as_of")
+    sensor_data = get_sensor_data.invoke({"machine_id": machine_id, "limit": 20, "as_of": as_of})
+    stats = calculate_sensor_statistics.invoke({"machine_id": machine_id, "as_of": as_of})
 
     if not sensor_data["found"]:
         return {
@@ -130,7 +131,7 @@ def gather_context(state: dict) -> dict:
 # 2. run_anomaly_model
 # ─────────────────────────────────────────────
 def run_anomaly_model(state: dict) -> dict:
-    result = run_anomaly_detection.invoke({"machine_id": state["machine_id"]})
+    result = run_anomaly_detection.invoke({"machine_id": state["machine_id"], "as_of": state.get("as_of")})
     summary = (f"Predicted: {result.get('predicted_class')} "
                f"(confidence {result.get('confidence', 0):.2f})" if result.get("found")
                else f"Could not run model: {result.get('error')}")
@@ -144,8 +145,9 @@ def gather_evidence(state: dict) -> dict:
     machine_id = state["machine_id"]
     exclude_id = state.get("incident_id")
 
-    maintenance = get_maintenance_history.invoke({"machine_id": machine_id})
-    history = get_failure_history.invoke({"machine_id": machine_id, "exclude_incident_id": exclude_id})
+    as_of = state.get("as_of")
+    maintenance = get_maintenance_history.invoke({"machine_id": machine_id, "as_of": as_of})
+    history = get_failure_history.invoke({"machine_id": machine_id, "exclude_incident_id": exclude_id, "as_of": as_of})
 
     similar = {"results": []}
     if state.get("sensor_readings"):
@@ -272,8 +274,8 @@ Rationale given: {hyp['rationale']}
 COMPUTED LIMIT CHECKS (calculated in code - use these numbers for every threshold comparison, never recompute):
 {_facts_block(checks)}
 
-SENSOR STATISTICS over the recent window (no trend information: the readings are independent samples with
-synthetic timestamps, so there is no real time ordering):
+SENSOR STATISTICS over this machine's FULL reading history up to now (not just the 20 recent readings; no
+trend information: the readings are independent samples with synthetic timestamps):
 {stats_text}
 
 TECHNICAL DOCUMENTATION (retrieved for this specific cause; synthetic manuals):

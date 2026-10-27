@@ -32,14 +32,15 @@ from schemas.tool_schemas import (
 # 1. get_sensor_data
 # ─────────────────────────────────────────────
 @tool
-def get_sensor_data(machine_id: str, limit: int = 20) -> dict:
+def get_sensor_data(machine_id: str, limit: int = 20, as_of: Optional[str] = None) -> dict:
     """Get the most recent sensor readings for a machine (air/process temperature,
-    rotational speed, torque, tool wear), newest first."""
+    rotational speed, torque, tool wear), newest first. as_of (optional timestamp text) hides
+    later readings, for investigating a historical incident."""
     if not db.machine_exists(machine_id):
         return SensorDataResult(machine_id=machine_id, found=False, reading_count=0,
                                  error=f"No machine with id '{machine_id}'").model_dump()
 
-    readings = db.get_recent_readings(machine_id, limit=limit)
+    readings = db.get_recent_readings(machine_id, limit=limit, as_of=as_of)
     return SensorDataResult(
         machine_id=machine_id, found=True, reading_count=len(readings), readings=readings
     ).model_dump()
@@ -49,13 +50,14 @@ def get_sensor_data(machine_id: str, limit: int = 20) -> dict:
 # 2. get_maintenance_history
 # ─────────────────────────────────────────────
 @tool
-def get_maintenance_history(machine_id: str) -> dict:
-    """Get all maintenance records for a machine (scheduled and reactive), newest first."""
+def get_maintenance_history(machine_id: str, as_of: Optional[str] = None) -> dict:
+    """Get maintenance records for a machine (scheduled and reactive), newest first.
+    as_of (optional) keeps only records dated on or before that moment."""
     if not db.machine_exists(machine_id):
         return MaintenanceHistoryResult(machine_id=machine_id, found=False, record_count=0,
                                          error=f"No machine with id '{machine_id}'").model_dump()
 
-    records = db.get_maintenance_records(machine_id)
+    records = db.get_maintenance_records(machine_id, as_of=as_of)
     return MaintenanceHistoryResult(
         machine_id=machine_id, found=True, record_count=len(records), records=records
     ).model_dump()
@@ -65,14 +67,16 @@ def get_maintenance_history(machine_id: str) -> dict:
 # 3. get_failure_history
 # ─────────────────────────────────────────────
 @tool
-def get_failure_history(machine_id: str, exclude_incident_id: Optional[int] = None) -> dict:
+def get_failure_history(machine_id: str, exclude_incident_id: Optional[int] = None,
+                        as_of: Optional[str] = None) -> dict:
     """Get past failure incidents for a machine, newest first. Pass exclude_incident_id
-    when investigating that exact incident, so the agent can't see its own answer."""
+    when investigating that exact incident, so the agent can't see its own answer.
+    as_of (optional) keeps only incidents strictly before that moment."""
     if not db.machine_exists(machine_id):
         return FailureHistoryResult(machine_id=machine_id, found=False, incident_count=0,
                                      error=f"No machine with id '{machine_id}'").model_dump()
 
-    incidents = db.get_failure_incidents(machine_id, exclude_incident_id=exclude_incident_id)
+    incidents = db.get_failure_incidents(machine_id, exclude_incident_id=exclude_incident_id, as_of=as_of)
     return FailureHistoryResult(
         machine_id=machine_id, found=True, incident_count=len(incidents), incidents=incidents
     ).model_dump()
@@ -82,8 +86,9 @@ def get_failure_history(machine_id: str, exclude_incident_id: Optional[int] = No
 # 4. run_anomaly_detection
 # ─────────────────────────────────────────────
 @tool
-def run_anomaly_detection(machine_id: str) -> dict:
-    """Run the trained XGBoost classifier on a machine's latest sensor reading. Returns
+def run_anomaly_detection(machine_id: str, as_of: Optional[str] = None) -> dict:
+    """Run the trained XGBoost classifier on a machine's latest sensor reading (as of the given
+    timestamp, if any). Returns
     the predicted failure class, confidence, full probability distribution, feature
     importances, and an honesty flag/note for classes the model is known to be weak on
     (see Phase 2 evaluation: Tool Wear Failure, Unknown, rare multi-cause combinations)."""
@@ -91,7 +96,7 @@ def run_anomaly_detection(machine_id: str) -> dict:
         return AnomalyDetectionResult(machine_id=machine_id, found=False,
                                        error=f"No machine with id '{machine_id}'").model_dump()
 
-    readings = db.get_recent_readings(machine_id, limit=1)
+    readings = db.get_recent_readings(machine_id, limit=1, as_of=as_of)
     if not readings:
         return AnomalyDetectionResult(machine_id=machine_id, found=False,
                                        error="Machine exists but has no sensor readings").model_dump()
@@ -140,14 +145,14 @@ def search_technical_documents(query: str, k: int = 4, failure_type: Optional[st
 # 6. calculate_sensor_statistics
 # ─────────────────────────────────────────────
 @tool
-def calculate_sensor_statistics(machine_id: str) -> dict:
+def calculate_sensor_statistics(machine_id: str, as_of: Optional[str] = None) -> dict:
     """Compute mean/std/min/max/latest and a simple trend (increasing/decreasing/stable)
-    for each sensor channel, across a machine's full reading history."""
+    for each sensor channel, across a machine's full reading history (up to as_of, if given)."""
     if not db.machine_exists(machine_id):
         return SensorStatisticsResult(machine_id=machine_id, found=False, reading_count=0,
                                        error=f"No machine with id '{machine_id}'").model_dump()
 
-    readings = db.get_all_readings(machine_id)  # chronological order
+    readings = db.get_all_readings(machine_id, as_of=as_of)  # chronological order
     if not readings:
         return SensorStatisticsResult(machine_id=machine_id, found=False, reading_count=0,
                                        error="Machine exists but has no sensor readings").model_dump()

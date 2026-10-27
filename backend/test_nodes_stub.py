@@ -25,8 +25,8 @@ class FakeLLM:
                 return NS(hypotheses=[Dumpable(**h) for h in LLM["hyps"]])
             if name == "HypothesisEvaluation":
                 cause = re.search(r"CANDIDATE CAUSE: (.*)", prompt).group(1).strip()
-                assert "trend" not in prompt.lower().split("sensor statistics")[1].split("technical documentation")[0].replace(
-                    "no trend information", ""), "trend labels must not reach the evaluator"
+                section = prompt.lower().split("sensor statistics")[1].split("technical documentation")[0]
+                assert "trend=" not in section and "decreasing" not in section, "trend values must not reach the evaluator"
                 return Dumpable(cause=cause, supporting_evidence=["s"], contradicting_evidence=["c"],
                                 reasoning="r", confidence=LLM["conf"].get(cause, "low"))
             return Dumpable(**LLM["root"])
@@ -45,13 +45,20 @@ NOFAIL = {"found": True, "predicted_class": "No Failure", "confidence": 0.999775
           "reliability_note": None, "close_second_class": "Power Failure", "close_second_margin": 0.9995}
 STATE = {"readings": HEALTHY, "anomaly": dict(NOFAIL)}
 
+CALLS = []
+def rec(name, fn):
+    def wrapped(a):
+        CALLS.append((name, dict(a)))
+        return fn(a)
+    return _Tool(wrapped)
+
 mod("tools.investigation_tools",
-    get_sensor_data=_Tool(lambda a: {"found": True, "readings": STATE["readings"], "reading_count": len(STATE["readings"])}),
-    get_maintenance_history=_Tool(lambda a: {"records": [], "record_count": 0}),
-    get_failure_history=_Tool(lambda a: {"incidents": [], "incident_count": 0}),
-    run_anomaly_detection=_Tool(lambda a: STATE["anomaly"]),
+    get_sensor_data=rec("get_sensor_data", lambda a: {"found": True, "readings": STATE["readings"], "reading_count": len(STATE["readings"])}),
+    get_maintenance_history=rec("get_maintenance_history", lambda a: {"records": [], "record_count": 0}),
+    get_failure_history=rec("get_failure_history", lambda a: {"incidents": [], "incident_count": 0}),
+    run_anomaly_detection=rec("run_anomaly_detection", lambda a: STATE["anomaly"]),
     search_technical_documents=_Tool(lambda a: {"results": []}),
-    calculate_sensor_statistics=_Tool(lambda a: {"channels": {"air_temperature": {"trend": "decreasing", "latest": 298.6, "mean": 299.9}}}),
+    calculate_sensor_statistics=rec("calculate_sensor_statistics", lambda a: {"channels": {"air_temperature": {"trend": "decreasing", "latest": 298.6, "mean": 299.9}}}),
     search_similar_incidents=_Tool(lambda a: {"results": []}))
 sys.path.insert(0, ".")
 import graph.nodes as N
@@ -159,4 +166,19 @@ long = "All computed limit checks are within documented normal ranges (heat diss
 short = N._shorten(long)
 assert short.endswith(" ...") and len(short) <= 165 and long.startswith(short[:-4]) and not short[:-4].endswith(" ")
 assert N._shorten("short text") == "short text"
-print("\nALL STUB CONTROL-FLOW TESTS PASSED (8 cases + shorten)")
+# C9: as_of travels from the graph input to EVERY time-aware tool
+setup(HEALTHY, hyps=[H_SENSOR])
+STATE["readings"] = HEALTHY
+N.get_sensor_data = rec("get_sensor_data", lambda a: {"found": True, "readings": HEALTHY, "reading_count": 2})
+CALLS.clear()
+run_pipeline({"machine_id": "M010", "incident_description": "A failure was reported.", "failure_reported": True,
+              "as_of": "2025-03-03 08:00:00.000001", "incident_id": 5})
+seen = {name: args.get("as_of") for name, args in CALLS}
+assert set(seen) == {"get_sensor_data", "calculate_sensor_statistics", "run_anomaly_detection",
+                     "get_maintenance_history", "get_failure_history"}, seen
+assert all(v == "2025-03-03 08:00:00.000001" for v in seen.values()), seen
+CALLS.clear()
+run_pipeline({"machine_id": "M011", "incident_description": "x", "failure_reported": True})
+assert all(args.get("as_of") is None for _, args in CALLS)           # no as_of -> really 'now'
+
+print("\nALL STUB CONTROL-FLOW TESTS PASSED (8 cases + shorten + as_of)")

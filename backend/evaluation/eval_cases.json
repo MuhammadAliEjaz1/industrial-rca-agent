@@ -1,0 +1,4965 @@
+[
+ {
+  "case_id": "inc-1",
+  "kind": "incident",
+  "incident_id": 1,
+  "machine_id": "M025",
+  "as_of": "2025-03-04 05:56:32.193807",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-2",
+  "kind": "incident",
+  "incident_id": 2,
+  "machine_id": "M025",
+  "as_of": "2025-03-08 00:13:25.420708",
+  "truth_raw": "Power Failure + Overstrain Failure",
+  "ml_class_truth": "Power Failure + Overstrain Failure",
+  "expected": [
+   "Overstrain failure",
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-3",
+  "kind": "incident",
+  "incident_id": 3,
+  "machine_id": "M030",
+  "as_of": "2025-03-06 19:24:20.082868",
+  "truth_raw": "Tool Wear Failure",
+  "ml_class_truth": "Tool Wear Failure",
+  "expected": [
+   "Tool wear failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-4",
+  "kind": "incident",
+  "incident_id": 4,
+  "machine_id": "M032",
+  "as_of": "2025-03-14 10:22:38.454181",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-5",
+  "kind": "incident",
+  "incident_id": 5,
+  "machine_id": "M016",
+  "as_of": "2025-03-03 20:33:25.116004",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-6",
+  "kind": "incident",
+  "incident_id": 6,
+  "machine_id": "M016",
+  "as_of": "2025-03-05 04:19:52.204161",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-7",
+  "kind": "incident",
+  "incident_id": 7,
+  "machine_id": "M007",
+  "as_of": "2025-03-10 08:45:47.415689",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-8",
+  "kind": "incident",
+  "incident_id": 8,
+  "machine_id": "M004",
+  "as_of": "2025-03-08 10:55:44.158519",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-9",
+  "kind": "incident",
+  "incident_id": 9,
+  "machine_id": "M017",
+  "as_of": "2025-03-14 15:37:12.864781",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-10",
+  "kind": "incident",
+  "incident_id": 10,
+  "machine_id": "M028",
+  "as_of": "2025-03-11 17:54:36.640383",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-11",
+  "kind": "incident",
+  "incident_id": 11,
+  "machine_id": "M023",
+  "as_of": "2025-03-28 21:09:09.312029",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-12",
+  "kind": "incident",
+  "incident_id": 12,
+  "machine_id": "M002",
+  "as_of": "2025-03-20 19:05:09.592588",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-13",
+  "kind": "incident",
+  "incident_id": 13,
+  "machine_id": "M025",
+  "as_of": "2025-03-25 16:20:47.675334",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-14",
+  "kind": "incident",
+  "incident_id": 14,
+  "machine_id": "M034",
+  "as_of": "2025-03-13 20:36:01.446044",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-15",
+  "kind": "incident",
+  "incident_id": 15,
+  "machine_id": "M013",
+  "as_of": "2025-03-09 22:19:04.357364",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-16",
+  "kind": "incident",
+  "incident_id": 16,
+  "machine_id": "M026",
+  "as_of": "2025-03-26 07:14:59.742290",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-17",
+  "kind": "incident",
+  "incident_id": 17,
+  "machine_id": "M035",
+  "as_of": "2025-04-09 02:09:59.543164",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-18",
+  "kind": "incident",
+  "incident_id": 18,
+  "machine_id": "M030",
+  "as_of": "2025-04-09 03:16:19.117043",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-19",
+  "kind": "incident",
+  "incident_id": 19,
+  "machine_id": "M033",
+  "as_of": "2025-04-08 00:28:52.684065",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-20",
+  "kind": "incident",
+  "incident_id": 20,
+  "machine_id": "M021",
+  "as_of": "2025-03-29 00:17:18.136180",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-21",
+  "kind": "incident",
+  "incident_id": 21,
+  "machine_id": "M002",
+  "as_of": "2025-04-14 00:54:31.194759",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-22",
+  "kind": "incident",
+  "incident_id": 22,
+  "machine_id": "M012",
+  "as_of": "2025-05-04 05:44:20.169994",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-23",
+  "kind": "incident",
+  "incident_id": 23,
+  "machine_id": "M025",
+  "as_of": "2025-04-25 04:17:24.300145",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-24",
+  "kind": "incident",
+  "incident_id": 24,
+  "machine_id": "M004",
+  "as_of": "2025-04-11 15:33:55.168043",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-25",
+  "kind": "incident",
+  "incident_id": 25,
+  "machine_id": "M023",
+  "as_of": "2025-05-02 11:48:22.191048",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-26",
+  "kind": "incident",
+  "incident_id": 26,
+  "machine_id": "M038",
+  "as_of": "2025-05-19 19:03:45.343832",
+  "truth_raw": "Tool Wear Failure",
+  "ml_class_truth": "Tool Wear Failure",
+  "expected": [
+   "Tool wear failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-27",
+  "kind": "incident",
+  "incident_id": 27,
+  "machine_id": "M020",
+  "as_of": "2025-05-03 21:40:08.893000",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-28",
+  "kind": "incident",
+  "incident_id": 28,
+  "machine_id": "M037",
+  "as_of": "2025-05-25 16:55:58.570306",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-29",
+  "kind": "incident",
+  "incident_id": 29,
+  "machine_id": "M004",
+  "as_of": "2025-04-18 23:46:50.348622",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-30",
+  "kind": "incident",
+  "incident_id": 30,
+  "machine_id": "M032",
+  "as_of": "2025-06-02 02:53:05.046136",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-31",
+  "kind": "incident",
+  "incident_id": 31,
+  "machine_id": "M032",
+  "as_of": "2025-06-03 13:45:49.876927",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-32",
+  "kind": "incident",
+  "incident_id": 32,
+  "machine_id": "M031",
+  "as_of": "2025-04-19 09:02:05.258114",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-33",
+  "kind": "incident",
+  "incident_id": 33,
+  "machine_id": "M016",
+  "as_of": "2025-04-25 22:14:58.782388",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-34",
+  "kind": "incident",
+  "incident_id": 34,
+  "machine_id": "M012",
+  "as_of": "2025-05-21 11:59:01.225970",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-35",
+  "kind": "incident",
+  "incident_id": 35,
+  "machine_id": "M006",
+  "as_of": "2025-04-22 22:23:41.751769",
+  "truth_raw": "Power Failure + Overstrain Failure",
+  "ml_class_truth": "Power Failure + Overstrain Failure",
+  "expected": [
+   "Overstrain failure",
+   "Power failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-36",
+  "kind": "incident",
+  "incident_id": 36,
+  "machine_id": "M033",
+  "as_of": "2025-04-27 20:56:23.709767",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-37",
+  "kind": "incident",
+  "incident_id": 37,
+  "machine_id": "M031",
+  "as_of": "2025-04-19 18:44:24.261001",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-38",
+  "kind": "incident",
+  "incident_id": 38,
+  "machine_id": "M015",
+  "as_of": "2025-06-04 16:31:46.205609",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-39",
+  "kind": "incident",
+  "incident_id": 39,
+  "machine_id": "M020",
+  "as_of": "2025-05-22 07:33:52.179539",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-40",
+  "kind": "incident",
+  "incident_id": 40,
+  "machine_id": "M039",
+  "as_of": "2025-06-07 09:10:08.665178",
+  "truth_raw": "Unknown",
+  "ml_class_truth": "Unknown",
+  "expected": [],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-41",
+  "kind": "incident",
+  "incident_id": 41,
+  "machine_id": "M007",
+  "as_of": "2025-06-04 16:55:45.540319",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-42",
+  "kind": "incident",
+  "incident_id": 42,
+  "machine_id": "M029",
+  "as_of": "2025-04-27 08:08:17.534220",
+  "truth_raw": "Power Failure + Overstrain Failure",
+  "ml_class_truth": "Power Failure + Overstrain Failure",
+  "expected": [
+   "Overstrain failure",
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-43",
+  "kind": "incident",
+  "incident_id": 43,
+  "machine_id": "M035",
+  "as_of": "2025-06-16 09:37:10.711760",
+  "truth_raw": "Tool Wear Failure",
+  "ml_class_truth": "Tool Wear Failure",
+  "expected": [
+   "Tool wear failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-44",
+  "kind": "incident",
+  "incident_id": 44,
+  "machine_id": "M034",
+  "as_of": "2025-05-21 21:19:29.588018",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-45",
+  "kind": "incident",
+  "incident_id": 45,
+  "machine_id": "M023",
+  "as_of": "2025-06-09 11:03:24.505265",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-46",
+  "kind": "incident",
+  "incident_id": 46,
+  "machine_id": "M039",
+  "as_of": "2025-06-27 21:23:33.856575",
+  "truth_raw": "Tool Wear Failure",
+  "ml_class_truth": "Tool Wear Failure",
+  "expected": [
+   "Tool wear failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-47",
+  "kind": "incident",
+  "incident_id": 47,
+  "machine_id": "M030",
+  "as_of": "2025-05-24 02:43:25.905444",
+  "truth_raw": "Tool Wear Failure",
+  "ml_class_truth": "Tool Wear Failure",
+  "expected": [
+   "Tool wear failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-48",
+  "kind": "incident",
+  "incident_id": 48,
+  "machine_id": "M034",
+  "as_of": "2025-05-29 22:19:02.644961",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-49",
+  "kind": "incident",
+  "incident_id": 49,
+  "machine_id": "M031",
+  "as_of": "2025-06-10 14:13:09.723335",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-50",
+  "kind": "incident",
+  "incident_id": 50,
+  "machine_id": "M018",
+  "as_of": "2025-05-18 23:20:54.049816",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-51",
+  "kind": "incident",
+  "incident_id": 51,
+  "machine_id": "M021",
+  "as_of": "2025-05-01 21:09:01.766673",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-52",
+  "kind": "incident",
+  "incident_id": 52,
+  "machine_id": "M005",
+  "as_of": "2025-06-03 00:39:49.566313",
+  "truth_raw": "Tool Wear Failure",
+  "ml_class_truth": "Tool Wear Failure",
+  "expected": [
+   "Tool wear failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-53",
+  "kind": "incident",
+  "incident_id": 53,
+  "machine_id": "M014",
+  "as_of": "2025-07-02 11:23:49.995934",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-54",
+  "kind": "incident",
+  "incident_id": 54,
+  "machine_id": "M021",
+  "as_of": "2025-05-11 15:47:00.387173",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-55",
+  "kind": "incident",
+  "incident_id": 55,
+  "machine_id": "M023",
+  "as_of": "2025-06-20 09:25:26.855780",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-56",
+  "kind": "incident",
+  "incident_id": 56,
+  "machine_id": "M004",
+  "as_of": "2025-06-17 15:35:46.240116",
+  "truth_raw": "Tool Wear Failure",
+  "ml_class_truth": "Tool Wear Failure",
+  "expected": [
+   "Tool wear failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-57",
+  "kind": "incident",
+  "incident_id": 57,
+  "machine_id": "M035",
+  "as_of": "2025-07-24 09:42:09.356164",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-58",
+  "kind": "incident",
+  "incident_id": 58,
+  "machine_id": "M010",
+  "as_of": "2025-07-25 18:05:27.233991",
+  "truth_raw": "Tool Wear Failure",
+  "ml_class_truth": "Tool Wear Failure",
+  "expected": [
+   "Tool wear failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-59",
+  "kind": "incident",
+  "incident_id": 59,
+  "machine_id": "M015",
+  "as_of": "2025-08-23 06:27:49.095784",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-60",
+  "kind": "incident",
+  "incident_id": 60,
+  "machine_id": "M021",
+  "as_of": "2025-05-30 02:53:14.471320",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-61",
+  "kind": "incident",
+  "incident_id": 61,
+  "machine_id": "M017",
+  "as_of": "2025-07-26 16:21:11.608156",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-62",
+  "kind": "incident",
+  "incident_id": 62,
+  "machine_id": "M007",
+  "as_of": "2025-07-27 04:21:32.242274",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-63",
+  "kind": "incident",
+  "incident_id": 63,
+  "machine_id": "M022",
+  "as_of": "2025-07-17 21:53:26.338985",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-64",
+  "kind": "incident",
+  "incident_id": 64,
+  "machine_id": "M034",
+  "as_of": "2025-06-28 07:04:29.503263",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-65",
+  "kind": "incident",
+  "incident_id": 65,
+  "machine_id": "M017",
+  "as_of": "2025-08-09 04:12:01.265300",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-66",
+  "kind": "incident",
+  "incident_id": 66,
+  "machine_id": "M034",
+  "as_of": "2025-07-05 02:52:00.932799",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-67",
+  "kind": "incident",
+  "incident_id": 67,
+  "machine_id": "M026",
+  "as_of": "2025-07-08 06:34:12.845277",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-68",
+  "kind": "incident",
+  "incident_id": 68,
+  "machine_id": "M010",
+  "as_of": "2025-08-11 09:34:11.665680",
+  "truth_raw": "Tool Wear Failure",
+  "ml_class_truth": "Tool Wear Failure",
+  "expected": [
+   "Tool wear failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-69",
+  "kind": "incident",
+  "incident_id": 69,
+  "machine_id": "M008",
+  "as_of": "2025-06-30 14:18:40.978542",
+  "truth_raw": "Unknown",
+  "ml_class_truth": "Unknown",
+  "expected": [],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-70",
+  "kind": "incident",
+  "incident_id": 70,
+  "machine_id": "M020",
+  "as_of": "2025-08-17 02:40:30.812853",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-71",
+  "kind": "incident",
+  "incident_id": 71,
+  "machine_id": "M023",
+  "as_of": "2025-06-29 07:34:20.130301",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-72",
+  "kind": "incident",
+  "incident_id": 72,
+  "machine_id": "M039",
+  "as_of": "2025-09-02 01:09:21.463926",
+  "truth_raw": "Tool Wear Failure",
+  "ml_class_truth": "Tool Wear Failure",
+  "expected": [
+   "Tool wear failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-73",
+  "kind": "incident",
+  "incident_id": 73,
+  "machine_id": "M003",
+  "as_of": "2025-08-02 05:19:04.951736",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-74",
+  "kind": "incident",
+  "incident_id": 74,
+  "machine_id": "M007",
+  "as_of": "2025-08-10 14:56:03.473133",
+  "truth_raw": "Tool Wear Failure",
+  "ml_class_truth": "Tool Wear Failure",
+  "expected": [
+   "Tool wear failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-75",
+  "kind": "incident",
+  "incident_id": 75,
+  "machine_id": "M039",
+  "as_of": "2025-09-07 17:01:45.001379",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-76",
+  "kind": "incident",
+  "incident_id": 76,
+  "machine_id": "M035",
+  "as_of": "2025-08-26 12:26:50.310073",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-77",
+  "kind": "incident",
+  "incident_id": 77,
+  "machine_id": "M037",
+  "as_of": "2025-09-21 06:23:05.593324",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-78",
+  "kind": "incident",
+  "incident_id": 78,
+  "machine_id": "M004",
+  "as_of": "2025-08-20 14:58:13.191075",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-79",
+  "kind": "incident",
+  "incident_id": 79,
+  "machine_id": "M022",
+  "as_of": "2025-09-09 05:58:53.000727",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-80",
+  "kind": "incident",
+  "incident_id": 80,
+  "machine_id": "M026",
+  "as_of": "2025-08-28 02:20:26.404162",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-81",
+  "kind": "incident",
+  "incident_id": 81,
+  "machine_id": "M019",
+  "as_of": "2025-10-07 16:40:21.386498",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-82",
+  "kind": "incident",
+  "incident_id": 82,
+  "machine_id": "M035",
+  "as_of": "2025-09-23 03:07:47.372838",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-83",
+  "kind": "incident",
+  "incident_id": 83,
+  "machine_id": "M005",
+  "as_of": "2025-08-22 11:57:18.802260",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-84",
+  "kind": "incident",
+  "incident_id": 84,
+  "machine_id": "M027",
+  "as_of": "2025-08-03 13:25:15.780698",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-85",
+  "kind": "incident",
+  "incident_id": 85,
+  "machine_id": "M033",
+  "as_of": "2025-09-19 01:03:11.237949",
+  "truth_raw": "Tool Wear Failure",
+  "ml_class_truth": "Tool Wear Failure",
+  "expected": [
+   "Tool wear failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-86",
+  "kind": "incident",
+  "incident_id": 86,
+  "machine_id": "M028",
+  "as_of": "2025-10-10 05:24:51.239653",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-87",
+  "kind": "incident",
+  "incident_id": 87,
+  "machine_id": "M016",
+  "as_of": "2025-09-10 11:12:22.472227",
+  "truth_raw": "Tool Wear Failure + Random Failure",
+  "ml_class_truth": "Multiple Failure Causes (rare combination)",
+  "expected": [
+   "Tool wear failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-88",
+  "kind": "incident",
+  "incident_id": 88,
+  "machine_id": "M027",
+  "as_of": "2025-08-11 22:39:53.883528",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-89",
+  "kind": "incident",
+  "incident_id": 89,
+  "machine_id": "M019",
+  "as_of": "2025-10-31 02:49:39.158864",
+  "truth_raw": "Tool Wear Failure",
+  "ml_class_truth": "Tool Wear Failure",
+  "expected": [
+   "Tool wear failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-90",
+  "kind": "incident",
+  "incident_id": 90,
+  "machine_id": "M028",
+  "as_of": "2025-11-03 07:35:12.502028",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-91",
+  "kind": "incident",
+  "incident_id": 91,
+  "machine_id": "M024",
+  "as_of": "2025-09-24 03:05:21.916529",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-92",
+  "kind": "incident",
+  "incident_id": 92,
+  "machine_id": "M025",
+  "as_of": "2025-09-30 09:16:20.932750",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-93",
+  "kind": "incident",
+  "incident_id": 93,
+  "machine_id": "M007",
+  "as_of": "2025-10-03 10:58:39.199401",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-94",
+  "kind": "incident",
+  "incident_id": 94,
+  "machine_id": "M001",
+  "as_of": "2025-10-11 12:37:30.007679",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-95",
+  "kind": "incident",
+  "incident_id": 95,
+  "machine_id": "M038",
+  "as_of": "2025-10-15 16:25:13.455383",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-96",
+  "kind": "incident",
+  "incident_id": 96,
+  "machine_id": "M035",
+  "as_of": "2025-10-23 04:58:48.621117",
+  "truth_raw": "Power Failure + Overstrain Failure",
+  "ml_class_truth": "Power Failure + Overstrain Failure",
+  "expected": [
+   "Overstrain failure",
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-97",
+  "kind": "incident",
+  "incident_id": 97,
+  "machine_id": "M037",
+  "as_of": "2025-10-03 07:54:41.168613",
+  "truth_raw": "Tool Wear Failure",
+  "ml_class_truth": "Tool Wear Failure",
+  "expected": [
+   "Tool wear failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-98",
+  "kind": "incident",
+  "incident_id": 98,
+  "machine_id": "M010",
+  "as_of": "2025-10-12 09:03:33.392428",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-99",
+  "kind": "incident",
+  "incident_id": 99,
+  "machine_id": "M028",
+  "as_of": "2025-11-07 00:28:08.613802",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-100",
+  "kind": "incident",
+  "incident_id": 100,
+  "machine_id": "M001",
+  "as_of": "2025-10-22 08:42:13.740334",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-101",
+  "kind": "incident",
+  "incident_id": 101,
+  "machine_id": "M031",
+  "as_of": "2025-10-13 17:17:11.076597",
+  "truth_raw": "Power Failure + Overstrain Failure",
+  "ml_class_truth": "Power Failure + Overstrain Failure",
+  "expected": [
+   "Overstrain failure",
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-102",
+  "kind": "incident",
+  "incident_id": 102,
+  "machine_id": "M035",
+  "as_of": "2025-11-05 08:08:12.167622",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-103",
+  "kind": "incident",
+  "incident_id": 103,
+  "machine_id": "M007",
+  "as_of": "2025-10-17 06:18:38.453096",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-104",
+  "kind": "incident",
+  "incident_id": 104,
+  "machine_id": "M018",
+  "as_of": "2025-08-26 23:07:12.032892",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-105",
+  "kind": "incident",
+  "incident_id": 105,
+  "machine_id": "M035",
+  "as_of": "2025-11-09 08:36:59.296005",
+  "truth_raw": "Tool Wear Failure",
+  "ml_class_truth": "Tool Wear Failure",
+  "expected": [
+   "Tool wear failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-106",
+  "kind": "incident",
+  "incident_id": 106,
+  "machine_id": "M011",
+  "as_of": "2025-09-17 02:26:36.609661",
+  "truth_raw": "Unknown",
+  "ml_class_truth": "Unknown",
+  "expected": [],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-107",
+  "kind": "incident",
+  "incident_id": 107,
+  "machine_id": "M019",
+  "as_of": "2025-11-28 17:17:17.120688",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-108",
+  "kind": "incident",
+  "incident_id": 108,
+  "machine_id": "M027",
+  "as_of": "2025-08-31 22:41:26.988879",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-109",
+  "kind": "incident",
+  "incident_id": 109,
+  "machine_id": "M037",
+  "as_of": "2025-10-26 02:34:45.940067",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-110",
+  "kind": "incident",
+  "incident_id": 110,
+  "machine_id": "M024",
+  "as_of": "2025-10-07 12:37:49.296837",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-111",
+  "kind": "incident",
+  "incident_id": 111,
+  "machine_id": "M028",
+  "as_of": "2025-11-13 20:47:00.041121",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-112",
+  "kind": "incident",
+  "incident_id": 112,
+  "machine_id": "M025",
+  "as_of": "2025-10-15 00:34:08.758208",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-113",
+  "kind": "incident",
+  "incident_id": 113,
+  "machine_id": "M025",
+  "as_of": "2025-10-18 10:54:42.119229",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-114",
+  "kind": "incident",
+  "incident_id": 114,
+  "machine_id": "M013",
+  "as_of": "2025-09-06 22:38:15.668392",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-115",
+  "kind": "incident",
+  "incident_id": 115,
+  "machine_id": "M016",
+  "as_of": "2025-09-23 11:32:01.497942",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-116",
+  "kind": "incident",
+  "incident_id": 116,
+  "machine_id": "M002",
+  "as_of": "2025-09-20 05:19:16.380018",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-117",
+  "kind": "incident",
+  "incident_id": 117,
+  "machine_id": "M007",
+  "as_of": "2025-10-20 14:55:47.047302",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-118",
+  "kind": "incident",
+  "incident_id": 118,
+  "machine_id": "M029",
+  "as_of": "2025-09-03 03:27:15.496793",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-119",
+  "kind": "incident",
+  "incident_id": 119,
+  "machine_id": "M018",
+  "as_of": "2025-08-28 05:54:26.952961",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-120",
+  "kind": "incident",
+  "incident_id": 120,
+  "machine_id": "M023",
+  "as_of": "2025-09-04 23:29:22.761966",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-121",
+  "kind": "incident",
+  "incident_id": 121,
+  "machine_id": "M003",
+  "as_of": "2025-10-15 10:03:01.865132",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-122",
+  "kind": "incident",
+  "incident_id": 122,
+  "machine_id": "M002",
+  "as_of": "2025-09-24 11:48:48.155351",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-123",
+  "kind": "incident",
+  "incident_id": 123,
+  "machine_id": "M014",
+  "as_of": "2025-10-24 22:03:19.624335",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-124",
+  "kind": "incident",
+  "incident_id": 124,
+  "machine_id": "M030",
+  "as_of": "2025-10-24 12:36:26.224132",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-125",
+  "kind": "incident",
+  "incident_id": 125,
+  "machine_id": "M027",
+  "as_of": "2025-09-06 23:46:48.011279",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-126",
+  "kind": "incident",
+  "incident_id": 126,
+  "machine_id": "M002",
+  "as_of": "2025-09-26 04:45:51.389037",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-127",
+  "kind": "incident",
+  "incident_id": 127,
+  "machine_id": "M007",
+  "as_of": "2025-10-27 11:52:03.205615",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-128",
+  "kind": "incident",
+  "incident_id": 128,
+  "machine_id": "M012",
+  "as_of": "2025-11-04 02:17:05.443732",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-129",
+  "kind": "incident",
+  "incident_id": 129,
+  "machine_id": "M015",
+  "as_of": "2025-11-08 14:51:39.177734",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-130",
+  "kind": "incident",
+  "incident_id": 130,
+  "machine_id": "M017",
+  "as_of": "2025-11-02 11:20:19.214571",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-131",
+  "kind": "incident",
+  "incident_id": 131,
+  "machine_id": "M025",
+  "as_of": "2025-10-21 15:52:47.625627",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-132",
+  "kind": "incident",
+  "incident_id": 132,
+  "machine_id": "M008",
+  "as_of": "2025-10-06 09:51:03.297397",
+  "truth_raw": "Tool Wear Failure",
+  "ml_class_truth": "Tool Wear Failure",
+  "expected": [
+   "Tool wear failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-133",
+  "kind": "incident",
+  "incident_id": 133,
+  "machine_id": "M013",
+  "as_of": "2025-09-09 12:17:01.032335",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-134",
+  "kind": "incident",
+  "incident_id": 134,
+  "machine_id": "M024",
+  "as_of": "2025-10-17 19:48:54.536257",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-135",
+  "kind": "incident",
+  "incident_id": 135,
+  "machine_id": "M032",
+  "as_of": "2025-11-07 14:24:24.995719",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-136",
+  "kind": "incident",
+  "incident_id": 136,
+  "machine_id": "M013",
+  "as_of": "2025-09-21 20:28:30.290689",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-137",
+  "kind": "incident",
+  "incident_id": 137,
+  "machine_id": "M037",
+  "as_of": "2025-10-28 22:10:32.878354",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-138",
+  "kind": "incident",
+  "incident_id": 138,
+  "machine_id": "M009",
+  "as_of": "2025-10-12 05:45:15.332648",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-139",
+  "kind": "incident",
+  "incident_id": 139,
+  "machine_id": "M024",
+  "as_of": "2025-10-18 02:07:29.492855",
+  "truth_raw": "Heat Dissipation Failure + Power Failure",
+  "ml_class_truth": "Multiple Failure Causes (rare combination)",
+  "expected": [
+   "Heat dissipation failure",
+   "Power failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-140",
+  "kind": "incident",
+  "incident_id": 140,
+  "machine_id": "M006",
+  "as_of": "2025-10-01 02:10:29.573859",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-141",
+  "kind": "incident",
+  "incident_id": 141,
+  "machine_id": "M021",
+  "as_of": "2025-10-02 16:00:12.770198",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-142",
+  "kind": "incident",
+  "incident_id": 142,
+  "machine_id": "M031",
+  "as_of": "2025-10-25 16:23:20.817052",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-143",
+  "kind": "incident",
+  "incident_id": 143,
+  "machine_id": "M035",
+  "as_of": "2025-11-18 10:22:54.805112",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-144",
+  "kind": "incident",
+  "incident_id": 144,
+  "machine_id": "M010",
+  "as_of": "2025-11-02 19:13:53.793458",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-145",
+  "kind": "incident",
+  "incident_id": 145,
+  "machine_id": "M021",
+  "as_of": "2025-10-06 01:56:02.799578",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-146",
+  "kind": "incident",
+  "incident_id": 146,
+  "machine_id": "M006",
+  "as_of": "2025-10-04 10:54:43.337739",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-147",
+  "kind": "incident",
+  "incident_id": 147,
+  "machine_id": "M015",
+  "as_of": "2025-11-17 20:06:40.289303",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-148",
+  "kind": "incident",
+  "incident_id": 148,
+  "machine_id": "M014",
+  "as_of": "2025-11-14 20:01:31.646883",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-149",
+  "kind": "incident",
+  "incident_id": 149,
+  "machine_id": "M024",
+  "as_of": "2025-10-21 07:37:00.334428",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-150",
+  "kind": "incident",
+  "incident_id": 150,
+  "machine_id": "M020",
+  "as_of": "2025-10-07 13:27:07.281561",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-151",
+  "kind": "incident",
+  "incident_id": 151,
+  "machine_id": "M023",
+  "as_of": "2025-09-18 22:24:24.204266",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-152",
+  "kind": "incident",
+  "incident_id": 152,
+  "machine_id": "M005",
+  "as_of": "2025-10-13 04:57:14.100798",
+  "truth_raw": "Heat Dissipation Failure + Power Failure",
+  "ml_class_truth": "Multiple Failure Causes (rare combination)",
+  "expected": [
+   "Heat dissipation failure",
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-153",
+  "kind": "incident",
+  "incident_id": 153,
+  "machine_id": "M005",
+  "as_of": "2025-10-13 16:40:52.420499",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-154",
+  "kind": "incident",
+  "incident_id": 154,
+  "machine_id": "M037",
+  "as_of": "2025-10-29 17:59:21.649256",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-155",
+  "kind": "incident",
+  "incident_id": 155,
+  "machine_id": "M009",
+  "as_of": "2025-10-21 04:54:39.252482",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-156",
+  "kind": "incident",
+  "incident_id": 156,
+  "machine_id": "M025",
+  "as_of": "2025-10-29 09:56:16.786027",
+  "truth_raw": "Heat Dissipation Failure + Overstrain Failure",
+  "ml_class_truth": "Heat Dissipation Failure + Overstrain Failure",
+  "expected": [
+   "Heat dissipation failure",
+   "Overstrain failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-157",
+  "kind": "incident",
+  "incident_id": 157,
+  "machine_id": "M013",
+  "as_of": "2025-09-27 18:54:14.339290",
+  "truth_raw": "Heat Dissipation Failure + Overstrain Failure",
+  "ml_class_truth": "Heat Dissipation Failure + Overstrain Failure",
+  "expected": [
+   "Heat dissipation failure",
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-158",
+  "kind": "incident",
+  "incident_id": 158,
+  "machine_id": "M014",
+  "as_of": "2025-11-16 22:19:47.653959",
+  "truth_raw": "Tool Wear Failure",
+  "ml_class_truth": "Tool Wear Failure",
+  "expected": [
+   "Tool wear failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-159",
+  "kind": "incident",
+  "incident_id": 159,
+  "machine_id": "M007",
+  "as_of": "2025-11-02 18:28:39.787286",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-160",
+  "kind": "incident",
+  "incident_id": 160,
+  "machine_id": "M001",
+  "as_of": "2025-11-09 09:34:54.144251",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-161",
+  "kind": "incident",
+  "incident_id": 161,
+  "machine_id": "M028",
+  "as_of": "2025-11-25 02:54:29.934019",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-162",
+  "kind": "incident",
+  "incident_id": 162,
+  "machine_id": "M023",
+  "as_of": "2025-09-20 18:17:11.636314",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-163",
+  "kind": "incident",
+  "incident_id": 163,
+  "machine_id": "M021",
+  "as_of": "2025-10-16 18:22:56.089290",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-164",
+  "kind": "incident",
+  "incident_id": 164,
+  "machine_id": "M002",
+  "as_of": "2025-10-12 16:37:58.235619",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-165",
+  "kind": "incident",
+  "incident_id": 165,
+  "machine_id": "M014",
+  "as_of": "2025-11-17 14:07:29.324740",
+  "truth_raw": "Heat Dissipation Failure + Power Failure",
+  "ml_class_truth": "Multiple Failure Causes (rare combination)",
+  "expected": [
+   "Heat dissipation failure",
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-166",
+  "kind": "incident",
+  "incident_id": 166,
+  "machine_id": "M001",
+  "as_of": "2025-11-11 11:08:04.151220",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-167",
+  "kind": "incident",
+  "incident_id": 167,
+  "machine_id": "M027",
+  "as_of": "2025-09-23 23:37:32.784502",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-168",
+  "kind": "incident",
+  "incident_id": 168,
+  "machine_id": "M003",
+  "as_of": "2025-10-23 17:40:24.772295",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-169",
+  "kind": "incident",
+  "incident_id": 169,
+  "machine_id": "M027",
+  "as_of": "2025-09-25 05:42:56.533266",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-170",
+  "kind": "incident",
+  "incident_id": 170,
+  "machine_id": "M015",
+  "as_of": "2025-11-19 12:20:37.046661",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-171",
+  "kind": "incident",
+  "incident_id": 171,
+  "machine_id": "M018",
+  "as_of": "2025-09-15 21:10:56.904669",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-172",
+  "kind": "incident",
+  "incident_id": 172,
+  "machine_id": "M011",
+  "as_of": "2025-10-01 12:46:27.904560",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-173",
+  "kind": "incident",
+  "incident_id": 173,
+  "machine_id": "M035",
+  "as_of": "2025-11-26 03:27:14.477297",
+  "truth_raw": "Heat Dissipation Failure + Overstrain Failure",
+  "ml_class_truth": "Heat Dissipation Failure + Overstrain Failure",
+  "expected": [
+   "Heat dissipation failure",
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-174",
+  "kind": "incident",
+  "incident_id": 174,
+  "machine_id": "M033",
+  "as_of": "2025-11-05 02:14:41.319733",
+  "truth_raw": "Tool Wear Failure",
+  "ml_class_truth": "Tool Wear Failure",
+  "expected": [
+   "Tool wear failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-175",
+  "kind": "incident",
+  "incident_id": 175,
+  "machine_id": "M025",
+  "as_of": "2025-11-04 18:02:53.556764",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-176",
+  "kind": "incident",
+  "incident_id": 176,
+  "machine_id": "M036",
+  "as_of": "2025-09-16 23:51:55.009122",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-177",
+  "kind": "incident",
+  "incident_id": 177,
+  "machine_id": "M031",
+  "as_of": "2025-11-04 06:23:01.680855",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-178",
+  "kind": "incident",
+  "incident_id": 178,
+  "machine_id": "M021",
+  "as_of": "2025-10-22 22:56:18.681020",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-179",
+  "kind": "incident",
+  "incident_id": 179,
+  "machine_id": "M015",
+  "as_of": "2025-12-03 18:31:12.680963",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-180",
+  "kind": "incident",
+  "incident_id": 180,
+  "machine_id": "M001",
+  "as_of": "2025-11-13 03:04:41.648920",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-181",
+  "kind": "incident",
+  "incident_id": 181,
+  "machine_id": "M004",
+  "as_of": "2025-10-23 00:43:38.989625",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-182",
+  "kind": "incident",
+  "incident_id": 182,
+  "machine_id": "M031",
+  "as_of": "2025-11-13 14:55:52.471321",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-183",
+  "kind": "incident",
+  "incident_id": 183,
+  "machine_id": "M030",
+  "as_of": "2025-11-07 18:42:19.698539",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-184",
+  "kind": "incident",
+  "incident_id": 184,
+  "machine_id": "M002",
+  "as_of": "2025-10-15 22:05:46.972755",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-185",
+  "kind": "incident",
+  "incident_id": 185,
+  "machine_id": "M020",
+  "as_of": "2025-10-17 06:23:16.461802",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-186",
+  "kind": "incident",
+  "incident_id": 186,
+  "machine_id": "M038",
+  "as_of": "2025-11-20 23:09:27.120372",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-187",
+  "kind": "incident",
+  "incident_id": 187,
+  "machine_id": "M033",
+  "as_of": "2025-11-13 09:43:21.107973",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-188",
+  "kind": "incident",
+  "incident_id": 188,
+  "machine_id": "M024",
+  "as_of": "2025-11-06 08:18:18.348844",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-189",
+  "kind": "incident",
+  "incident_id": 189,
+  "machine_id": "M013",
+  "as_of": "2025-10-12 14:18:59.748669",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-190",
+  "kind": "incident",
+  "incident_id": 190,
+  "machine_id": "M013",
+  "as_of": "2025-10-16 09:05:01.123179",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-191",
+  "kind": "incident",
+  "incident_id": 191,
+  "machine_id": "M008",
+  "as_of": "2025-10-15 08:04:32.597343",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-192",
+  "kind": "incident",
+  "incident_id": 192,
+  "machine_id": "M025",
+  "as_of": "2025-11-22 05:26:46.854145",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-193",
+  "kind": "incident",
+  "incident_id": 193,
+  "machine_id": "M003",
+  "as_of": "2025-10-28 19:50:54.972824",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-194",
+  "kind": "incident",
+  "incident_id": 194,
+  "machine_id": "M012",
+  "as_of": "2025-11-11 17:42:16.625936",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-195",
+  "kind": "incident",
+  "incident_id": 195,
+  "machine_id": "M022",
+  "as_of": "2025-11-16 15:11:55.611861",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-196",
+  "kind": "incident",
+  "incident_id": 196,
+  "machine_id": "M006",
+  "as_of": "2025-10-17 07:26:52.032666",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-197",
+  "kind": "incident",
+  "incident_id": 197,
+  "machine_id": "M032",
+  "as_of": "2025-12-03 05:06:28.354800",
+  "truth_raw": "Heat Dissipation Failure + Overstrain Failure",
+  "ml_class_truth": "Heat Dissipation Failure + Overstrain Failure",
+  "expected": [
+   "Heat dissipation failure",
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-198",
+  "kind": "incident",
+  "incident_id": 198,
+  "machine_id": "M021",
+  "as_of": "2025-11-02 10:40:01.082620",
+  "truth_raw": "Heat Dissipation Failure + Overstrain Failure",
+  "ml_class_truth": "Heat Dissipation Failure + Overstrain Failure",
+  "expected": [
+   "Heat dissipation failure",
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-199",
+  "kind": "incident",
+  "incident_id": 199,
+  "machine_id": "M021",
+  "as_of": "2025-11-03 00:39:42.889370",
+  "truth_raw": "Tool Wear Failure",
+  "ml_class_truth": "Tool Wear Failure",
+  "expected": [
+   "Tool wear failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-200",
+  "kind": "incident",
+  "incident_id": 200,
+  "machine_id": "M030",
+  "as_of": "2025-11-13 14:06:49.199855",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-201",
+  "kind": "incident",
+  "incident_id": 201,
+  "machine_id": "M014",
+  "as_of": "2025-11-22 06:04:48.510756",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-202",
+  "kind": "incident",
+  "incident_id": 202,
+  "machine_id": "M010",
+  "as_of": "2025-11-24 14:34:50.792999",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-203",
+  "kind": "incident",
+  "incident_id": 203,
+  "machine_id": "M007",
+  "as_of": "2025-11-04 19:06:36.066471",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-204",
+  "kind": "incident",
+  "incident_id": 204,
+  "machine_id": "M008",
+  "as_of": "2025-10-17 01:31:32.523371",
+  "truth_raw": "Unknown",
+  "ml_class_truth": "Unknown",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-205",
+  "kind": "incident",
+  "incident_id": 205,
+  "machine_id": "M021",
+  "as_of": "2025-11-12 07:08:22.027109",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-206",
+  "kind": "incident",
+  "incident_id": 206,
+  "machine_id": "M027",
+  "as_of": "2025-10-13 04:09:19.981628",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-207",
+  "kind": "incident",
+  "incident_id": 207,
+  "machine_id": "M011",
+  "as_of": "2025-10-22 09:00:08.626378",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-208",
+  "kind": "incident",
+  "incident_id": 208,
+  "machine_id": "M013",
+  "as_of": "2025-11-02 07:08:57.023869",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-209",
+  "kind": "incident",
+  "incident_id": 209,
+  "machine_id": "M010",
+  "as_of": "2025-11-28 06:58:32.870097",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-210",
+  "kind": "incident",
+  "incident_id": 210,
+  "machine_id": "M020",
+  "as_of": "2025-10-27 02:53:27.266932",
+  "truth_raw": "Heat Dissipation Failure + Overstrain Failure",
+  "ml_class_truth": "Heat Dissipation Failure + Overstrain Failure",
+  "expected": [
+   "Heat dissipation failure",
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-211",
+  "kind": "incident",
+  "incident_id": 211,
+  "machine_id": "M020",
+  "as_of": "2025-10-28 00:32:46.969160",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-212",
+  "kind": "incident",
+  "incident_id": 212,
+  "machine_id": "M007",
+  "as_of": "2025-11-06 01:21:24.853784",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-213",
+  "kind": "incident",
+  "incident_id": 213,
+  "machine_id": "M013",
+  "as_of": "2025-11-04 10:04:28.528676",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-214",
+  "kind": "incident",
+  "incident_id": 214,
+  "machine_id": "M013",
+  "as_of": "2025-11-09 06:08:48.919326",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-215",
+  "kind": "incident",
+  "incident_id": 215,
+  "machine_id": "M016",
+  "as_of": "2025-11-04 04:33:08.987906",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-216",
+  "kind": "incident",
+  "incident_id": 216,
+  "machine_id": "M035",
+  "as_of": "2025-12-15 22:03:35.758974",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-217",
+  "kind": "incident",
+  "incident_id": 217,
+  "machine_id": "M036",
+  "as_of": "2025-09-22 07:11:49.120802",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-218",
+  "kind": "incident",
+  "incident_id": 218,
+  "machine_id": "M005",
+  "as_of": "2025-10-30 22:32:55.891689",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-219",
+  "kind": "incident",
+  "incident_id": 219,
+  "machine_id": "M016",
+  "as_of": "2025-11-04 10:44:15.862263",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-220",
+  "kind": "incident",
+  "incident_id": 220,
+  "machine_id": "M029",
+  "as_of": "2025-09-30 19:48:04.230490",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-221",
+  "kind": "incident",
+  "incident_id": 221,
+  "machine_id": "M037",
+  "as_of": "2025-11-19 07:53:04.272799",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-222",
+  "kind": "incident",
+  "incident_id": 222,
+  "machine_id": "M019",
+  "as_of": "2025-12-31 10:03:14.701887",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-223",
+  "kind": "incident",
+  "incident_id": 223,
+  "machine_id": "M030",
+  "as_of": "2025-11-16 01:02:28.071112",
+  "truth_raw": "Tool Wear Failure",
+  "ml_class_truth": "Tool Wear Failure",
+  "expected": [
+   "Tool wear failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-224",
+  "kind": "incident",
+  "incident_id": 224,
+  "machine_id": "M026",
+  "as_of": "2025-12-05 23:51:47.821009",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-225",
+  "kind": "incident",
+  "incident_id": 225,
+  "machine_id": "M028",
+  "as_of": "2025-12-07 23:30:36.205889",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-226",
+  "kind": "incident",
+  "incident_id": 226,
+  "machine_id": "M020",
+  "as_of": "2025-11-03 05:52:06.663457",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-227",
+  "kind": "incident",
+  "incident_id": 227,
+  "machine_id": "M033",
+  "as_of": "2025-11-27 03:50:11.139298",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-228",
+  "kind": "incident",
+  "incident_id": 228,
+  "machine_id": "M010",
+  "as_of": "2025-12-03 19:55:01.806937",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-229",
+  "kind": "incident",
+  "incident_id": 229,
+  "machine_id": "M016",
+  "as_of": "2025-11-06 20:12:23.053373",
+  "truth_raw": "Heat Dissipation Failure",
+  "ml_class_truth": "Heat Dissipation Failure",
+  "expected": [
+   "Heat dissipation failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-230",
+  "kind": "incident",
+  "incident_id": 230,
+  "machine_id": "M035",
+  "as_of": "2025-12-25 05:58:20.082168",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-231",
+  "kind": "incident",
+  "incident_id": 231,
+  "machine_id": "M026",
+  "as_of": "2025-12-13 02:18:41.787354",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-232",
+  "kind": "incident",
+  "incident_id": 232,
+  "machine_id": "M017",
+  "as_of": "2025-12-16 18:50:46.425112",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-233",
+  "kind": "incident",
+  "incident_id": 233,
+  "machine_id": "M033",
+  "as_of": "2025-12-03 03:40:27.514521",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-234",
+  "kind": "incident",
+  "incident_id": 234,
+  "machine_id": "M026",
+  "as_of": "2025-12-15 01:05:57.408939",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-235",
+  "kind": "incident",
+  "incident_id": 235,
+  "machine_id": "M009",
+  "as_of": "2025-11-21 15:01:39.468521",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-236",
+  "kind": "incident",
+  "incident_id": 236,
+  "machine_id": "M039",
+  "as_of": "2025-12-25 18:20:59.223104",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-237",
+  "kind": "incident",
+  "incident_id": 237,
+  "machine_id": "M021",
+  "as_of": "2025-11-30 13:37:46.900090",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-238",
+  "kind": "incident",
+  "incident_id": 238,
+  "machine_id": "M029",
+  "as_of": "2025-10-06 13:29:56.970141",
+  "truth_raw": "Tool Wear Failure",
+  "ml_class_truth": "Tool Wear Failure",
+  "expected": [
+   "Tool wear failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-239",
+  "kind": "incident",
+  "incident_id": 239,
+  "machine_id": "M015",
+  "as_of": "2026-01-04 08:01:37.134901",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-240",
+  "kind": "incident",
+  "incident_id": 240,
+  "machine_id": "M011",
+  "as_of": "2025-11-28 21:42:20.808295",
+  "truth_raw": "Tool Wear Failure",
+  "ml_class_truth": "Tool Wear Failure",
+  "expected": [
+   "Tool wear failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-241",
+  "kind": "incident",
+  "incident_id": 241,
+  "machine_id": "M005",
+  "as_of": "2025-11-25 18:27:22.971068",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-242",
+  "kind": "incident",
+  "incident_id": 242,
+  "machine_id": "M007",
+  "as_of": "2025-12-22 00:49:43.773823",
+  "truth_raw": "Power Failure + Overstrain Failure",
+  "ml_class_truth": "Power Failure + Overstrain Failure",
+  "expected": [
+   "Overstrain failure",
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-243",
+  "kind": "incident",
+  "incident_id": 243,
+  "machine_id": "M037",
+  "as_of": "2026-01-01 16:53:37.765537",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-244",
+  "kind": "incident",
+  "incident_id": 244,
+  "machine_id": "M020",
+  "as_of": "2025-11-27 09:46:44.980056",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-245",
+  "kind": "incident",
+  "incident_id": 245,
+  "machine_id": "M004",
+  "as_of": "2025-12-01 02:36:11.692784",
+  "truth_raw": "Tool Wear Failure + Overstrain Failure",
+  "ml_class_truth": "Multiple Failure Causes (rare combination)",
+  "expected": [
+   "Overstrain failure",
+   "Tool wear failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-246",
+  "kind": "incident",
+  "incident_id": 246,
+  "machine_id": "M012",
+  "as_of": "2025-12-31 00:49:06.545348",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-247",
+  "kind": "incident",
+  "incident_id": 247,
+  "machine_id": "M022",
+  "as_of": "2026-01-22 16:24:28.034758",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-248",
+  "kind": "incident",
+  "incident_id": 248,
+  "machine_id": "M007",
+  "as_of": "2025-12-24 11:26:59.118870",
+  "truth_raw": "Unknown",
+  "ml_class_truth": "Unknown",
+  "expected": [],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-249",
+  "kind": "incident",
+  "incident_id": 249,
+  "machine_id": "M008",
+  "as_of": "2025-12-03 10:08:43.851604",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-250",
+  "kind": "incident",
+  "incident_id": 250,
+  "machine_id": "M023",
+  "as_of": "2026-01-10 01:46:42.408771",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-251",
+  "kind": "incident",
+  "incident_id": 251,
+  "machine_id": "M029",
+  "as_of": "2025-12-01 09:09:43.375550",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-252",
+  "kind": "incident",
+  "incident_id": 252,
+  "machine_id": "M031",
+  "as_of": "2026-01-16 15:14:01.916389",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-253",
+  "kind": "incident",
+  "incident_id": 253,
+  "machine_id": "M038",
+  "as_of": "2026-01-31 00:13:19.442781",
+  "truth_raw": "Tool Wear Failure + Power Failure + Overstrain Failure",
+  "ml_class_truth": "Multiple Failure Causes (rare combination)",
+  "expected": [
+   "Overstrain failure",
+   "Power failure",
+   "Tool wear failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-254",
+  "kind": "incident",
+  "incident_id": 254,
+  "machine_id": "M031",
+  "as_of": "2026-01-31 17:48:59.411281",
+  "truth_raw": "Unknown",
+  "ml_class_truth": "Unknown",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-255",
+  "kind": "incident",
+  "incident_id": 255,
+  "machine_id": "M008",
+  "as_of": "2025-12-30 16:26:24.643060",
+  "truth_raw": "Tool Wear Failure",
+  "ml_class_truth": "Tool Wear Failure",
+  "expected": [
+   "Tool wear failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-256",
+  "kind": "incident",
+  "incident_id": 256,
+  "machine_id": "M017",
+  "as_of": "2026-02-06 00:41:29.645111",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-257",
+  "kind": "incident",
+  "incident_id": 257,
+  "machine_id": "M035",
+  "as_of": "2026-02-10 04:13:49.694461",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-258",
+  "kind": "incident",
+  "incident_id": 258,
+  "machine_id": "M012",
+  "as_of": "2026-01-27 07:51:59.068874",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-259",
+  "kind": "incident",
+  "incident_id": 259,
+  "machine_id": "M028",
+  "as_of": "2026-02-07 06:11:42.646508",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-260",
+  "kind": "incident",
+  "incident_id": 260,
+  "machine_id": "M014",
+  "as_of": "2026-02-08 09:37:03.802498",
+  "truth_raw": "Tool Wear Failure",
+  "ml_class_truth": "Tool Wear Failure",
+  "expected": [
+   "Tool wear failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-261",
+  "kind": "incident",
+  "incident_id": 261,
+  "machine_id": "M031",
+  "as_of": "2026-02-23 11:37:17.901544",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-262",
+  "kind": "incident",
+  "incident_id": 262,
+  "machine_id": "M031",
+  "as_of": "2026-02-24 11:02:14.801808",
+  "truth_raw": "Power Failure + Overstrain Failure",
+  "ml_class_truth": "Power Failure + Overstrain Failure",
+  "expected": [
+   "Overstrain failure",
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-263",
+  "kind": "incident",
+  "incident_id": 263,
+  "machine_id": "M027",
+  "as_of": "2026-01-14 10:55:18.493921",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-264",
+  "kind": "incident",
+  "incident_id": 264,
+  "machine_id": "M029",
+  "as_of": "2026-01-13 23:02:23.317649",
+  "truth_raw": "Tool Wear Failure",
+  "ml_class_truth": "Tool Wear Failure",
+  "expected": [
+   "Tool wear failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-265",
+  "kind": "incident",
+  "incident_id": 265,
+  "machine_id": "M038",
+  "as_of": "2026-02-14 01:04:54.854452",
+  "truth_raw": "Tool Wear Failure",
+  "ml_class_truth": "Tool Wear Failure",
+  "expected": [
+   "Tool wear failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-266",
+  "kind": "incident",
+  "incident_id": 266,
+  "machine_id": "M036",
+  "as_of": "2025-12-07 11:33:31.349642",
+  "truth_raw": "Tool Wear Failure",
+  "ml_class_truth": "Tool Wear Failure",
+  "expected": [
+   "Tool wear failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-267",
+  "kind": "incident",
+  "incident_id": 267,
+  "machine_id": "M028",
+  "as_of": "2026-03-04 00:11:49.196383",
+  "truth_raw": "Unknown",
+  "ml_class_truth": "Unknown",
+  "expected": [],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-268",
+  "kind": "incident",
+  "incident_id": 268,
+  "machine_id": "M014",
+  "as_of": "2026-02-19 22:40:11.105908",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-269",
+  "kind": "incident",
+  "incident_id": 269,
+  "machine_id": "M019",
+  "as_of": "2026-03-28 21:04:08.509098",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-270",
+  "kind": "incident",
+  "incident_id": 270,
+  "machine_id": "M004",
+  "as_of": "2026-02-01 23:12:16.011304",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-271",
+  "kind": "incident",
+  "incident_id": 271,
+  "machine_id": "M008",
+  "as_of": "2026-01-24 10:49:45.956862",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-272",
+  "kind": "incident",
+  "incident_id": 272,
+  "machine_id": "M032",
+  "as_of": "2026-02-10 00:04:13.372535",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-273",
+  "kind": "incident",
+  "incident_id": 273,
+  "machine_id": "M008",
+  "as_of": "2026-01-28 04:57:40.602555",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-274",
+  "kind": "incident",
+  "incident_id": 274,
+  "machine_id": "M022",
+  "as_of": "2026-03-10 06:19:22.865520",
+  "truth_raw": "Tool Wear Failure",
+  "ml_class_truth": "Tool Wear Failure",
+  "expected": [
+   "Tool wear failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-275",
+  "kind": "incident",
+  "incident_id": 275,
+  "machine_id": "M010",
+  "as_of": "2026-03-18 03:03:51.174376",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-276",
+  "kind": "incident",
+  "incident_id": 276,
+  "machine_id": "M023",
+  "as_of": "2026-02-20 04:42:22.248644",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-277",
+  "kind": "incident",
+  "incident_id": 277,
+  "machine_id": "M023",
+  "as_of": "2026-02-23 21:18:52.320433",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-278",
+  "kind": "incident",
+  "incident_id": 278,
+  "machine_id": "M023",
+  "as_of": "2026-02-24 13:40:51.762524",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-279",
+  "kind": "incident",
+  "incident_id": 279,
+  "machine_id": "M032",
+  "as_of": "2026-03-07 08:00:09.913087",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-280",
+  "kind": "incident",
+  "incident_id": 280,
+  "machine_id": "M025",
+  "as_of": "2026-05-12 12:12:23.698150",
+  "truth_raw": "Power Failure + Overstrain Failure",
+  "ml_class_truth": "Power Failure + Overstrain Failure",
+  "expected": [
+   "Overstrain failure",
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-281",
+  "kind": "incident",
+  "incident_id": 281,
+  "machine_id": "M028",
+  "as_of": "2026-04-12 10:19:26.430313",
+  "truth_raw": "Tool Wear Failure",
+  "ml_class_truth": "Tool Wear Failure",
+  "expected": [
+   "Tool wear failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-282",
+  "kind": "incident",
+  "incident_id": 282,
+  "machine_id": "M032",
+  "as_of": "2026-03-19 05:30:26.359056",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-283",
+  "kind": "incident",
+  "incident_id": 283,
+  "machine_id": "M029",
+  "as_of": "2026-03-15 10:08:53.975530",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-284",
+  "kind": "incident",
+  "incident_id": 284,
+  "machine_id": "M001",
+  "as_of": "2026-05-20 11:38:50.121771",
+  "truth_raw": "Tool Wear Failure",
+  "ml_class_truth": "Tool Wear Failure",
+  "expected": [
+   "Tool wear failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-285",
+  "kind": "incident",
+  "incident_id": 285,
+  "machine_id": "M021",
+  "as_of": "2026-05-19 00:52:11.017932",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-286",
+  "kind": "incident",
+  "incident_id": 286,
+  "machine_id": "M022",
+  "as_of": "2026-04-24 16:17:38.589920",
+  "truth_raw": "Tool Wear Failure",
+  "ml_class_truth": "Tool Wear Failure",
+  "expected": [
+   "Tool wear failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-287",
+  "kind": "incident",
+  "incident_id": 287,
+  "machine_id": "M034",
+  "as_of": "2026-05-11 23:14:57.637067",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-288",
+  "kind": "incident",
+  "incident_id": 288,
+  "machine_id": "M006",
+  "as_of": "2026-04-07 21:42:04.040830",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-289",
+  "kind": "incident",
+  "incident_id": 289,
+  "machine_id": "M020",
+  "as_of": "2026-04-14 07:59:09.269703",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-290",
+  "kind": "incident",
+  "incident_id": 290,
+  "machine_id": "M004",
+  "as_of": "2026-03-25 09:41:08.147796",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-291",
+  "kind": "incident",
+  "incident_id": 291,
+  "machine_id": "M025",
+  "as_of": "2026-05-27 11:09:01.639914",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-292",
+  "kind": "incident",
+  "incident_id": 292,
+  "machine_id": "M034",
+  "as_of": "2026-05-28 15:12:20.528503",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-293",
+  "kind": "incident",
+  "incident_id": 293,
+  "machine_id": "M006",
+  "as_of": "2026-04-18 15:16:27.879065",
+  "truth_raw": "Tool Wear Failure",
+  "ml_class_truth": "Tool Wear Failure",
+  "expected": [
+   "Tool wear failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-294",
+  "kind": "incident",
+  "incident_id": 294,
+  "machine_id": "M028",
+  "as_of": "2026-05-09 05:52:03.633637",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-295",
+  "kind": "incident",
+  "incident_id": 295,
+  "machine_id": "M025",
+  "as_of": "2026-06-04 23:24:20.150101",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-296",
+  "kind": "incident",
+  "incident_id": 296,
+  "machine_id": "M032",
+  "as_of": "2026-04-30 06:28:58.875614",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-297",
+  "kind": "incident",
+  "incident_id": 297,
+  "machine_id": "M004",
+  "as_of": "2026-04-06 09:53:25.294637",
+  "truth_raw": "Tool Wear Failure",
+  "ml_class_truth": "Tool Wear Failure",
+  "expected": [
+   "Tool wear failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-298",
+  "kind": "incident",
+  "incident_id": 298,
+  "machine_id": "M018",
+  "as_of": "2026-04-21 15:12:35.958995",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-299",
+  "kind": "incident",
+  "incident_id": 299,
+  "machine_id": "M020",
+  "as_of": "2026-05-06 14:36:24.631123",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-300",
+  "kind": "incident",
+  "incident_id": 300,
+  "machine_id": "M001",
+  "as_of": "2026-06-11 02:49:50.717915",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-301",
+  "kind": "incident",
+  "incident_id": 301,
+  "machine_id": "M031",
+  "as_of": "2026-06-02 16:46:38.681496",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-302",
+  "kind": "incident",
+  "incident_id": 302,
+  "machine_id": "M010",
+  "as_of": "2026-05-13 06:32:55.770214",
+  "truth_raw": "Tool Wear Failure",
+  "ml_class_truth": "Tool Wear Failure",
+  "expected": [
+   "Tool wear failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-303",
+  "kind": "incident",
+  "incident_id": 303,
+  "machine_id": "M013",
+  "as_of": "2026-05-18 10:32:33.360543",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-304",
+  "kind": "incident",
+  "incident_id": 304,
+  "machine_id": "M033",
+  "as_of": "2026-05-18 09:47:51.661372",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-305",
+  "kind": "incident",
+  "incident_id": 305,
+  "machine_id": "M022",
+  "as_of": "2026-05-10 06:58:55.631431",
+  "truth_raw": "Tool Wear Failure",
+  "ml_class_truth": "Tool Wear Failure",
+  "expected": [
+   "Tool wear failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-306",
+  "kind": "incident",
+  "incident_id": 306,
+  "machine_id": "M008",
+  "as_of": "2026-04-07 09:14:35.816521",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-307",
+  "kind": "incident",
+  "incident_id": 307,
+  "machine_id": "M007",
+  "as_of": "2026-06-16 22:55:34.510543",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-308",
+  "kind": "incident",
+  "incident_id": 308,
+  "machine_id": "M029",
+  "as_of": "2026-05-21 20:50:01.970493",
+  "truth_raw": "Tool Wear Failure",
+  "ml_class_truth": "Tool Wear Failure",
+  "expected": [
+   "Tool wear failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-309",
+  "kind": "incident",
+  "incident_id": 309,
+  "machine_id": "M016",
+  "as_of": "2026-05-01 11:05:57.409874",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-310",
+  "kind": "incident",
+  "incident_id": 310,
+  "machine_id": "M013",
+  "as_of": "2026-06-02 16:56:08.279544",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-311",
+  "kind": "incident",
+  "incident_id": 311,
+  "machine_id": "M027",
+  "as_of": "2026-06-12 07:06:16.212036",
+  "truth_raw": "Unknown",
+  "ml_class_truth": "Unknown",
+  "expected": [],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-312",
+  "kind": "incident",
+  "incident_id": 312,
+  "machine_id": "M006",
+  "as_of": "2026-05-20 12:24:38.038386",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-313",
+  "kind": "incident",
+  "incident_id": 313,
+  "machine_id": "M022",
+  "as_of": "2026-06-13 20:53:08.703652",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-314",
+  "kind": "incident",
+  "incident_id": 314,
+  "machine_id": "M019",
+  "as_of": "2026-06-29 02:03:35.480529",
+  "truth_raw": "Tool Wear Failure",
+  "ml_class_truth": "Tool Wear Failure",
+  "expected": [
+   "Tool wear failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-315",
+  "kind": "incident",
+  "incident_id": 315,
+  "machine_id": "M012",
+  "as_of": "2026-06-15 17:23:20.453476",
+  "truth_raw": "Tool Wear Failure",
+  "ml_class_truth": "Tool Wear Failure",
+  "expected": [
+   "Tool wear failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-316",
+  "kind": "incident",
+  "incident_id": 316,
+  "machine_id": "M004",
+  "as_of": "2026-06-05 13:30:10.998653",
+  "truth_raw": "Tool Wear Failure + Overstrain Failure",
+  "ml_class_truth": "Multiple Failure Causes (rare combination)",
+  "expected": [
+   "Overstrain failure",
+   "Tool wear failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-317",
+  "kind": "incident",
+  "incident_id": 317,
+  "machine_id": "M001",
+  "as_of": "2026-07-24 14:19:51.704010",
+  "truth_raw": "Power Failure + Overstrain Failure",
+  "ml_class_truth": "Power Failure + Overstrain Failure",
+  "expected": [
+   "Overstrain failure",
+   "Power failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-318",
+  "kind": "incident",
+  "incident_id": 318,
+  "machine_id": "M006",
+  "as_of": "2026-06-16 04:48:22.524795",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-319",
+  "kind": "incident",
+  "incident_id": 319,
+  "machine_id": "M020",
+  "as_of": "2026-07-14 02:12:28.228076",
+  "truth_raw": "Unknown",
+  "ml_class_truth": "Unknown",
+  "expected": [],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-320",
+  "kind": "incident",
+  "incident_id": 320,
+  "machine_id": "M013",
+  "as_of": "2026-07-04 14:46:24.529461",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-321",
+  "kind": "incident",
+  "incident_id": 321,
+  "machine_id": "M014",
+  "as_of": "2026-07-01 23:25:42.194862",
+  "truth_raw": "Tool Wear Failure",
+  "ml_class_truth": "Tool Wear Failure",
+  "expected": [
+   "Tool wear failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-322",
+  "kind": "incident",
+  "incident_id": 322,
+  "machine_id": "M028",
+  "as_of": "2026-07-13 10:04:48.564240",
+  "truth_raw": "Power Failure + Overstrain Failure",
+  "ml_class_truth": "Power Failure + Overstrain Failure",
+  "expected": [
+   "Overstrain failure",
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-323",
+  "kind": "incident",
+  "incident_id": 323,
+  "machine_id": "M016",
+  "as_of": "2026-07-02 05:20:35.598373",
+  "truth_raw": "Tool Wear Failure",
+  "ml_class_truth": "Tool Wear Failure",
+  "expected": [
+   "Tool wear failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-324",
+  "kind": "incident",
+  "incident_id": 324,
+  "machine_id": "M028",
+  "as_of": "2026-07-28 20:23:42.027365",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-325",
+  "kind": "incident",
+  "incident_id": 325,
+  "machine_id": "M031",
+  "as_of": "2026-08-08 00:43:15.500842",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-326",
+  "kind": "incident",
+  "incident_id": 326,
+  "machine_id": "M031",
+  "as_of": "2026-08-15 00:27:30.585569",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-327",
+  "kind": "incident",
+  "incident_id": 327,
+  "machine_id": "M027",
+  "as_of": "2026-08-02 06:20:44.311412",
+  "truth_raw": "Tool Wear Failure",
+  "ml_class_truth": "Tool Wear Failure",
+  "expected": [
+   "Tool wear failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-328",
+  "kind": "incident",
+  "incident_id": 328,
+  "machine_id": "M015",
+  "as_of": "2026-08-11 08:03:30.081880",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-329",
+  "kind": "incident",
+  "incident_id": 329,
+  "machine_id": "M024",
+  "as_of": "2026-08-03 11:00:19.519727",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-330",
+  "kind": "incident",
+  "incident_id": 330,
+  "machine_id": "M029",
+  "as_of": "2026-08-13 00:47:32.030093",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-331",
+  "kind": "incident",
+  "incident_id": 331,
+  "machine_id": "M018",
+  "as_of": "2026-08-05 11:29:24.194390",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-332",
+  "kind": "incident",
+  "incident_id": 332,
+  "machine_id": "M019",
+  "as_of": "2026-08-06 08:11:27.539653",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-333",
+  "kind": "incident",
+  "incident_id": 333,
+  "machine_id": "M029",
+  "as_of": "2026-08-13 08:10:37.551506",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-334",
+  "kind": "incident",
+  "incident_id": 334,
+  "machine_id": "M012",
+  "as_of": "2026-08-27 09:26:50.594838",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-335",
+  "kind": "incident",
+  "incident_id": 335,
+  "machine_id": "M028",
+  "as_of": "2026-08-23 18:50:53.532430",
+  "truth_raw": "Tool Wear Failure",
+  "ml_class_truth": "Tool Wear Failure",
+  "expected": [
+   "Tool wear failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-336",
+  "kind": "incident",
+  "incident_id": 336,
+  "machine_id": "M027",
+  "as_of": "2026-08-26 19:54:49.241436",
+  "truth_raw": "Power Failure",
+  "ml_class_truth": "Power Failure",
+  "expected": [
+   "Power failure"
+  ],
+  "in_test": true
+ },
+ {
+  "case_id": "inc-337",
+  "kind": "incident",
+  "incident_id": 337,
+  "machine_id": "M034",
+  "as_of": "2026-08-26 06:32:12.713878",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-338",
+  "kind": "incident",
+  "incident_id": 338,
+  "machine_id": "M016",
+  "as_of": "2026-08-14 09:17:37.397468",
+  "truth_raw": "Overstrain Failure",
+  "ml_class_truth": "Overstrain Failure",
+  "expected": [
+   "Overstrain failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "inc-339",
+  "kind": "incident",
+  "incident_id": 339,
+  "machine_id": "M026",
+  "as_of": "2026-08-30 17:05:50.101131",
+  "truth_raw": "Power Failure + Overstrain Failure",
+  "ml_class_truth": "Power Failure + Overstrain Failure",
+  "expected": [
+   "Overstrain failure",
+   "Power failure"
+  ],
+  "in_test": false
+ },
+ {
+  "case_id": "healthy-14",
+  "kind": "healthy",
+  "incident_id": null,
+  "machine_id": "M007",
+  "as_of": "2025-03-03 15:43:49.800274",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "healthy-149",
+  "kind": "healthy",
+  "incident_id": null,
+  "machine_id": "M009",
+  "as_of": "2025-03-08 09:09:13.385753",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "healthy-355",
+  "kind": "healthy",
+  "incident_id": null,
+  "machine_id": "M019",
+  "as_of": "2025-04-09 01:48:02.740278",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "healthy-432",
+  "kind": "healthy",
+  "incident_id": null,
+  "machine_id": "M020",
+  "as_of": "2025-04-06 17:24:56.643599",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "healthy-804",
+  "kind": "healthy",
+  "incident_id": null,
+  "machine_id": "M038",
+  "as_of": "2025-04-16 19:16:24.181495",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "healthy-1711",
+  "kind": "healthy",
+  "incident_id": null,
+  "machine_id": "M032",
+  "as_of": "2025-06-21 14:23:12.940992",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "healthy-2669",
+  "kind": "healthy",
+  "incident_id": null,
+  "machine_id": "M001",
+  "as_of": "2025-08-15 05:50:49.342851",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "healthy-2784",
+  "kind": "healthy",
+  "incident_id": null,
+  "machine_id": "M003",
+  "as_of": "2025-07-30 12:55:14.129326",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "healthy-3014",
+  "kind": "healthy",
+  "incident_id": null,
+  "machine_id": "M029",
+  "as_of": "2025-07-10 19:45:40.803319",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "healthy-3857",
+  "kind": "healthy",
+  "incident_id": null,
+  "machine_id": "M001",
+  "as_of": "2025-10-14 12:16:48.116013",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "healthy-5031",
+  "kind": "healthy",
+  "incident_id": null,
+  "machine_id": "M008",
+  "as_of": "2025-10-30 17:12:22.382812",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "healthy-5069",
+  "kind": "healthy",
+  "incident_id": null,
+  "machine_id": "M006",
+  "as_of": "2025-10-29 19:03:09.388419",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "healthy-5425",
+  "kind": "healthy",
+  "incident_id": null,
+  "machine_id": "M014",
+  "as_of": "2025-12-12 12:04:43.476659",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "healthy-5564",
+  "kind": "healthy",
+  "incident_id": null,
+  "machine_id": "M010",
+  "as_of": "2026-01-04 14:14:27.466326",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "healthy-5595",
+  "kind": "healthy",
+  "incident_id": null,
+  "machine_id": "M024",
+  "as_of": "2026-01-08 04:47:51.542505",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "healthy-6068",
+  "kind": "healthy",
+  "incident_id": null,
+  "machine_id": "M029",
+  "as_of": "2026-01-01 18:08:30.650447",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "healthy-6348",
+  "kind": "healthy",
+  "incident_id": null,
+  "machine_id": "M015",
+  "as_of": "2026-03-09 07:22:59.360357",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "healthy-6349",
+  "kind": "healthy",
+  "incident_id": null,
+  "machine_id": "M017",
+  "as_of": "2026-02-25 07:21:50.805943",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "healthy-6527",
+  "kind": "healthy",
+  "incident_id": null,
+  "machine_id": "M027",
+  "as_of": "2026-01-28 19:57:04.159797",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "healthy-6816",
+  "kind": "healthy",
+  "incident_id": null,
+  "machine_id": "M034",
+  "as_of": "2026-03-31 17:42:17.623429",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "healthy-7298",
+  "kind": "healthy",
+  "incident_id": null,
+  "machine_id": "M021",
+  "as_of": "2026-04-30 13:08:19.610009",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "healthy-7340",
+  "kind": "healthy",
+  "incident_id": null,
+  "machine_id": "M016",
+  "as_of": "2026-02-10 16:00:54.179266",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "healthy-7652",
+  "kind": "healthy",
+  "incident_id": null,
+  "machine_id": "M005",
+  "as_of": "2026-03-31 06:20:14.981264",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "healthy-8055",
+  "kind": "healthy",
+  "incident_id": null,
+  "machine_id": "M018",
+  "as_of": "2026-05-03 05:24:46.320187",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "healthy-8133",
+  "kind": "healthy",
+  "incident_id": null,
+  "machine_id": "M009",
+  "as_of": "2026-05-04 06:35:31.918628",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "healthy-8362",
+  "kind": "healthy",
+  "incident_id": null,
+  "machine_id": "M027",
+  "as_of": "2026-06-05 12:26:04.267780",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "healthy-8542",
+  "kind": "healthy",
+  "incident_id": null,
+  "machine_id": "M012",
+  "as_of": "2026-05-31 08:17:33.357440",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "healthy-9067",
+  "kind": "healthy",
+  "incident_id": null,
+  "machine_id": "M016",
+  "as_of": "2026-06-25 16:20:28.498855",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "healthy-9327",
+  "kind": "healthy",
+  "incident_id": null,
+  "machine_id": "M027",
+  "as_of": "2026-07-24 15:09:35.524009",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "healthy-9645",
+  "kind": "healthy",
+  "incident_id": null,
+  "machine_id": "M031",
+  "as_of": "2026-08-22 10:28:52.722368",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "healthywear-589",
+  "kind": "healthy_wear",
+  "incident_id": null,
+  "machine_id": "M014",
+  "as_of": "2025-04-19 18:34:11.268582",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "healthywear-847",
+  "kind": "healthy_wear",
+  "incident_id": null,
+  "machine_id": "M004",
+  "as_of": "2025-04-01 05:25:10.126541",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "healthywear-2853",
+  "kind": "healthy_wear",
+  "incident_id": null,
+  "machine_id": "M008",
+  "as_of": "2025-07-02 04:14:18.645186",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "healthywear-3272",
+  "kind": "healthy_wear",
+  "incident_id": null,
+  "machine_id": "M005",
+  "as_of": "2025-08-15 03:56:36.522394",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "healthywear-3447",
+  "kind": "healthy_wear",
+  "incident_id": null,
+  "machine_id": "M038",
+  "as_of": "2025-09-27 01:51:08.064621",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "healthywear-3863",
+  "kind": "healthy_wear",
+  "incident_id": null,
+  "machine_id": "M038",
+  "as_of": "2025-10-22 13:41:04.414640",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "healthywear-4385",
+  "kind": "healthy_wear",
+  "incident_id": null,
+  "machine_id": "M021",
+  "as_of": "2025-10-16 00:09:20.656788",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "healthywear-4642",
+  "kind": "healthy_wear",
+  "incident_id": null,
+  "machine_id": "M038",
+  "as_of": "2025-11-28 22:29:06.024255",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "healthywear-4986",
+  "kind": "healthy_wear",
+  "incident_id": null,
+  "machine_id": "M008",
+  "as_of": "2025-10-28 14:06:45.420591",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "healthywear-5486",
+  "kind": "healthy_wear",
+  "incident_id": null,
+  "machine_id": "M016",
+  "as_of": "2025-12-04 09:57:02.112002",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "healthywear-5822",
+  "kind": "healthy_wear",
+  "incident_id": null,
+  "machine_id": "M030",
+  "as_of": "2026-02-15 09:16:08.153027",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "healthywear-5997",
+  "kind": "healthy_wear",
+  "incident_id": null,
+  "machine_id": "M007",
+  "as_of": "2026-01-17 01:07:37.611268",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "healthywear-6675",
+  "kind": "healthy_wear",
+  "incident_id": null,
+  "machine_id": "M028",
+  "as_of": "2026-03-10 14:59:29.983244",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "healthywear-7081",
+  "kind": "healthy_wear",
+  "incident_id": null,
+  "machine_id": "M017",
+  "as_of": "2026-03-27 17:44:48.899422",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "healthywear-7336",
+  "kind": "healthy_wear",
+  "incident_id": null,
+  "machine_id": "M019",
+  "as_of": "2026-05-13 10:12:17.928884",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "healthywear-7685",
+  "kind": "healthy_wear",
+  "incident_id": null,
+  "machine_id": "M002",
+  "as_of": "2026-05-10 09:05:48.819254",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "healthywear-7843",
+  "kind": "healthy_wear",
+  "incident_id": null,
+  "machine_id": "M017",
+  "as_of": "2026-04-30 18:43:16.371431",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "healthywear-8926",
+  "kind": "healthy_wear",
+  "incident_id": null,
+  "machine_id": "M007",
+  "as_of": "2026-07-16 04:36:52.171331",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "healthywear-9492",
+  "kind": "healthy_wear",
+  "incident_id": null,
+  "machine_id": "M004",
+  "as_of": "2026-07-25 02:18:49.786705",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ },
+ {
+  "case_id": "healthywear-9987",
+  "kind": "healthy_wear",
+  "incident_id": null,
+  "machine_id": "M007",
+  "as_of": "2026-08-29 14:11:11.263631",
+  "truth_raw": "No Failure",
+  "ml_class_truth": "No Failure",
+  "expected": [],
+  "in_test": true
+ }
+]

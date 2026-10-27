@@ -1,0 +1,134 @@
+{
+ "held_out_incidents": {
+  "hard rules only": {
+   "exact": 58,
+   "partial": 1,
+   "wrong": 1,
+   "missed": 8,
+   "overclaim": 0
+  },
+  "rules + tool-wear hint": {
+   "exact": 50,
+   "partial": 18,
+   "wrong": 0,
+   "missed": 0,
+   "overclaim": 0
+  },
+  "classifier only": {
+   "exact": 59,
+   "partial": 1,
+   "wrong": 1,
+   "missed": 7,
+   "overclaim": 0
+  },
+  "hard rules + classifier": {
+   "exact": 60,
+   "partial": 1,
+   "wrong": 2,
+   "missed": 5,
+   "overclaim": 0
+  }
+ },
+ "all_incidents": {
+  "hard rules only": {
+   "exact": 290,
+   "partial": 6,
+   "wrong": 1,
+   "missed": 42,
+   "overclaim": 0
+  },
+  "rules + tool-wear hint": {
+   "exact": 256,
+   "partial": 81,
+   "wrong": 0,
+   "missed": 1,
+   "overclaim": 1
+  },
+  "classifier only": {
+   "exact": 325,
+   "partial": 1,
+   "wrong": 1,
+   "missed": 12,
+   "overclaim": 0
+  },
+  "hard rules + classifier": {
+   "exact": 326,
+   "partial": 6,
+   "wrong": 2,
+   "missed": 5,
+   "overclaim": 0
+  }
+ },
+ "healthy_held_out": {
+  "hard rules only": {
+   "exact": 1929,
+   "partial": 0,
+   "wrong": 0,
+   "missed": 0,
+   "overclaim": 3
+  },
+  "rules + tool-wear hint": {
+   "exact": 1781,
+   "partial": 0,
+   "wrong": 0,
+   "missed": 0,
+   "overclaim": 151
+  },
+  "classifier only": {
+   "exact": 1904,
+   "partial": 0,
+   "wrong": 0,
+   "missed": 0,
+   "overclaim": 28
+  },
+  "hard rules + classifier": {
+   "exact": 1903,
+   "partial": 0,
+   "wrong": 0,
+   "missed": 0,
+   "overclaim": 29
+  }
+ },
+ "held_out_by_label": {
+  "Power Failure": {
+   "exact": 15,
+   "n": 16
+  },
+  "Overstrain Failure": {
+   "exact": 16,
+   "n": 16
+  },
+  "Power Failure + Overstrain Failure": {
+   "exact": 2,
+   "n": 2
+  },
+  "Tool Wear Failure": {
+   "exact": 1,
+   "n": 8
+  },
+  "Tool Wear Failure + Random Failure": {
+   "exact": 1,
+   "n": 1
+  },
+  "Heat Dissipation Failure": {
+   "exact": 21,
+   "n": 21
+  },
+  "Heat Dissipation Failure + Power Failure": {
+   "exact": 1,
+   "n": 1
+  },
+  "Heat Dissipation Failure + Overstrain Failure": {
+   "exact": 1,
+   "n": 1
+  },
+  "Unknown": {
+   "exact": 2,
+   "n": 2
+  }
+ },
+ "false_alarm_by_rule": {
+  "Tool wear failure": 150,
+  "Overstrain failure": 3
+ }
+}

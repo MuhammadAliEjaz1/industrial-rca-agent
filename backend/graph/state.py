@@ -18,6 +18,8 @@ class InvestigationState(TypedDict):
     incident_description: str
     incident_id: Optional[int]  # set when investigating a KNOWN historical incident (Phase 8 eval);
                                  # None for a fresh, live investigation
+    as_of: Optional[str]         # evaluation only: pretend "now" is this timestamp (readings, maintenance and
+                                 # this machine's incidents after it are hidden). None = really now.
     failure_reported: bool       # True = a failure/stoppage was reported (default if omitted);
                                  # False = routine check, nothing reported -> health-check mode
 

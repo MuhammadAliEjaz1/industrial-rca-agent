@@ -1,0 +1,224 @@
+{
+ "incident_summary": "A failure was reported on this machine at 2025-10-17 01:31:32.523371. Investigate the root cause.",
+ "mode": "failure_investigation",
+ "machine_condition": {
+  "machine_id": "M008",
+  "latest_reading": {
+   "timestamp": "2025-10-17 01:31:32.523371",
+   "air_temperature": 303.6,
+   "process_temperature": 311.8,
+   "rotational_speed": 1421.0,
+   "torque": 44.8,
+   "tool_wear": 101.0
+  },
+  "sensor_statistics": {
+   "air_temperature": {
+    "mean": 299.723,
+    "std": 2.056,
+    "min": 295.6,
+    "max": 303.6,
+    "latest": 303.6,
+    "trend": "increasing"
+   },
+   "process_temperature": {
+    "mean": 309.404,
+    "std": 1.329,
+    "min": 306.2,
+    "max": 311.8,
+    "latest": 311.8,
+    "trend": "increasing"
+   },
+   "rotational_speed": {
+    "mean": 1540.734,
+    "std": 169.559,
+    "min": 1288.0,
+    "max": 2293.0,
+    "latest": 1421.0,
+    "trend": "stable"
+   },
+   "torque": {
+    "mean": 40.165,
+    "std": 9.399,
+    "min": 16.3,
+    "max": 60.5,
+    "latest": 44.8,
+    "trend": "stable"
+   },
+   "tool_wear": {
+    "mean": 109.516,
+    "std": 60.718,
+    "min": 0.0,
+    "max": 221.0,
+    "latest": 101.0,
+    "trend": "stable"
+   }
+  }
+ },
+ "limit_checks": {
+  "n_readings": 20,
+  "latest": {
+   "temp_diff_k": 8.199999999999989,
+   "power_w": 6666.543386721636,
+   "wear_x_torque": 4524.799999999999,
+   "heat_dissipation": false,
+   "power_out_of_range": false,
+   "possible_overstrain": false,
+   "tool_wear_at_failure_range": false
+  },
+  "latest_raw": {
+   "timestamp": "2025-10-17 01:31:32.523371",
+   "air_temperature": 303.6,
+   "process_temperature": 311.8,
+   "rotational_speed": 1421.0,
+   "torque": 44.8,
+   "tool_wear": 101.0
+  },
+  "counts": {
+   "heat_dissipation": 1,
+   "power_out_of_range": 0,
+   "possible_overstrain": 0,
+   "tool_wear_at_failure_range": 2
+  },
+  "violated": [
+   "heat_dissipation"
+  ]
+ },
+ "ml_analysis": {
+  "predicted_class": "No Failure",
+  "confidence": 0.9926279187202454,
+  "anomaly_score": 0.007372081279754639,
+  "reliability_warning": false,
+  "reliability_note": null,
+  "close_second_class": "Heat Dissipation Failure",
+  "close_second_margin": 0.9878
+ },
+ "maintenance_history": [
+  {
+   "date": "2025-06-29 00:00:00",
+   "maintenance_type": "Reactive",
+   "description": "Investigated abnormal temperature reading; cleaned cooling fan.",
+   "technician": "S. Malik",
+   "parts_replaced": null
+  },
+  {
+   "date": "2025-06-23 00:00:00",
+   "maintenance_type": "Scheduled",
+   "description": "Routine inspection and lubrication of bearing assembly.",
+   "technician": "T. Ahmed",
+   "parts_replaced": null
+  }
+ ],
+ "candidate_root_causes": [
+  {
+   "cause": "Sensor fault or data-quality problem",
+   "supporting_evidence": [
+    "The classifier predicts \"No Failure\" with >99% confidence while an incident was logged, creating a perception\u2011reality mismatch.",
+    "All limit checks (heat\u2011dissipation, power, wear\u00d7torque, tool wear) are within normal limits, yet an incident occurred."
+   ],
+   "contradicting_evidence": [
+    "All computed limit checks are within normal bounds (heat-dissipation gap 8.2\u202fK above threshold, speed 1421\u202frpm above limit, power 6667\u202fW within 3500\u20119000\u202fW, tool_wear 101\u202fmin below failure threshold).",
+    "Sensor statistics show the latest readings are at the historical extremes but still within the recorded min\u2011max ranges (air_temperature 303.6\u202fK max, process_temperature 311.8\u202fK max, rotational_speed 1421\u202frpm within 1288\u20112293\u202frpm).",
+    "The technical manual states that a physically implausible jump in one channel while others stay stable suggests a sensor fault; no such jump is evident in the provided data.",
+    "Maintenance history only notes a fan cleaning after an abnormal temperature reading, not a sensor calibration or replacement."
+   ],
+   "confidence": "low",
+   "reasoning": "The mismatch between the ML model\u2019s high confidence of \"No Failure\" and the logged incident could be explained by bad sensor data, but the evidence does not show any abnormal sensor behavior: all readings lie within historical bounds, no limit is violated, and no sudden outlier or jump is reported. The documentation\u2019s criteria for suspecting a sensor fault are not met, and the maintenance record provides no direct indication of sensor problems. Therefore the hypothesis lacks concrete support and is contradicted by multiple pieces of evidence."
+  },
+  {
+   "cause": "Heat dissipation failure",
+   "supporting_evidence": [
+    "The latest temperature difference is 8.2\u202fK, which is below the 8.6\u202fK threshold, satisfying the temperature\u2011gap part of the rule.",
+    "Maintenance history shows a recent fan cleaning (2025\u201106\u201129), which could be related to cooling performance, though it does not confirm a failure."
+   ],
+   "contradicting_evidence": [
+    "The operating limit requires both temperature gap <8.6\u202fK AND rotational speed <1380\u202frpm; latest reading has speed 1421\u202frpm, which exceeds the limit, so the combined condition is not met.",
+    "Across the 20 most recent readings the heat\u2011dissipation rule was satisfied in only 1 case, indicating the condition is rarely true.",
+    "The documentation states that heat\u2011dissipation failure occurs only when both conditions hold; with speed above the limit the cause is not triggered."
+   ],
+   "confidence": "low",
+   "reasoning": "Heat\u2011dissipation failure is defined by a dual condition: temperature gap <8.6\u202fK AND speed <1380\u202frpm. While the temperature gap criterion is met (8.2\u202fK), the speed criterion is not (1421\u202frpm). The rule therefore fails for the latest reading and for the majority of recent readings (only 1 of 20 satisfied). The documentation explicitly requires both conditions simultaneously, so the current data contradicts the cause. The only partial support is the low temperature gap and a prior fan cleaning, which are insufficient to outweigh the contradictions. Consequently, confidence in heat\u2011dissipation failure as the root cause is low."
+  },
+  {
+   "cause": "Unexplained: random or undetected failure",
+   "supporting_evidence": [
+    "Heat\u2011dissipation rule requires gap < 8.6\u202fK AND speed < 1380\u202frpm; gap is 8.2\u202fK (met) but speed is 1421\u202frpm (not met) \u2013 rule not satisfied.",
+    "Power reading 6667\u202fW is within documented normal range 3500\u20119000\u202fW.",
+    "Tool_wear\u202f\u00d7\u202ftorque = 4525 is below the lowest over\u2011strain limit (11000).",
+    "Tool wear = 101\u202fmin is below the documented failure onset around 200\u202fmin.",
+    "Across the last 20 readings, heat\u2011dissipation rule met only once, power out\u2011of\u2011range zero times, wear\u00d7torque above limit zero times, tool wear \u2265200\u202fmin only twice \u2013 no consistent pattern of a known failure mode.",
+    "Latest sensor values (air temp 303.6\u202fK, process temp 311.8\u202fK, speed 1421\u202frpm, torque 44.8\u202fNm, tool wear 101\u202fmin) are within the historical means \u00b1\u202f3\u202f\u03c3 and do not show an outlier signature.",
+    "Manual guidance: random failures leave no sensor\u2011visible cause and occur regardless of temperature, speed, torque or tool wear."
+   ],
+   "contradicting_evidence": [],
+   "confidence": "medium",
+   "reasoning": "All defined mechanistic failure checks (heat\u2011dissipation, power out\u2011of\u2011range, wear\u00d7torque, tool\u2011wear) are not satisfied, and the latest sensor values lie within normal historical ranges. The troubleshooting manual states that random/unexplained failures leave no sensor signature and occur regardless of temperature, speed, torque or tool wear. Because no known cause is supported while the event matches the description of a random failure, the unexplained label is the most appropriate, though the evidence is indirect (absence of other causes) rather than a positive signature of randomness, yielding medium confidence."
+  }
+ ],
+ "most_supported_cause": "Unexplained: random or undetected failure",
+ "confidence_level": "medium",
+ "justification": "Every specific fault hypothesis stayed at low confidence and no documented limit is violated, so the 'unexplained' reading is the best fit. That reflects an absence of evidence, not a diagnosed cause. Model notes (NOT a conclusion): All defined mechanistic failure checks (heat\u2011dissipation, power out\u2011of\u2011range, wear\u00d7torque, tool\u2011wear) are not satisfied, and the latest sensor values lie within normal historical ranges. The manual states that random or undetected failures leave no sensor\u2011visible cause and occur regardless of the monitored parameters. No other hypothesis is supported by the observed data, making the unexplained/random failure hypothesis the most consistent with the evidence.",
+ "observed_facts": [
+  "[computed] Latest reading: process minus air temperature = 8.2 K at 1421 rpm. Heat-dissipation failure needs the gap below 8.6 K AND speed below 1380 rpm (met: no).",
+  "[computed] Latest derived power = 6667 W (documented normal range 3500-9000 W; outside range: no).",
+  "[computed] Latest tool_wear x torque = 4525 (overstrain limits by product quality: L 11000, M 12000, H 13000; above the lowest limit: no).",
+  "[computed] Latest tool wear = 101 min (tool-wear failures are documented from about 200 min; at or above: no).",
+  "[computed] Across the 20 most recent readings: heat-dissipation rule met in 1, power out of range in 0, wear x torque above the lowest limit in 0, tool wear at or above 200 in 2.",
+  "Heat\u2011dissipation rule satisfied in 1 of the last 20 readings",
+  "Power out\u2011of\u2011range count = 0 in the last 20 readings",
+  "Wear\u00d7torque above lowest limit count = 0 in the last 20 readings",
+  "Fan cleaning performed on 2025\u201106\u201129",
+  "An incident was logged"
+ ],
+ "ml_predictions": [
+  "PREDICTION: No Failure (confidence 0.9926) - reliability_warning: none"
+ ],
+ "unsupported_speculation": [
+  "Sensor fault or data-quality problem (confidence low): All computed limit checks are within normal bounds (heat-dissipation gap 8.2 K above threshold, speed 1421 rpm above limit, power 6667 W within 3500\u20119000 W ...",
+  "Heat dissipation failure (confidence low): The operating limit requires both temperature gap <8.6 K AND rotational speed <1380 rpm; latest reading has speed 1421 rpm, which exceeds the limit, so the ..."
+ ],
+ "evidence_sources": [
+  "Incident 220 (M029, 2025-09-30 19:48:04.230490)",
+  "Incident 189 (M013, 2025-10-12 14:18:59.748669)",
+  "Incident 216 (M035, 2025-12-15 22:03:35.758974)",
+  "Incident 190 (M013, 2025-10-16 09:05:01.123179)",
+  "Incident 203 (M007, 2025-11-04 19:06:36.066471)"
+ ],
+ "investigation_log": [
+  {
+   "step": "gather_context",
+   "status": "done",
+   "summary": "Loaded 20 recent readings for M008.",
+   "timestamp": "2026-10-27T05:46:01.432615+00:00"
+  },
+  {
+   "step": "run_anomaly_model",
+   "status": "done",
+   "summary": "Predicted: No Failure (confidence 0.99)",
+   "timestamp": "2026-10-27T05:46:01.448247+00:00"
+  },
+  {
+   "step": "gather_evidence",
+   "status": "done",
+   "summary": "2 maintenance records, 3 past incidents, 5 similar incidents.",
+   "timestamp": "2026-10-27T05:46:01.753264+00:00"
+  },
+  {
+   "step": "generate_hypotheses",
+   "status": "done",
+   "summary": "Mode: failure investigation. Hypotheses: Sensor fault or data-quality problem, Heat dissipation failure, Unexplained: random or undetected failure",
+   "timestamp": "2026-10-27T05:46:13.497772+00:00"
+  },
+  {
+   "step": "investigate_hypotheses",
+   "status": "done",
+   "summary": "Evaluated 3 hypotheses: Sensor fault or data-quality problem (low), Heat dissipation failure (low), Unexplained: random or undetected failure (medium)",
+   "timestamp": "2026-10-27T05:46:58.962082+00:00"
+  },
+  {
+   "step": "determine_root_cause",
+   "status": "done",
+   "summary": "Most supported cause: Unexplained: random or undetected failure (medium) | null hypothesis chosen: no specific fault supported",
+   "timestamp": "2026-10-27T05:47:23.955402+00:00"
+  }
+ ]
+}

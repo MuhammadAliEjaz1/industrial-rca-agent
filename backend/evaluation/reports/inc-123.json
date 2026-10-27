@@ -1,0 +1,224 @@
+{
+ "incident_summary": "A failure was reported on this machine at 2025-10-24 22:03:19.624335. Investigate the root cause.",
+ "mode": "failure_investigation",
+ "machine_condition": {
+  "machine_id": "M014",
+  "latest_reading": {
+   "timestamp": "2025-10-24 22:03:19.624335",
+   "air_temperature": 302.0,
+   "process_temperature": 310.5,
+   "rotational_speed": 1370.0,
+   "torque": 44.4,
+   "tool_wear": 85.0
+  },
+  "sensor_statistics": {
+   "air_temperature": {
+    "mean": 299.235,
+    "std": 1.875,
+    "min": 295.5,
+    "max": 302.7,
+    "latest": 302.0,
+    "trend": "increasing"
+   },
+   "process_temperature": {
+    "mean": 309.087,
+    "std": 1.327,
+    "min": 306.0,
+    "max": 311.9,
+    "latest": 310.5,
+    "trend": "increasing"
+   },
+   "rotational_speed": {
+    "mean": 1532.312,
+    "std": 175.797,
+    "min": 1230.0,
+    "max": 2384.0,
+    "latest": 1370.0,
+    "trend": "stable"
+   },
+   "torque": {
+    "mean": 40.254,
+    "std": 9.942,
+    "min": 15.0,
+    "max": 66.3,
+    "latest": 44.4,
+    "trend": "stable"
+   },
+   "tool_wear": {
+    "mean": 104.505,
+    "std": 66.951,
+    "min": 0.0,
+    "max": 229.0,
+    "latest": 85.0,
+    "trend": "stable"
+   }
+  }
+ },
+ "limit_checks": {
+  "n_readings": 20,
+  "latest": {
+   "temp_diff_k": 8.5,
+   "power_w": 6369.893264418665,
+   "wear_x_torque": 3774.0,
+   "heat_dissipation": true,
+   "power_out_of_range": false,
+   "possible_overstrain": false,
+   "tool_wear_at_failure_range": false
+  },
+  "latest_raw": {
+   "timestamp": "2025-10-24 22:03:19.624335",
+   "air_temperature": 302.0,
+   "process_temperature": 310.5,
+   "rotational_speed": 1370.0,
+   "torque": 44.4,
+   "tool_wear": 85.0
+  },
+  "counts": {
+   "heat_dissipation": 1,
+   "power_out_of_range": 0,
+   "possible_overstrain": 0,
+   "tool_wear_at_failure_range": 0
+  },
+  "violated": [
+   "heat_dissipation"
+  ]
+ },
+ "ml_analysis": {
+  "predicted_class": "Heat Dissipation Failure",
+  "confidence": 0.9981510043144226,
+  "anomaly_score": 0.9981722235679626,
+  "reliability_warning": false,
+  "reliability_note": null,
+  "close_second_class": "No Failure",
+  "close_second_margin": 0.9963
+ },
+ "maintenance_history": [
+  {
+   "date": "2025-06-13 00:00:00",
+   "maintenance_type": "Scheduled",
+   "description": "Quarterly calibration check on torque and speed sensors.",
+   "technician": "S. Malik",
+   "parts_replaced": null
+  },
+  {
+   "date": "2025-03-21 00:00:00",
+   "maintenance_type": "Reactive",
+   "description": "Tightened loose motor mounting bolts.",
+   "technician": "R. Hussain",
+   "parts_replaced": null
+  }
+ ],
+ "candidate_root_causes": [
+  {
+   "cause": "Heat dissipation failure",
+   "supporting_evidence": [
+    "Latest reading: process\u2011minus\u2011air temperature gap = 8.5\u202fK (threshold <\u202f8.6\u202fK) and speed = 1370\u202frpm (threshold <\u202f1380\u202frpm) \u2013 both conditions met.",
+    "Across the last 20 readings the heat\u2011dissipation rule was met once, and no other rules were triggered.",
+    "Historical statistics: mean temperature gap \u2248 9.85\u202fK, so the current 8.5\u202fK gap is unusually low, indicating poorer heat removal.",
+    "Similar past incidents (121, 93, 125, 151, 162) were all classified as heat\u2011dissipation failures with comparable sensor profiles."
+   ],
+   "contradicting_evidence": [],
+   "confidence": "high",
+   "reasoning": "The latest sensor reading shows a process\u2011minus\u2011air temperature gap of 8.5\u202fK while the rotational speed is 1370\u202frpm. Both values satisfy the documented operating limit for heat\u2011dissipation failure (gap <\u202f8.6\u202fK AND speed <\u202f1380\u202frpm). The rule was met in one of the last 20 readings, and no other failure rules are triggered, making this the only active alarm. Independent evidence supports the diagnosis: the temperature gap is notably lower than the historical mean gap (~9.85\u202fK), indicating reduced heat removal, and several past incidents with very similar sensor profiles were classified as heat\u2011dissipation failures. No evidence contradicts the cause (power, tool\u2011wear, wear\u00d7torque are all normal, and there are no recorded coolant or fan problems). Therefore the documented limit is violated and independent data align, justifying high confidence."
+  },
+  {
+   "cause": "Sensor fault or data-quality problem",
+   "supporting_evidence": [
+    "The heat\u2011dissipation rule is met because the temperature gap is 8.5\u202fK, just 0.1\u202fK below the 8.6\u202fK limit, meaning a small error in either temperature sensor could flip the outcome.",
+    "The sensor interpretation guide notes that a single anomalous temperature reading can cause a false heat\u2011dissipation alarm, especially when other limits are satisfied.",
+    "There is no recent calibration record for the temperature sensors, unlike torque and speed sensors which were calibrated on 2025\u201106\u201113, leaving open the possibility of drift or fault."
+   ],
+   "contradicting_evidence": [
+    "Both process_temperature (310.5\u202fK) and air_temperature (302.0\u202fK) are within their historical means and standard deviations (means 309.1\u202fK\u202f\u00b1\u202f1.33 and 299.2\u202fK\u202f\u00b1\u202f1.88 respectively) and far from their recorded minima/maxima, indicating no outlier reading.",
+    "All derived limits (power, wear\u202f\u00d7\u202ftorque, tool wear) are within normal ranges; the only rule triggered is the heat\u2011dissipation gap, which is only 0.1\u202fK below the threshold, not a large deviation.",
+    "Technical documentation states that a physically implausible jump in one channel while others stay stable suggests a sensor fault, but no such jump is observed in the provided data.",
+    "The sensor statistics show no recent abnormal spikes; the latest readings are typical of the full history."
+   ],
+   "confidence": "low",
+   "reasoning": "The candidate cause is plausible in principle because the heat\u2011dissipation alarm hinges on a very small temperature gap, so a minor sensor error could trigger it. However, the evidence shows both temperature readings are well within their normal statistical bounds, there is no documented sudden jump, and all other sensor\u2011derived limits are satisfied. The lack of a recent temperature\u2011sensor calibration is a mild hint but not strong evidence of fault. Consequently, the balance of evidence leans against a sensor fault, yielding a low confidence assessment."
+  },
+  {
+   "cause": "Unexplained: random or undetected failure",
+   "supporting_evidence": [
+    "Manual states about 0.1\u202f% of runs fail randomly with no sensor signature.",
+    "No other documented failure mechanisms (power out of range, tool wear, over\u2011strain) are triggered in the latest data.",
+    "Across the 20 most recent readings, heat\u2011dissipation rule was met only once, suggesting it may be incidental."
+   ],
+   "contradicting_evidence": [
+    "Heat-dissipation failure condition is met: process minus air temperature = 8.5\u202fK (below 8.6\u202fK) and speed = 1370\u202frpm (below 1380\u202frpm).",
+    "Similar past incidents with heat-dissipation failures have sensor distances close to current reading, indicating a known failure mode."
+   ],
+   "confidence": "low",
+   "reasoning": "The candidate cause of an unexplained random failure is meant for situations where no sensor\u2011based mechanism is supported. In this case the heat\u2011dissipation rule is satisfied by the latest reading (gap 8.5\u202fK < 8.6\u202fK and speed 1370\u202frpm < 1380\u202frpm), which directly matches a documented failure mode. Additionally, several past incidents with similar sensor profiles were classified as heat\u2011dissipation failures, providing concrete contrary evidence. While the manual notes a very low background rate of random failures and no other mechanisms are triggered, the presence of a specific, documented cause outweighs the generic random\u2011failure rationale, leading to low confidence in the unexplained cause."
+  }
+ ],
+ "most_supported_cause": "Heat dissipation failure",
+ "confidence_level": "high",
+ "justification": "The latest sensor reading shows a process\u2011minus\u2011air temperature gap of 8.5\u202fK and a rotational speed of 1370\u202frpm, which together satisfy the documented heat\u2011dissipation failure condition (gap <\u202f8.6\u202fK AND speed <\u202f1380\u202frpm). This rule was met in one of the last 20 readings and no other failure rules were triggered. Historical data indicate the current gap is lower than the mean gap (~9.85\u202fK), consistent with reduced heat removal. Several past incidents with similar sensor profiles were classified as heat\u2011dissipation failures. There are no contradicting observations for this cause, while alternative hypotheses have low confidence and lack supporting evidence. Therefore the heat\u2011dissipation failure hypothesis is the most strongly supported.",
+ "observed_facts": [
+  "[computed] Latest reading: process minus air temperature = 8.5 K at 1370 rpm. Heat-dissipation failure needs the gap below 8.6 K AND speed below 1380 rpm (met: yes).",
+  "[computed] Latest derived power = 6370 W (documented normal range 3500-9000 W; outside range: no).",
+  "[computed] Latest tool_wear x torque = 3774 (overstrain limits by product quality: L 11000, M 12000, H 13000; above the lowest limit: no).",
+  "[computed] Latest tool wear = 85 min (tool-wear failures are documented from about 200 min; at or above: no).",
+  "[computed] Across the 20 most recent readings: heat-dissipation rule met in 1, power out of range in 0, wear x torque above the lowest limit in 0, tool wear at or above 200 in 0.",
+  "historical mean temperature gap \u2248 9.85\u202fK  [UNVERIFIED NUMBER(S): 9.85]",
+  "heat\u2011dissipation rule met in 1 of the last 20 readings",
+  "no other failure rules triggered in the last 20 readings",
+  "tool wear = 85\u202fmin",
+  "past incidents 121, 93, 125, 151, 162 classified as heat\u2011dissipation failures with comparable sensor profiles",
+  "torque and speed sensors calibrated on 2025\u201106\u201113",
+  "no recent calibration record for temperature sensors"
+ ],
+ "ml_predictions": [
+  "PREDICTION: Heat Dissipation Failure (confidence 0.9982) - reliability_warning: none"
+ ],
+ "unsupported_speculation": [
+  "Sensor fault or data-quality problem (confidence low): Both process_temperature (310.5 K) and air_temperature (302.0 K) are within their historical means and standard deviations (means 309.1 K \u00b1 1.33 and 299.2 K \u00b1 ...",
+  "Unexplained: random or undetected failure (confidence low): Heat-dissipation failure condition is met: process minus air temperature = 8.5 K (below 8.6 K) and speed = 1370 rpm (below 1380 rpm)."
+ ],
+ "evidence_sources": [
+  "Incident 121 (M003, 2025-10-15 10:03:01.865132)",
+  "Incident 93 (M007, 2025-10-03 10:58:39.199401)",
+  "Incident 125 (M027, 2025-09-06 23:46:48.011279)",
+  "Incident 151 (M023, 2025-09-18 22:24:24.204266)",
+  "Incident 162 (M023, 2025-09-20 18:17:11.636314)"
+ ],
+ "investigation_log": [
+  {
+   "step": "gather_context",
+   "status": "done",
+   "summary": "Loaded 20 recent readings for M014.",
+   "timestamp": "2026-10-27T05:50:41.799040+00:00"
+  },
+  {
+   "step": "run_anomaly_model",
+   "status": "done",
+   "summary": "Predicted: Heat Dissipation Failure (confidence 1.00)",
+   "timestamp": "2026-10-27T05:50:41.814668+00:00"
+  },
+  {
+   "step": "gather_evidence",
+   "status": "done",
+   "summary": "2 maintenance records, 1 past incidents, 5 similar incidents.",
+   "timestamp": "2026-10-27T05:50:42.205303+00:00"
+  },
+  {
+   "step": "generate_hypotheses",
+   "status": "done",
+   "summary": "Mode: failure investigation. Hypotheses: Heat dissipation failure, Sensor fault or data-quality problem, Unexplained: random or undetected failure",
+   "timestamp": "2026-10-27T05:50:50.576387+00:00"
+  },
+  {
+   "step": "investigate_hypotheses",
+   "status": "done",
+   "summary": "Evaluated 3 hypotheses: Heat dissipation failure (high), Sensor fault or data-quality problem (low), Unexplained: random or undetected failure (low)",
+   "timestamp": "2026-10-27T05:51:39.534183+00:00"
+  },
+  {
+   "step": "determine_root_cause",
+   "status": "done",
+   "summary": "Most supported cause: Heat dissipation failure (high) | 1 observed fact(s) contain numbers not found in the evidence",
+   "timestamp": "2026-10-27T05:51:56.132377+00:00"
+  }
+ ]
+}

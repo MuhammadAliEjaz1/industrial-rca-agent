@@ -24,55 +24,69 @@ def machine_exists(machine_id: str, db_path: Path = DB_PATH) -> bool:
     return row is not None
 
 
-def get_recent_readings(machine_id: str, limit: int = 20, db_path: Path = DB_PATH) -> list[dict]:
+def get_recent_readings(machine_id: str, limit: int = 20, db_path: Path = DB_PATH,
+                        as_of: Optional[str] = None) -> list[dict]:
+    """Newest first. as_of (same text format as the timestamps) hides every reading AFTER that moment,
+    so a historical incident can be investigated as if it were happening 'now'."""
+    sql = ("SELECT timestamp, air_temperature, process_temperature, rotational_speed, torque, tool_wear "
+           "FROM sensor_readings WHERE machine_id = ?")
+    params: list = [machine_id]
+    if as_of is not None:
+        sql += " AND timestamp <= ?"
+        params.append(as_of)
+    sql += " ORDER BY timestamp DESC LIMIT ?"
+    params.append(limit)
     conn = _connect(db_path)
-    rows = conn.execute(
-        "SELECT timestamp, air_temperature, process_temperature, rotational_speed, torque, tool_wear "
-        "FROM sensor_readings WHERE machine_id = ? ORDER BY timestamp DESC LIMIT ?",
-        (machine_id, limit),
-    ).fetchall()
+    rows = conn.execute(sql, params).fetchall()
     conn.close()
     return [dict(r) for r in rows]
 
 
-def get_all_readings(machine_id: str, db_path: Path = DB_PATH) -> list[dict]:
-    """No limit — used for statistics, where we want the full history, not just recent."""
+def get_all_readings(machine_id: str, db_path: Path = DB_PATH, as_of: Optional[str] = None) -> list[dict]:
+    """No limit — used for statistics, where we want the full history, not just recent.
+    With as_of, the history stops at that moment (no look-ahead)."""
+    sql = ("SELECT timestamp, air_temperature, process_temperature, rotational_speed, torque, tool_wear "
+           "FROM sensor_readings WHERE machine_id = ?")
+    params: list = [machine_id]
+    if as_of is not None:
+        sql += " AND timestamp <= ?"
+        params.append(as_of)
+    sql += " ORDER BY timestamp ASC"
     conn = _connect(db_path)
-    rows = conn.execute(
-        "SELECT timestamp, air_temperature, process_temperature, rotational_speed, torque, tool_wear "
-        "FROM sensor_readings WHERE machine_id = ? ORDER BY timestamp ASC",
-        (machine_id,),
-    ).fetchall()
+    rows = conn.execute(sql, params).fetchall()
     conn.close()
     return [dict(r) for r in rows]
 
 
-def get_maintenance_records(machine_id: str, db_path: Path = DB_PATH) -> list[dict]:
+def get_maintenance_records(machine_id: str, db_path: Path = DB_PATH, as_of: Optional[str] = None) -> list[dict]:
+    sql = ("SELECT date, maintenance_type, description, technician, parts_replaced "
+           "FROM maintenance_records WHERE machine_id = ?")
+    params: list = [machine_id]
+    if as_of is not None:
+        sql += " AND date <= ?"   # 'YYYY-MM-DD' sorts before 'YYYY-MM-DD hh:mm:ss', so same-day records are kept
+        params.append(as_of)
+    sql += " ORDER BY date DESC"
     conn = _connect(db_path)
-    rows = conn.execute(
-        "SELECT date, maintenance_type, description, technician, parts_replaced "
-        "FROM maintenance_records WHERE machine_id = ? ORDER BY date DESC",
-        (machine_id,),
-    ).fetchall()
+    rows = conn.execute(sql, params).fetchall()
     conn.close()
     return [dict(r) for r in rows]
 
 
 def get_failure_incidents(machine_id: str, exclude_incident_id: Optional[int] = None,
-                           db_path: Path = DB_PATH) -> list[dict]:
-    conn = _connect(db_path)
+                           db_path: Path = DB_PATH, as_of: Optional[str] = None) -> list[dict]:
+    """as_of keeps only incidents STRICTLY BEFORE that moment (the past of this machine)."""
+    sql = ("SELECT incident_id, date, failure_type, description, resolution, root_cause "
+           "FROM failure_incidents WHERE machine_id = ?")
+    params: list = [machine_id]
     if exclude_incident_id is not None:
-        rows = conn.execute(
-            "SELECT incident_id, date, failure_type, description, resolution, root_cause "
-            "FROM failure_incidents WHERE machine_id = ? AND incident_id != ? ORDER BY date DESC",
-            (machine_id, exclude_incident_id),
-        ).fetchall()
-    else:
-        rows = conn.execute(
-            "SELECT incident_id, date, failure_type, description, resolution, root_cause "
-            "FROM failure_incidents WHERE machine_id = ? ORDER BY date DESC",
-            (machine_id,),
-        ).fetchall()
+        sql += " AND incident_id != ?"
+        params.append(exclude_incident_id)
+    if as_of is not None:
+        sql += " AND date < ?"
+        params.append(as_of)
+    sql += " ORDER BY date DESC"
+    conn = _connect(db_path)
+    rows = conn.execute(sql, params).fetchall()
     conn.close()
     return [dict(r) for r in rows]
 
