@@ -1,0 +1,257 @@
+{
+ "incident_summary": "A failure was reported on this machine at 2025-10-18 02:07:29.492855. Investigate the root cause.",
+ "mode": "failure_investigation",
+ "machine_condition": {
+  "machine_id": "M024",
+  "latest_reading": {
+   "timestamp": "2025-10-18 02:07:29.492855",
+   "air_temperature": 302.6,
+   "process_temperature": 311.0,
+   "rotational_speed": 1284.0,
+   "torque": 68.0,
+   "tool_wear": 114.0
+  },
+  "sensor_statistics": {
+   "air_temperature": {
+    "mean": 299.332,
+    "std": 1.954,
+    "min": 295.5,
+    "max": 302.6,
+    "latest": 302.6,
+    "trend": "increasing"
+   },
+   "process_temperature": {
+    "mean": 309.206,
+    "std": 1.268,
+    "min": 306.1,
+    "max": 311.5,
+    "latest": 311.0,
+    "trend": "increasing"
+   },
+   "rotational_speed": {
+    "mean": 1519.039,
+    "std": 151.466,
+    "min": 1251.0,
+    "max": 1981.0,
+    "latest": 1284.0,
+    "trend": "stable"
+   },
+   "torque": {
+    "mean": 40.751,
+    "std": 10.199,
+    "min": 21.4,
+    "max": 68.0,
+    "latest": 68.0,
+    "trend": "increasing"
+   },
+   "tool_wear": {
+    "mean": 112.512,
+    "std": 63.678,
+    "min": 2.0,
+    "max": 233.0,
+    "latest": 114.0,
+    "trend": "stable"
+   }
+  }
+ },
+ "limit_checks": {
+  "n_readings": 20,
+  "latest": {
+   "temp_diff_k": 8.399999999999977,
+   "power_w": 9143.291259007734,
+   "wear_x_torque": 7752.0,
+   "heat_dissipation": true,
+   "power_out_of_range": true,
+   "possible_overstrain": false,
+   "tool_wear_at_failure_range": false
+  },
+  "latest_raw": {
+   "timestamp": "2025-10-18 02:07:29.492855",
+   "air_temperature": 302.6,
+   "process_temperature": 311.0,
+   "rotational_speed": 1284.0,
+   "torque": 68.0,
+   "tool_wear": 114.0
+  },
+  "counts": {
+   "heat_dissipation": 4,
+   "power_out_of_range": 1,
+   "possible_overstrain": 0,
+   "tool_wear_at_failure_range": 2
+  },
+  "violated": [
+   "heat_dissipation",
+   "power_out_of_range"
+  ]
+ },
+ "ml_analysis": {
+  "predicted_class": "Power Failure",
+  "confidence": 0.9991922974586487,
+  "anomaly_score": 0.9999488592147827,
+  "reliability_warning": false,
+  "reliability_note": null,
+  "close_second_class": "Heat Dissipation Failure",
+  "close_second_margin": 0.9988
+ },
+ "maintenance_history": [
+  {
+   "date": "2025-06-27 00:00:00",
+   "maintenance_type": "Reactive",
+   "description": "Investigated abnormal temperature reading; cleaned cooling fan.",
+   "technician": "S. Malik",
+   "parts_replaced": null
+  },
+  {
+   "date": "2025-04-10 00:00:00",
+   "maintenance_type": "Scheduled",
+   "description": "Coolant system inspection and top-up.",
+   "technician": "T. Ahmed",
+   "parts_replaced": null
+  },
+  {
+   "date": "2025-03-10 00:00:00",
+   "maintenance_type": "Reactive",
+   "description": "Investigated abnormal temperature reading; cleaned cooling fan.",
+   "technician": "S. Malik",
+   "parts_replaced": null
+  }
+ ],
+ "candidate_root_causes": [
+  {
+   "cause": "Power failure",
+   "supporting_evidence": [
+    "Latest derived power = 9143\u202fW, which exceeds the documented normal range of 3500\u20119000\u202fW (Operating Limit in power_failure.md).",
+    "Power failure is defined as derived power > 9,000\u202fW (or < 3,500\u202fW); the observed 9,143\u202fW meets this criterion.",
+    "Across the 20 most recent readings, the power out\u2011of\u2011range condition occurs in 1 reading (the latest), indicating an anomaly consistent with a power\u2011related event.",
+    "Similar past incidents include Incident 108 (Power Failure) and Incident 251 (Power Failure) with sensor\u2011profile distances of 0.6893 and 0.7574, showing precedent for power\u2011failure signatures."
+   ],
+   "contradicting_evidence": [
+    "Only one of the last 20 readings is out of the power range, suggesting the high reading may be a transient spike rather than a sustained failure.",
+    "The heat\u2011dissipation rule is also met (temperature gap 8.4\u202fK < 8.6\u202fK and speed 1284\u202frpm < 1380\u202frpm), indicating a concurrent condition that could explain the anomaly.",
+    "No trend information or historical derived\u2011power statistics are provided; the broader sensor statistics (temperature, speed, torque) are within normal historical bounds, which does not reinforce a persistent power issue."
+   ],
+   "confidence": "high",
+   "reasoning": "The observed derived power exceeds the documented upper limit for normal operation, directly matching the definition of a power failure. This single out\u2011of\u2011range measurement aligns with the ML classifier\u2019s high\u2011confidence prediction and with similar historical power\u2011failure incidents. However, the anomaly is isolated (1/20 readings) and another failure mode (heat\u2011dissipation) is also satisfied, reducing certainty that the root cause is a sustained power failure. Consequently, confidence is assessed as medium. [set to high by rule (the model said medium): its documented limit is met by the latest reading]",
+   "llm_confidence": "medium",
+   "confidence_note": "set to high by rule (the model said medium): its documented limit is met by the latest reading"
+  },
+  {
+   "cause": "Heat dissipation failure",
+   "supporting_evidence": [
+    "Latest reading: process\u2011minus\u2011air temperature gap = 8.4\u202fK (below 8.6\u202fK threshold) and spindle speed = 1284\u202frpm (below 1380\u202frpm limit).",
+    "Heat\u2011dissipation rule met in 4 of the most recent 20 samples, indicating a recurring breach.",
+    "Maintenance history includes fan cleaning (2025\u201106\u201127, 2025\u201103\u201110) and coolant system inspection (2025\u201104\u201110), which are the corrective actions listed for heat\u2011dissipation failure.",
+    "Similar past incidents: Incident 109, 140, and 165 were recorded as Heat Dissipation Failures with comparable sensor profiles."
+   ],
+   "contradicting_evidence": [
+    "Across the full reading history the mean temperature gap is 9.87\u202fK, well above the 8.6\u202fK limit, indicating that most of the time the system is not in a heat\u2011dissipation\u2011failure regime.",
+    "Only 4 of the most recent 20 samples meet the heat\u2011dissipation rule, so the condition is not persistent.",
+    "The latest derived power (9143\u202fW) is outside the normal range (3500\u20119000\u202fW), pointing to a power\u2011related issue that could explain the symptom independently of heat dissipation."
+   ],
+   "confidence": "high",
+   "reasoning": "Heat\u2011dissipation failure is defined by a temperature gap below 8.6\u202fK together with a rotational speed below 1380\u202frpm. The latest reading satisfies both (gap\u202f=\u202f8.4\u202fK, speed\u202f=\u202f1284\u202frpm) and the rule has been met in 4 of the last 20 samples, showing that the condition can recur. Maintenance records show recent fan cleaning and coolant inspections, which are typical corrective actions for this failure mode, and several past incidents with similar sensor profiles were also classified as heat\u2011dissipation failures. However, the overall historical gap average is 9.87\u202fK (well above the limit) and the rule is only met in a minority of recent samples, suggesting the problem is intermittent. Moreover, the power reading is out of range, providing an alternative plausible cause. Because the evidence is mixed\u2014some clear indications of the rule being violated but limited frequency and competing anomalies\u2014the confidence is set to medium. [set to high by rule (the model said medium): its documented limit is met by the latest reading]",
+   "llm_confidence": "medium",
+   "confidence_note": "set to high by rule (the model said medium): its documented limit is met by the latest reading"
+  },
+  {
+   "cause": "Sensor fault or data-quality problem",
+   "supporting_evidence": [
+    "Derived power = 9143\u202fW, which exceeds the documented normal range (3500\u20119000\u202fW) and is the only out\u2011of\u2011range value among the last 20 samples.",
+    "Temperature gap = 8.4\u202fK, below the heat\u2011dissipation threshold of 8.6\u202fK and notably lower than the historical mean gap of 9.87\u202fK, suggesting an outlier.",
+    "Only one of the last 20 readings shows a power out\u2011of\u2011range condition, indicating an isolated anomaly rather than a sustained trend.",
+    "Sensor\u2011interpretation guide notes that a physically implausible jump in a single channel while others stay stable points to a sensor fault.",
+    "Maintenance logs record prior investigations of abnormal temperature readings, implying recurring sensor\u2011related concerns."
+   ],
+   "contradicting_evidence": [
+    "All sensor readings (air temperature, process temperature, rotational speed, torque) are within their historical min/max ranges, indicating no obvious sensor outlier.",
+    "The technical manual \"Random and Unexplained Failures - Sensor Signature\" states that every logged channel is inside its normal window and no limit for power, heat dissipation, or tool wear is violated, directly contradicting the computed power out\u2011of\u2011range flag.",
+    "The heat\u2011dissipation condition (gap < 8.6\u202fK and speed < 1380\u202frpm) is met, which could be a genuine process condition rather than a sensor error."
+   ],
+   "confidence": "low",
+   "reasoning": "The candidate cause is plausible because the only out\u2011of\u2011range measurement (derived power = 9143\u202fW, above the documented 9000\u202fW limit) occurs in a single sample among the last 20, and the temperature gap of 8.4\u202fK is unusually low compared to the historical mean gap of 9.87\u202fK and likely lower than any historical gap, suggesting a possible sensor anomaly. The sensor\u2011interpretation guide explicitly flags an isolated implausible jump in one channel while others remain stable as a sensor fault signature. However, the broader sensor statistics show no values outside historical bounds, and the manual\u2019s statement that all channels are within normal windows contradicts the notion of a sensor fault for power. Additionally, the heat\u2011dissipation rule being satisfied could reflect a real condition rather than a measurement error. Given this mixed picture, confidence is set to medium. [set to low by rule (the model said medium): a sensor fault cannot be established from this data (no independent cross-check)]",
+   "llm_confidence": "medium",
+   "confidence_note": "set to low by rule (the model said medium): a sensor fault cannot be established from this data (no independent cross-check)"
+  },
+  {
+   "cause": "Unexplained: random or undetected failure",
+   "supporting_evidence": [],
+   "contradicting_evidence": [
+    "Heat\u2011dissipation rule met: temperature gap 8.4\u202fK (below 8.6\u202fK) AND rotational speed 1284\u202frpm (below 1380\u202frpm) \u2013 satisfies documented heat\u2011dissipation failure condition.",
+    "Derived power 9143\u202fW exceeds documented normal range (3500\u20119000\u202fW) \u2013 satisfies documented power\u2011failure condition.",
+    "Across the 20 most recent readings, heat\u2011dissipation rule was met 4 times and power was out of range 1 time, indicating repeatable sensor\u2011visible failure modes."
+   ],
+   "confidence": "low",
+   "reasoning": "The candidate cause \"unexplained\" is defined for runs where no known mechanism (heat\u2011dissipation, power, tool\u2011wear, over\u2011strain) is supported by sensor data. In this case, both the heat\u2011dissipation and power thresholds are clearly breached, providing concrete evidence for those specific failure modes. The presence of multiple recent occurrences of the same sensor signatures further strengthens the case for a known cause. Because the evidence directly contradicts the premise of an unexplained failure, confidence that the root cause is truly \"unexplained\" must be low.",
+   "llm_confidence": "low"
+  }
+ ],
+ "most_supported_cause": "Heat dissipation failure + Power failure",
+ "confidence_level": "high",
+ "justification": "The latest sensor reading shows a process\u2011minus\u2011air temperature gap of 8.4\u202fK and a spindle speed of 1284\u202frpm, which together satisfy the documented heat\u2011dissipation failure condition (gap < 8.6\u202fK and speed < 1380\u202frpm). This heat\u2011dissipation rule was also met in four of the most recent twenty samples, indicating recurrence. Additionally, the derived power for the latest reading is 9143\u202fW, exceeding the documented normal power range of 3500\u20119000\u202fW and thus meeting the definition of a power failure. Historical incident records show multiple past power\u2011failure incidents (Incident\u202f108, distance\u202f0.6893; Incident\u202f251, distance\u202f0.7574) and heat\u2011dissipation failures (Incidents\u202f109,\u202f140,\u202f165) with similar sensor profiles, providing precedent. Maintenance logs record recent fan cleaning and coolant system inspections, which are corrective actions associated with heat\u2011dissipation failures. Because both documented limits are directly breached in the latest reading and supported by recent recurrence and historical precedent, the system assigns high confidence to the combined outcome of Heat dissipation failure + Power failure.",
+ "observed_facts": [
+  "[computed] Latest reading: process minus air temperature = 8.4 K at 1284 rpm. Heat-dissipation failure needs the gap below 8.6 K AND speed below 1380 rpm (met: yes).",
+  "[computed] Latest derived power = 9143 W (documented normal range 3500-9000 W; outside range: yes).",
+  "[computed] Latest tool_wear x torque = 7752 (overstrain limits by product quality: L 11000, M 12000, H 13000; above the lowest limit: no).",
+  "[computed] Latest tool wear = 114 min (tool-wear failures are documented from about 200 min; at or above: no).",
+  "[computed] Across the 20 most recent readings: heat-dissipation rule met in 4, power out of range in 1, wear x torque above the lowest limit in 0, tool wear at or above 200 in 2.",
+  "Heat\u2011dissipation rule met in 4 of the most recent 20 samples",
+  "Power out\u2011of\u2011range condition occurs in 1 of the most recent 20 samples",
+  "Maintenance history includes fan cleaning on 2025\u201106\u201127 and 2025\u201103\u201110",
+  "Maintenance history includes coolant system inspection on 2025\u201104\u201110",
+  "Similar past incidents: Incident\u202f108 (Power Failure) distance\u202f0.6893, Incident\u202f251 (Power Failure) distance\u202f0.7574",
+  "Similar past incidents: Incident\u202f109, Incident\u202f140, Incident\u202f165 (Heat Dissipation Failures)"
+ ],
+ "ml_predictions": [
+  "PREDICTION: Power Failure (confidence 0.9992) - reliability_warning: none"
+ ],
+ "advisories": [],
+ "unsupported_speculation": [
+  "Sensor fault or data-quality problem (confidence low): All sensor readings (air temperature, process temperature, rotational speed, torque) are within their historical min/max ranges, indicating no obvious sensor ...",
+  "Unexplained: random or undetected failure (confidence low): Heat\u2011dissipation rule met: temperature gap 8.4 K (below 8.6 K) AND rotational speed 1284 rpm (below 1380 rpm) \u2013 satisfies documented heat\u2011dissipation failure ..."
+ ],
+ "evidence_sources": [
+  "Incident 109 (M037, 2025-10-26 02:34:45.940067)",
+  "Incident 108 (M027, 2025-08-31 22:41:26.988879)",
+  "Incident 251 (M029, 2025-12-01 09:09:43.375550)",
+  "Incident 140 (M006, 2025-10-01 02:10:29.573859)",
+  "Incident 165 (M014, 2025-11-17 14:07:29.324740)"
+ ],
+ "investigation_log": [
+  {
+   "step": "gather_context",
+   "status": "done",
+   "summary": "Loaded 20 recent readings for M024.",
+   "timestamp": "2026-10-27T10:43:26.116628+00:00"
+  },
+  {
+   "step": "run_anomaly_model",
+   "status": "done",
+   "summary": "Predicted: Power Failure (confidence 1.00)",
+   "timestamp": "2026-10-27T10:43:26.132254+00:00"
+  },
+  {
+   "step": "gather_evidence",
+   "status": "done",
+   "summary": "3 maintenance records, 3 past incidents, 5 similar incidents.",
+   "timestamp": "2026-10-27T10:43:26.304138+00:00"
+  },
+  {
+   "step": "generate_hypotheses",
+   "status": "done",
+   "summary": "Mode: failure investigation. Hypotheses: Power failure, Heat dissipation failure, Sensor fault or data-quality problem, Unexplained: random or undetected failure",
+   "timestamp": "2026-10-27T10:43:29.169141+00:00"
+  },
+  {
+   "step": "investigate_hypotheses",
+   "status": "done",
+   "summary": "Evaluated 4 hypotheses: Power failure (high), Heat dissipation failure (high), Sensor fault or data-quality problem (low), Unexplained: random or undetected failure (low) | RULE OVERRIDES: 'Power failure' set to high by rule (the model said medium): its documented limit is met by the latest reading; 'Heat dissipation failure' set to high by rule (the model said medium): its documented limit is met by the latest reading; 'Sensor fault or data-quality problem' set to low by rule (the model said medium): a sensor fault cannot be established from this data (no independent cross-check)",
+   "timestamp": "2026-10-27T10:44:42.067454+00:00"
+  },
+  {
+   "step": "determine_root_cause",
+   "status": "done",
+   "summary": "Most supported cause: Heat dissipation failure + Power failure (high) | outcome decided by code (causes)",
+   "timestamp": "2026-10-27T10:45:31.033846+00:00"
+  }
+ ]
+}

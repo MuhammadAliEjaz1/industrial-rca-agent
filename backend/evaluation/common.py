@@ -115,5 +115,13 @@ def load_split():
     return df, tr.FEATURE_COLUMNS
 
 
+def results_suffix(tag=None, dev_only=False, no_maintenance=False) -> str:
+    """File-name suffix shared by the runner and the report, e.g. '' or '_dev' or '_v1_pilot_nomaint'."""
+    parts = [tag] if tag else (["dev"] if dev_only else [])
+    if no_maintenance:
+        parts.append("nomaint")
+    return "_" + "_".join(parts) if parts else ""
+
+
 def reading_of(row) -> dict:
     return {c: float(row[c]) for c in SENSORS}

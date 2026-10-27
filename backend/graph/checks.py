@@ -26,6 +26,16 @@ DOC_CONSTANTS_TEXT = (
     "tool wear 200 240 minutes; random failure about 0.1 %"
 )
 
+# Closed hypothesis catalog: only failure modes this system can test with its data, limits and manuals.
+H_TOOL_WEAR = "Tool wear failure"
+H_HEAT = "Heat dissipation failure"
+H_POWER = "Power failure"
+H_OVERSTRAIN = "Overstrain failure"
+H_SENSOR = "Sensor fault or data-quality problem"
+H_UNEXPLAINED = "Unexplained: random or undetected failure"   # failure reported, nothing supported
+H_NO_FAULT = "No fault: normal variation"                       # health check, nothing reported
+FAULT_CATALOG = [H_TOOL_WEAR, H_HEAT, H_POWER, H_OVERSTRAIN, H_SENSOR]
+
 ORDER = ["low", "medium", "high"]
 NULL_PREFIXES = ("no fault", "unexplained", "normal variation")
 
@@ -58,7 +68,9 @@ def compute_limit_checks(readings: list) -> dict:
               for k in ("heat_dissipation", "power_out_of_range", "possible_overstrain",
                         "tool_wear_at_failure_range")}
     # Tool wear >= 200 is only a SIGNAL (671 normal readings overlap that range), not a hard limit.
-    violated = [k for k in ("heat_dissipation", "power_out_of_range", "possible_overstrain") if counts[k] > 0]
+    # 'violated' looks at the LATEST reading only: the readings in the window are independent samples, so an
+    # older row that broke a limit says nothing about the present (the counts above are shown for context).
+    violated = [k for k in ("heat_dissipation", "power_out_of_range", "possible_overstrain") if per[0][k]]
     return {"n_readings": len(readings), "latest": per[0], "latest_raw": readings[0],
             "counts": counts, "violated": violated}
 
@@ -96,37 +108,85 @@ def near_tie(anomaly: dict, max_margin: float = 0.25) -> bool:
 def is_health_check(anomaly: dict, failure_reported: bool, checks: dict) -> bool:
     """Nobody reported a failure, ML says No Failure, and no documented limit is violated.
     (If a failure WAS reported, e.g. a random failure with normal sensors, it is always an investigation.)"""
-    # Tool wear at or above ~200 min is a documented failure range, and the classifier is known to miss
-    # tool-wear failures (recall ~0.12), so that reading is never called a 'health check'.
-    wear_signal = bool((checks.get("latest") or {}).get("tool_wear_at_failure_range"))
     return (not failure_reported and anomaly.get("predicted_class") == "No Failure"
-            and not checks.get("violated") and not wear_signal)
+            and not checks.get("violated"))
 
 
-# ---------- confidence caps ----------
+# ---------- confidence: decided by documented rules, not by the LLM ----------
+# The first pilot showed the LLM overriding documented rules (heat dissipation rated 'low' although the limit was
+# met) and rating tool wear 'high' on readings that broke a different limit. So wherever a documented criterion
+# exists, the code sets the confidence; the LLM's own rating is kept next to it as a second opinion.
+
+RULE_KEY = {H_HEAT: "heat_dissipation", H_POWER: "power_out_of_range", H_OVERSTRAIN: "possible_overstrain"}
+_ML_WORD = {H_HEAT: "heat dissipation", H_POWER: "power", H_OVERSTRAIN: "overstrain", H_TOOL_WEAR: "tool wear"}
+
 
 def is_null_hypothesis(cause: str) -> bool:
     return cause.strip().lower().startswith(NULL_PREFIXES)
 
 
-def cap_confidence(cause: str, confidence: str, checks: dict, anomaly: dict):
-    """Returns (confidence, note). 'high' needs a documented limit violation.
-    Null hypotheses ('No fault:', 'Unexplained:') are not capped."""
+def rule_confidence(cause: str, checks: dict, anomaly: dict, failure_reported: bool):
+    """(confidence, why) that the documented rules give a NON-null cause. Independent of anything the LLM says."""
+    latest = checks.get("latest") or {}
+    ml_class = str(anomaly.get("predicted_class") or "").lower()
+    ml_p = anomaly.get("confidence") or 0
+    ml_names = cause in _ML_WORD and _ML_WORD[cause] in ml_class and ml_p >= 0.5
+
+    if cause in RULE_KEY:
+        if latest.get(RULE_KEY[cause]):
+            return "high", "its documented limit is met by the latest reading"
+        if ml_names:
+            return "medium", "its documented limit is not met by the latest reading, but the classifier names it"
+        return "low", "its documented limit is not met by the latest reading"
+    if cause == H_TOOL_WEAR:
+        wear = bool(latest.get("tool_wear_at_failure_range"))
+        if checks.get("violated"):
+            return "low", "a documented hard limit already explains the reading, and tool wear alone is a weak signal"
+        if (failure_reported and wear) or ml_names:
+            return "medium", ("tool wear can reach 'medium' at most: it is a weak signal "
+                              "(documented recall ~0.12; about 94% of readings at 200+ min are healthy)")
+        if wear:
+            return "low", "no failure was reported, so a worn tool is an advisory, not a diagnosis"
+        return "low", "the latest tool wear is below the documented failure range"
+    return "low", "a sensor fault cannot be established from this data (no independent cross-check)"
+
+
+def decide_confidence(cause: str, llm_conf: str, checks: dict, anomaly: dict, failure_reported: bool):
+    """Returns (confidence, note). note is None when the LLM's rating is kept (null hypotheses) or agrees."""
     if is_null_hypothesis(cause):
-        return confidence, None
-    cap, why = "high", ""
-    if not checks.get("violated"):
-        cap, why = "medium", "no documented operating limit is violated in the recent readings"
-        p = anomaly.get("confidence") or 0
-        wear_signal = bool((checks.get("latest") or {}).get("tool_wear_at_failure_range"))
-        # With tool wear in the failure range we do not squeeze everything to 'low': the classifier
-        # is documented as unreliable for tool wear, so a confident 'No Failure' means less there.
-        if anomaly.get("predicted_class") == "No Failure" and p >= 0.95 and not wear_signal:
-            cap = "low"
-            why = "the classifier predicts No Failure with high confidence and no documented limit is violated"
-    if ORDER.index(confidence) > ORDER.index(cap):
-        return cap, f"capped from {confidence} to {cap}: {why}"
-    return confidence, None
+        return llm_conf, None
+    new, why = rule_confidence(cause, checks, anomaly, failure_reported)
+    note = None if new == llm_conf else f"set to {new} by rule (the model said {llm_conf}): {why}"
+    return new, note
+
+
+def decide_final(evaluations: list, health: bool) -> dict:
+    """The outcome, from the evaluated confidences. kind: causes | no_fault | unexplained | unresolved."""
+    non_null = [e for e in evaluations if not is_null_hypothesis(e["cause"])]
+    rank = {c: i for i, c in enumerate(FAULT_CATALOG)}
+    for level in ("high", "medium"):
+        hits = sorted((e["cause"] for e in non_null if e["confidence"] == level), key=lambda c: rank.get(c, 99))
+        if hits:
+            return {"kind": "causes", "causes": hits, "confidence": level}
+    if health:
+        return {"kind": "no_fault", "causes": [], "confidence": "medium"}
+    nulls = [e for e in evaluations if is_null_hypothesis(e["cause"]) and e["confidence"] in ("medium", "high")]
+    if nulls:
+        best = max(nulls, key=lambda e: ORDER.index(e["confidence"]))
+        return {"kind": "unexplained", "causes": [best["cause"]], "confidence": "medium"}
+    return {"kind": "unresolved", "causes": [], "confidence": "low"}
+
+
+def tool_wear_advisory(checks: dict, anomaly: dict, failure_reported: bool):
+    """A routine check with tool wear in the failure range and nothing else wrong gets an advisory, not a diagnosis."""
+    latest = checks.get("latest") or {}
+    if (not failure_reported and latest.get("tool_wear_at_failure_range") and not checks.get("violated")
+            and anomaly.get("predicted_class") == "No Failure"):
+        return (f"Latest tool wear is {checks['latest_raw']['tool_wear']:g} min, inside the documented failure range "
+                f"(about {TOOL_WEAR_FAIL_START}-240 min). Sensors cannot reliably detect tool-wear failures (documented "
+                f"recall ~0.12; about 94% of readings at 200+ min are healthy), so this is a maintenance advisory, not a "
+                f"diagnosis. The manual recommends proactive replacement at about 180-200 min.")
+    return None
 
 
 # ---------- number grounding ----------
@@ -174,14 +234,7 @@ def annotate_ungrounded(facts: list, evidence_text: str):
 # ---------- closed hypothesis catalog ----------
 # Only failure modes this system can actually test with its data (sensor limits, ML class, manuals).
 # Power sags, PLC interlocks, bearing seizures etc. cannot be confirmed or ruled out here, so they are not offered.
-H_TOOL_WEAR = "Tool wear failure"
-H_HEAT = "Heat dissipation failure"
-H_POWER = "Power failure"
-H_OVERSTRAIN = "Overstrain failure"
-H_SENSOR = "Sensor fault or data-quality problem"
-H_UNEXPLAINED = "Unexplained: random or undetected failure"   # failure reported, nothing supported
-H_NO_FAULT = "No fault: normal variation"                       # health check, nothing reported
-FAULT_CATALOG = [H_TOOL_WEAR, H_HEAT, H_POWER, H_OVERSTRAIN, H_SENSOR]
+
 
 _SHORTCUTS = [("tool wear", H_TOOL_WEAR), ("heat dissipation", H_HEAT), ("power", H_POWER),
               ("overstrain", H_OVERSTRAIN), ("sensor", H_SENSOR), ("unexplained", H_UNEXPLAINED),
@@ -204,7 +257,7 @@ def match_catalog(cause: str):
     return None
 
 
-def required_hypotheses(anomaly: dict, checks: dict) -> list:
+def required_hypotheses(anomaly: dict, checks: dict, failure_reported: bool = True) -> list:
     """(label, reason) pairs that are ALWAYS evaluated, whether or not the LLM proposed them."""
     req = {}
     violated = checks.get("violated", [])
@@ -214,7 +267,7 @@ def required_hypotheses(anomaly: dict, checks: dict) -> list:
         req[H_POWER] = "derived power is outside the documented range in the recent readings"
     if "possible_overstrain" in violated:
         req[H_OVERSTRAIN] = "wear x torque is above the lowest documented overstrain limit in the recent readings"
-    if (checks.get("latest") or {}).get("tool_wear_at_failure_range"):
+    if failure_reported and (checks.get("latest") or {}).get("tool_wear_at_failure_range"):
         req[H_TOOL_WEAR] = "the latest tool wear is in the documented failure range"
     cls = str(anomaly.get("predicted_class") or "")
     if cls.lower() != "no failure":
@@ -225,7 +278,7 @@ def required_hypotheses(anomaly: dict, checks: dict) -> list:
     return list(req.items())
 
 
-def finalize_hypotheses(llm_items: list, anomaly: dict, checks: dict, health: bool):
+def finalize_hypotheses(llm_items: list, anomaly: dict, checks: dict, health: bool, failure_reported: bool = True):
     """Keeps only catalog hypotheses from the LLM, adds the ones the evidence forces, and appends the null
     hypothesis. Returns (hypotheses, notes)."""
     chosen, dropped, notes = {}, [], []
@@ -235,7 +288,7 @@ def finalize_hypotheses(llm_items: list, anomaly: dict, checks: dict, health: bo
             dropped.append(h["cause"])
         elif label not in (H_UNEXPLAINED, H_NO_FAULT):
             chosen.setdefault(label, h["rationale"])
-    for label, why in required_hypotheses(anomaly, checks):
+    for label, why in required_hypotheses(anomaly, checks, failure_reported):
         if label not in chosen:
             chosen[label] = f"Added by rule: {why}."
             notes.append(f"added '{label}' because {why}")

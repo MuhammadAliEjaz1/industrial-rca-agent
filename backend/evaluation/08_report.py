@@ -1,7 +1,8 @@
 """
 Phase 8, step 4: score the agent's results and compare them with the no-LLM baseline on the SAME cases.
 
-Run from backend/:   python evaluation/08_report.py [--no-maintenance]
+Run from backend/:   python evaluation/08_report.py [--dev-only] [--tag NAME] [--no-maintenance]
+(with no flags it reads agent_results.jsonl, the TEST run)
 No LLM, no network.
 """
 
@@ -11,12 +12,14 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from evaluation.common import load_split, truth_components, ml_components, rule_components, score_case, reading_of, BACKEND
+from evaluation.common import (load_split, truth_components, ml_components, rule_components, score_case, reading_of,
+                               results_suffix, BACKEND)
 from evaluation.report_lib import summarize, format_report
 
 
 def main():
-    suffix = "_nomaint" if "--no-maintenance" in sys.argv else ""
+    tag = sys.argv[sys.argv.index("--tag") + 1] if "--tag" in sys.argv else None
+    suffix = results_suffix(tag, "--dev-only" in sys.argv, "--no-maintenance" in sys.argv)
     path = BACKEND / "evaluation" / f"agent_results{suffix}.jsonl"
     if not path.exists():
         raise SystemExit(f"{path} not found - run evaluation/08_run_agent.py first.")

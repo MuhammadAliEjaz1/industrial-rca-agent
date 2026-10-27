@@ -57,8 +57,11 @@ def summarize(rows: list, base_scores: dict) -> dict:
         "unverified_total": sum(r["unverified_facts"] for r in rows),
         "cases_with_unverified": sum(r["unverified_facts"] > 0 for r in rows),
         "capped_candidates": sum(c["capped"] for r in rows for c in r["candidates"]),
+        "advisories": sum(bool(r.get("advisory")) for r in rows),
         "mean_retries": sum(r["retries"] for r in rows) / n,
         "mean_seconds": sum(r["elapsed_s"] for r in rows) / n,
+        "mean_tokens": (sum(r["tokens"] for r in rows if r.get("tokens")) / max(sum(1 for r in rows if r.get("tokens")), 1))
+                       if any(r.get("tokens") for r in rows) else None,
         "healthy_in_health_mode": (sum(r["mode"] == "health_check" for r in healthy), len(healthy)),
         "history_readings_min_median_max": _spread([r["n_history_readings"] for r in rows if r.get("n_history_readings")]),
     }
@@ -99,8 +102,11 @@ def format_report(s: dict, n_errors: int = 0) -> str:
     ok, tot = f["healthy_in_health_mode"]
     L += ["", "Faithfulness and cost:",
           f"  facts with numbers not found in the evidence: {f['unverified_total']} (in {f['cases_with_unverified']} cases)",
-          f"  confidence caps applied: {f['capped_candidates']} | mean retries per case: {f['mean_retries']:.2f}",
+          f"  confidence set by a documented rule instead of the model's own rating: {f['capped_candidates']} "
+          f"| tool-wear advisories issued: {f['advisories']} | mean retries per case: {f['mean_retries']:.2f}",
           f"  random healthy readings handled in health-check mode: {ok}/{tot}",
           f"  mean seconds per case: {f['mean_seconds']:.0f}",
+          (f"  mean tokens per case: {f['mean_tokens']:.0f}  ->  about {200000 / f['mean_tokens']:.0f} cases per 200K-token free day"
+           if f.get("mean_tokens") else "  tokens per case: not recorded"),
           f"  history readings visible per case (min / median / max): {f['history_readings_min_median_max']}"]
     return "\n".join(L)
