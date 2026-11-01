@@ -6,8 +6,9 @@ Run from backend/:
     python evaluation/08_run_agent.py                    # the TEST cases: held-out incidents + healthy cases, minus the dev cases
     python evaluation/08_run_agent.py --limit 10         # only the first N cases (spread over all failure types)
     python evaluation/08_run_agent.py --all-incidents    # also the incidents the classifier trained on
-    python evaluation/08_run_agent.py --no-maintenance   # ablation: hide maintenance records
+    python evaluation/08_run_agent.py --maintenance-evidence   # ablation: let the model see the (random) maintenance records
     python evaluation/08_run_agent.py --tag NAME         # write to agent_results_NAME.jsonl
+    python evaluation/08_run_agent.py --ids inc-105,inc-317   # only these cases (results go to agent_results_spot.jsonl)
 
 The 12 pilot cases were used to find bugs and tune the agent, so they are a DEV set. The headline results must be
 reported on the other cases only; the default run excludes the dev cases (use --include-dev to override).
@@ -185,10 +186,12 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--limit", type=int, default=None, help="run only the first N cases (spread over all types)")
     ap.add_argument("--all-incidents", action="store_true", help="include incidents the classifier trained on")
-    ap.add_argument("--no-maintenance", action="store_true", help="ablation: hide all maintenance records")
+    ap.add_argument("--maintenance-evidence", action="store_true",
+                    help="ablation: show the model the maintenance records (random demo data) as evidence")
     ap.add_argument("--pause", type=float, default=1.0, help="seconds to wait between cases")
     ap.add_argument("--dev-only", action="store_true", help="run only the 12 development (pilot) cases")
     ap.add_argument("--include-dev", action="store_true", help="do not exclude the development cases")
+    ap.add_argument("--ids", default=None, help="comma-separated case ids to run (spot check)")
     ap.add_argument("--tag", default=None, help="name for the results file: agent_results_<tag>.jsonl")
     args = ap.parse_args()
 
@@ -197,7 +200,11 @@ def main():
     cases = json.loads(CASES_FILE.read_text(encoding="utf-8"))
     if not args.all_incidents:
         cases = [c for c in cases if c["in_test"]]
-    if args.dev_only:
+    if args.ids:
+        wanted = {x.strip() for x in args.ids.split(",") if x.strip()}
+        cases = [c for c in json.loads(CASES_FILE.read_text(encoding="utf-8")) if c["case_id"] in wanted]
+        args.tag = args.tag or "spot"
+    elif args.dev_only:
         cases = [c for c in cases if c["case_id"] in DEV_CASE_IDS]
     elif not args.include_dev:
         cases = [c for c in cases if c["case_id"] not in DEV_CASE_IDS]
@@ -205,14 +212,11 @@ def main():
     if args.limit:
         cases = cases[:args.limit]
 
-    import graph.nodes as nodes
+    import os
+    if args.maintenance_evidence:
+        os.environ["MAINTENANCE_AS_EVIDENCE"] = "1"
     from graph.build_graph import build_graph
-    if args.no_maintenance:
-        class _NoMaintenance:
-            def invoke(self, a):
-                return {"records": [], "record_count": 0}
-        nodes.get_maintenance_history = _NoMaintenance()
-    suffix = results_suffix(args.tag, args.dev_only, args.no_maintenance)
+    suffix = results_suffix(args.tag, args.dev_only, args.maintenance_evidence)
     out_path = EVAL_DIR / f"agent_results{suffix}.jsonl"
     reports_dir = EVAL_DIR / f"reports{suffix}"
     print(f"Writing to {out_path}")

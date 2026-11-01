@@ -23,7 +23,7 @@ TOOL_WEAR_FAIL_START = 200  # tool wear failures happen around 200-240 min
 # agent's "observed facts" appears anywhere in the evidence.
 DOC_CONSTANTS_TEXT = (
     "heat dissipation 8.6 K 1380 rpm; power 3500 W 9000 W; overstrain 11000 12000 13000; "
-    "tool wear 200 240 minutes; random failure about 0.1 %"
+    "tool wear 200 240 minutes; proactive tool replacement 180 200 minutes; random failure about 0.1 %"
 )
 
 # Closed hypothesis catalog: only failure modes this system can test with its data, limits and manuals.
@@ -90,9 +90,8 @@ def limit_check_facts(checks: dict) -> list:
         f"above the lowest limit: {'yes' if L['possible_overstrain'] else 'no'}).",
         f"Latest tool wear = {raw['tool_wear']:g} min (tool-wear failures are documented from about "
         f"{TOOL_WEAR_FAIL_START} min; at or above: {'yes' if L['tool_wear_at_failure_range'] else 'no'}).",
-        f"Across the {n} most recent readings: heat-dissipation rule met in {c['heat_dissipation']}, "
-        f"power out of range in {c['power_out_of_range']}, wear x torque above the lowest limit in "
-        f"{c['possible_overstrain']}, tool wear at or above {TOOL_WEAR_FAIL_START} in {c['tool_wear_at_failure_range']}.",
+        f"Note: the {n} readings loaded for this machine are independent samples with synthetic timestamps, not a "
+        f"time series. Decisions use the latest reading only.",
     ]
 
 
@@ -160,6 +159,12 @@ def decide_confidence(cause: str, llm_conf: str, checks: dict, anomaly: dict, fa
     return new, note
 
 
+def ml_agrees(causes: list, anomaly: dict) -> bool:
+    """True if the classifier's top class names at least one of the chosen causes."""
+    ml_class = str(anomaly.get("predicted_class") or "").lower()
+    return any(_ML_WORD.get(c) and _ML_WORD[c] in ml_class for c in causes)
+
+
 def decide_final(evaluations: list, health: bool) -> dict:
     """The outcome, from the evaluated confidences. kind: causes | no_fault | unexplained | unresolved."""
     non_null = [e for e in evaluations if not is_null_hypothesis(e["cause"])]
@@ -194,6 +199,11 @@ def tool_wear_advisory(checks: dict, anomaly: dict, failure_reported: bool):
 _NUM = re.compile(r"\d[\d,]*\.?\d*")
 
 
+def _clean(text: str) -> str:
+    """Joins thousands written with a thin/no-break space ('12\u202f337' -> '12337') so they are one number."""
+    return re.sub(r"(\d)[\u202f\u00a0](?=\d{3}\b)", r"\1", text).replace("\u202f", " ")
+
+
 def _to_float(s: str):
     try:
         return float(s.replace(",", "").rstrip("."))
@@ -203,7 +213,7 @@ def _to_float(s: str):
 
 def ungrounded_numbers(claim: str, evidence_text: str) -> list:
     """Numbers in `claim` (decimals or 3+ digits) that match nothing in the evidence (0.5% tolerance)."""
-    clean = lambda t: t.replace("\u202f", " ")
+    clean = _clean
     known = [v for v in (_to_float(m) for m in _NUM.findall(clean(evidence_text))) if v is not None]
     bad = []
     for m in _NUM.findall(clean(claim)):
@@ -310,7 +320,7 @@ def finalize_hypotheses(llm_items: list, anomaly: dict, checks: dict, health: bo
 
 def _significant_numbers(text: str) -> list:
     out = []
-    for m in _NUM.findall(text.replace("\u202f", " ")):
+    for m in _NUM.findall(_clean(text)):
         digits = m.replace(",", "").rstrip(".")
         if "." in digits or len(digits) >= 3:
             v = _to_float(m)

@@ -47,6 +47,12 @@ assert decide_confidence(H_SENSOR, "high", ch, anom, True)[0] == "low"          
 assert decide_confidence(H_UNEXPLAINED, "medium", c, anom, True) == ("medium", None)
 assert decide_confidence(H_NO_FAULT, "high", c, anom, False) == ("high", None)
 
+# ---- does the classifier name the chosen cause? ----
+assert ml_agrees([H_HEAT], {"predicted_class": "Heat Dissipation Failure + Overstrain Failure"})
+assert ml_agrees([H_POWER, H_OVERSTRAIN], {"predicted_class": "Power Failure"})
+assert not ml_agrees([H_TOOL_WEAR], {"predicted_class": "No Failure", "confidence": 0.91})
+assert not ml_agrees([H_HEAT], {"predicted_class": "Multiple Failure Causes (rare combination)"})
+
 # ---- decide_final ----
 ev = lambda **k: [{"cause": a, "confidence": b} for a, b in k.items()]
 E = lambda pairs: [{"cause": a, "confidence": b} for a, b in pairs]
@@ -85,5 +91,12 @@ assert n == 1 and "UNVERIFIED" in facts[0] and "UNVERIFIED" not in facts[1]
 assert drop_redundant_facts(["Speed 1589 rpm above 1380 rpm", "Air temperature latest 298.6 K", "Sensor statistics look normal",
                              "Gap 11.3 K"], " ".join(limit_check_facts(c))) == \
     ["Air temperature latest 298.6 K", "Sensor statistics look normal", "Gap 11.3 K"]
+# false alarms seen in the first dev run: thin-space thousands and a manual constant
+assert ungrounded_numbers("Latest tool_wear\u202f\u00d7\u202ftorque = 12\u202f337", "wear x torque 12337") == []
+assert ungrounded_numbers("Technical documentation recommends replacement at 180\u2011200\u202fmin", DOC_CONSTANTS_TEXT) == []
+assert ungrounded_numbers("a value of 12 999", "wear x torque 12337") == ["999"]      # plain spaces are NOT merged
+# the window counts no longer reach the model: only the 'not a time series' note does
+joined = " ".join(limit_check_facts(c))
+assert "Across the" not in joined and "independent samples" in joined
 print("\n".join(limit_check_facts(c)))
 print("\nALL checks.py TESTS PASSED")

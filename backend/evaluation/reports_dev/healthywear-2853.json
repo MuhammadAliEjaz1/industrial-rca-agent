@@ -1,0 +1,196 @@
+{
+ "incident_summary": "Routine automated check flagged this machine for investigation.",
+ "mode": "health_check",
+ "machine_condition": {
+  "machine_id": "M008",
+  "latest_reading": {
+   "timestamp": "2025-07-02 04:14:18.645186",
+   "air_temperature": 300.5,
+   "process_temperature": 309.4,
+   "rotational_speed": 1347.0,
+   "torque": 50.1,
+   "tool_wear": 213.0
+  },
+  "sensor_statistics": {
+   "air_temperature": {
+    "mean": 298.111,
+    "std": 1.18,
+    "min": 295.6,
+    "max": 300.5,
+    "latest": 300.5,
+    "trend": "increasing"
+   },
+   "process_temperature": {
+    "mean": 308.474,
+    "std": 0.93,
+    "min": 306.2,
+    "max": 310.3,
+    "latest": 309.4,
+    "trend": "increasing"
+   },
+   "rotational_speed": {
+    "mean": 1544.443,
+    "std": 153.758,
+    "min": 1303.0,
+    "max": 1995.0,
+    "latest": 1347.0,
+    "trend": "stable"
+   },
+   "torque": {
+    "mean": 39.601,
+    "std": 8.86,
+    "min": 19.1,
+    "max": 59.3,
+    "latest": 50.1,
+    "trend": "stable"
+   },
+   "tool_wear": {
+    "mean": 112.829,
+    "std": 65.298,
+    "min": 0.0,
+    "max": 219.0,
+    "latest": 213.0,
+    "trend": "increasing"
+   }
+  }
+ },
+ "limit_checks": {
+  "n_readings": 20,
+  "latest": {
+   "temp_diff_k": 8.899999999999977,
+   "power_w": 7066.9812583237035,
+   "wear_x_torque": 10671.300000000001,
+   "heat_dissipation": false,
+   "power_out_of_range": false,
+   "possible_overstrain": false,
+   "tool_wear_at_failure_range": true
+  },
+  "latest_raw": {
+   "timestamp": "2025-07-02 04:14:18.645186",
+   "air_temperature": 300.5,
+   "process_temperature": 309.4,
+   "rotational_speed": 1347.0,
+   "torque": 50.1,
+   "tool_wear": 213.0
+  },
+  "counts": {
+   "heat_dissipation": 0,
+   "power_out_of_range": 0,
+   "possible_overstrain": 0,
+   "tool_wear_at_failure_range": 5
+  },
+  "violated": []
+ },
+ "ml_analysis": {
+  "predicted_class": "No Failure",
+  "confidence": 0.9827334880828857,
+  "anomaly_score": 0.017266511917114258,
+  "reliability_warning": false,
+  "reliability_note": null,
+  "close_second_class": "Overstrain Failure",
+  "close_second_margin": 0.9699
+ },
+ "maintenance_history": [
+  {
+   "date": "2025-06-29 00:00:00",
+   "maintenance_type": "Reactive",
+   "description": "Investigated abnormal temperature reading; cleaned cooling fan.",
+   "technician": "S. Malik",
+   "parts_replaced": null
+  },
+  {
+   "date": "2025-06-23 00:00:00",
+   "maintenance_type": "Scheduled",
+   "description": "Routine inspection and lubrication of bearing assembly.",
+   "technician": "T. Ahmed",
+   "parts_replaced": null
+  }
+ ],
+ "candidate_root_causes": [
+  {
+   "cause": "Tool wear failure",
+   "supporting_evidence": [],
+   "contradicting_evidence": [
+    "No failure was reported, so a worn tool is an advisory, not a diagnosis."
+   ],
+   "reasoning": "Not sent to the model (the documented rules already settle it): no failure was reported, so a worn tool is an advisory, not a diagnosis.",
+   "confidence": "low",
+   "confidence_note": "set to low by rule: no failure was reported, so a worn tool is an advisory, not a diagnosis",
+   "evaluated_by": "rule"
+  },
+  {
+   "cause": "No fault: normal variation",
+   "supporting_evidence": [
+    "The classifier predicts No Failure (confidence 0.9827).",
+    "No documented operating limit is violated in the 20 recent readings."
+   ],
+   "contradicting_evidence": [],
+   "reasoning": "Set by code: 'medium' when every fault hypothesis stays at low confidence, otherwise 'low'. An absence of evidence of a fault, not proof that none exists.",
+   "confidence": "medium"
+  }
+ ],
+ "most_supported_cause": "No fault identified (ML predicts No Failure; no documented limit violated)",
+ "confidence_level": "medium",
+ "justification": "The classifier predicts No Failure and no documented operating limit is violated by the latest reading. None of the 1 candidate faults reached more than low confidence. This is an absence of evidence of a fault, not proof that none exists; the timestamps, maintenance records and manuals are synthetic, which limits what can be concluded. ADVISORY: Latest tool wear is 213 min, inside the documented failure range (about 200-240 min). Sensors cannot reliably detect tool-wear failures (documented recall ~0.12; about 94% of readings at 200+ min are healthy), so this is a maintenance advisory, not a diagnosis. The manual recommends proactive replacement at about 180-200 min.",
+ "observed_facts": [
+  "[computed] Latest reading: process minus air temperature = 8.9 K at 1347 rpm. Heat-dissipation failure needs the gap below 8.6 K AND speed below 1380 rpm (met: no).",
+  "[computed] Latest derived power = 7067 W (documented normal range 3500-9000 W; outside range: no).",
+  "[computed] Latest tool_wear x torque = 10671 (overstrain limits by product quality: L 11000, M 12000, H 13000; above the lowest limit: no).",
+  "[computed] Latest tool wear = 213 min (tool-wear failures are documented from about 200 min; at or above: yes).",
+  "[computed] Across the 20 most recent readings: heat-dissipation rule met in 0, power out of range in 0, wear x torque above the lowest limit in 0, tool wear at or above 200 in 5."
+ ],
+ "ml_predictions": [
+  "PREDICTION: No Failure (confidence 0.9827) - reliability_warning: none"
+ ],
+ "advisories": [
+  "Latest tool wear is 213 min, inside the documented failure range (about 200-240 min). Sensors cannot reliably detect tool-wear failures (documented recall ~0.12; about 94% of readings at 200+ min are healthy), so this is a maintenance advisory, not a diagnosis. The manual recommends proactive replacement at about 180-200 min."
+ ],
+ "unsupported_speculation": [
+  "Tool wear failure (confidence low): No failure was reported, so a worn tool is an advisory, not a diagnosis."
+ ],
+ "evidence_sources": [
+  "Incident 71 (M023, 2025-06-29 07:34:20.130301)",
+  "Incident 76 (M035, 2025-08-26 12:26:50.310073)",
+  "Incident 266 (M036, 2025-12-07 11:33:31.349642)",
+  "Incident 72 (M039, 2025-09-02 01:09:21.463926)",
+  "Incident 265 (M038, 2026-02-14 01:04:54.854452)"
+ ],
+ "investigation_log": [
+  {
+   "step": "gather_context",
+   "status": "done",
+   "summary": "Loaded 20 recent readings for M008.",
+   "timestamp": "2026-10-28T09:59:21.285662+00:00"
+  },
+  {
+   "step": "run_anomaly_model",
+   "status": "done",
+   "summary": "Predicted: No Failure (confidence 0.98)",
+   "timestamp": "2026-10-28T09:59:21.313310+00:00"
+  },
+  {
+   "step": "gather_evidence",
+   "status": "done",
+   "summary": "2 maintenance records, 1 past incidents, 5 similar incidents.",
+   "timestamp": "2026-10-28T09:59:21.710666+00:00"
+  },
+  {
+   "step": "generate_hypotheses",
+   "status": "done",
+   "summary": "Mode: health check. Hypotheses: Tool wear failure, No fault: normal variation",
+   "timestamp": "2026-10-28T09:59:27.108317+00:00"
+  },
+  {
+   "step": "investigate_hypotheses",
+   "status": "done",
+   "summary": "Evaluated 2 hypotheses: Tool wear failure (low), No fault: normal variation (medium) | 1 settled by rule without the model",
+   "timestamp": "2026-10-28T09:59:27.123956+00:00"
+  },
+  {
+   "step": "determine_root_cause",
+   "status": "done",
+   "summary": "Most supported cause: No fault identified (ML predicts No Failure; no documented limit violated) (medium) | outcome decided by code (no_fault)",
+   "timestamp": "2026-10-28T09:59:35.815682+00:00"
+  }
+ ]
+}

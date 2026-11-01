@@ -12,7 +12,7 @@ def mod(name, **attrs):
 class Dumpable(NS):
     def model_dump(self): return dict(self.__dict__)
 
-LLM = {"hyps": [], "conf": {}, "root": None, "fail_next": 0, "calls": 0}
+LLM = {"hyps": [], "conf": {}, "root": None, "fail_next": 0, "calls": 0, "prompts": []}
 
 class FakeLLM:
     def with_structured_output(self, schema):
@@ -22,6 +22,7 @@ class FakeLLM:
                 LLM["fail_next"] -= 1
                 raise Exception("Error code: 400 - tool_use_failed: Tool choice is required, but model did not call a tool")
             LLM["calls"] += 1
+            LLM["prompts"].append(prompt)
             if name == "HypothesisList":
                 return NS(hypotheses=[Dumpable(**h) for h in LLM["hyps"]])
             if name == "HypothesisEvaluation":
@@ -31,6 +32,7 @@ class FakeLLM:
                 return Dumpable(cause=cause, supporting_evidence=["s"], contradicting_evidence=["c"],
                                 reasoning="r", confidence=LLM["conf"].get(cause, "low"))
             assert "OUTCOME DECIDED BY THE SYSTEM" in prompt       # the LLM is told the outcome, it does not choose it
+            assert "Do NOT discuss the confidence level" in prompt  # the real reason for each confidence is added by code
             return Dumpable(**LLM["root"])
         return NS(invoke=invoke)
 
@@ -59,7 +61,7 @@ def rec(name, fn):
 
 mod("tools.investigation_tools",
     get_sensor_data=rec("get_sensor_data", lambda a: {"found": True, "readings": STATE["readings"], "reading_count": len(STATE["readings"])}),
-    get_maintenance_history=rec("get_maintenance_history", lambda a: {"records": [], "record_count": 0}),
+    get_maintenance_history=rec("get_maintenance_history", lambda a: {"records": STATE.get("maintenance", []), "record_count": len(STATE.get("maintenance", []))}),
     get_failure_history=rec("get_failure_history", lambda a: {"incidents": [], "incident_count": 0}),
     run_anomaly_detection=rec("run_anomaly_detection", lambda a: STATE["anomaly"]),
     search_technical_documents=_Tool(lambda a: {"results": []}),
@@ -90,7 +92,7 @@ def setup(readings, anomaly=None, hyps=(), conf=None, root=None):
                 observed_facts=[], ml_predictions=["Power Failure second class, similar confidence"],
                 unsupported_speculation=["x"])
     base.update(root or {})
-    LLM.update(hyps=[dict(cause=c, rationale="r") for c in hyps], conf=conf or {}, root=base, calls=0)
+    LLM.update(hyps=[dict(cause=c, rationale="r") for c in hyps], conf=conf or {}, root=base, calls=0, prompts=[])
 
 def causes(r): return {e["cause"]: e["confidence"] for e in r["candidate_root_causes"]}
 def log(s): return " ".join(l["summary"] for l in s["investigation_log"])
@@ -124,7 +126,11 @@ assert c[H_HEAT] == "high" and c[H_TOOL_WEAR] == "low" and c[H_SENSOR] == "low"
 assert r["most_supported_cause"] == H_HEAT and r["confidence_level"] == "high"
 assert any(e.get("llm_confidence") == "low" and e["confidence"] == "high" for e in r["candidate_root_causes"])
 assert "added 'Heat dissipation failure'" in log(s)
+assert "Confidence basis (set by documented rules)" in r["justification"] and "documented limit is met" in r["justification"]
+assert "Classifier disagreement" not in r["justification"]          # the classifier names heat dissipation here: they agree
 assert LLM["calls"] == 4, LLM["calls"]       # hypotheses + heat + 'unexplained' + explanation; sensor and tool wear settled by rule
+assert all(e.get("confidence_basis") for e in r["candidate_root_causes"] if not e["cause"].startswith("Unexplained"))
+assert not any("trend" in v for v in r["machine_condition"]["sensor_statistics"].values())   # no trend labels in the report
 
 # C3: ML predicts Tool Wear (reliability warning), sensors look fine: medium at most, never retried (MAX_RETRIES=0)
 setup(HEALTHY, anomaly=dict(predicted_class="Tool Wear Failure", confidence=0.6, reliability_warning=True,
@@ -171,6 +177,7 @@ assert r["advisories"] and "ADVISORY" in r["justification"] and causes(r)[H_TOOL
 setup(WORN, hyps=[H_SENSOR], conf={H_TOOL_WEAR: "high"})
 s = run_pipeline(dict(machine_id="M009", **FAILURE)); r = s["final_report"]
 print("C8b ->", r["mode"], "|", r["most_supported_cause"], "|", r["confidence_level"])
+assert "Classifier disagreement: it predicts No Failure (confidence 1.00)" in r["justification"]   # ML does not name tool wear
 assert r["most_supported_cause"] == H_TOOL_WEAR and r["confidence_level"] == "medium" and not r["advisories"]
 
 # C9: as_of travels from the graph input to EVERY time-aware tool
@@ -208,9 +215,23 @@ s = run_pipeline(dict(machine_id="M015", **FAILURE))
 assert s.get("retry_count", 0) == 2, s.get("retry_count")          # tool wear is 'medium' -> promising -> loops to the limit
 N.MAX_RETRIES = 0
 
+# C14: the random maintenance records are not shown to the model unless explicitly switched on
+import os
+STATE["maintenance"] = [{"date": "2025-07-05", "maintenance_type": "Reactive", "description": "ZZTOP replaced worn cutting tool"}]
+setup(HEALTHY, anomaly=dict(predicted_class="Heat Dissipation Failure", confidence=0.9), hyps=[H_HEAT], conf={})
+STATE["readings"] = HOT
+s = run_pipeline(dict(machine_id="M016", **FAILURE))
+assert not any("ZZTOP" in p for p in LLM["prompts"]) and any("not provided" in p for p in LLM["prompts"])
+assert s["final_report"]["maintenance_history"][0]["description"].startswith("ZZTOP")   # but the report still lists them
+os.environ["MAINTENANCE_AS_EVIDENCE"] = "1"
+setup(HOT, anomaly=dict(predicted_class="Heat Dissipation Failure", confidence=0.9), hyps=[H_HEAT], conf={})
+run_pipeline(dict(machine_id="M016", **FAILURE))
+assert any("ZZTOP" in p for p in LLM["prompts"])
+os.environ.pop("MAINTENANCE_AS_EVIDENCE"); STATE["maintenance"] = []
+
 # _shorten: never stops mid-word, marks the cut
 long = "All computed limit checks are within documented normal ranges (heat dissipation gap 9.7 K > 8.6 K, speed 1589 rpm, power 5674 W within range, tool wear 174 min, tool wear x torque 5933 below limit)"
 short = N._shorten(long)
 assert short.endswith(" ...") and len(short) <= 165 and long.startswith(short[:-4]) and not short[:-4].endswith(" ")
 assert N._shorten("short text") == "short text"
-print("\nALL STUB CONTROL-FLOW TESTS PASSED (13 cases + shorten)")
+print("\nALL STUB CONTROL-FLOW TESTS PASSED (14 cases + shorten)")

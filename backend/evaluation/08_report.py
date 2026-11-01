@@ -1,7 +1,7 @@
 """
 Phase 8, step 4: score the agent's results and compare them with the no-LLM baseline on the SAME cases.
 
-Run from backend/:   python evaluation/08_report.py [--dev-only] [--tag NAME] [--no-maintenance]
+Run from backend/:   python evaluation/08_report.py [--dev-only] [--tag NAME] [--with-maintenance]
 (with no flags it reads agent_results.jsonl, the TEST run)
 No LLM, no network.
 """
@@ -19,7 +19,7 @@ from evaluation.report_lib import summarize, format_report
 
 def main():
     tag = sys.argv[sys.argv.index("--tag") + 1] if "--tag" in sys.argv else None
-    suffix = results_suffix(tag, "--dev-only" in sys.argv, "--no-maintenance" in sys.argv)
+    suffix = results_suffix(tag, "--dev-only" in sys.argv, "--with-maintenance" in sys.argv)
     path = BACKEND / "evaluation" / f"agent_results{suffix}.jsonl"
     if not path.exists():
         raise SystemExit(f"{path} not found - run evaluation/08_run_agent.py first.")
@@ -29,6 +29,14 @@ def main():
             row = json.loads(line)
             latest[row["case_id"]] = row           # a later line (a retry) replaces an earlier one
     ok = [r for r in latest.values() if r["status"] == "ok"]
+    # how often did a documented rule settle a hypothesis, and how often did it overrule the model's own rating?
+    for r in ok:
+        rp = BACKEND / "evaluation" / f"reports{suffix}" / f"{r['case_id']}.json"
+        cands = json.loads(rp.read_text(encoding="utf-8")).get("candidate_root_causes", []) if rp.exists() else []
+        non_null = [e for e in cands if not e["cause"].lower().startswith(("no fault", "unexplained", "normal variation"))]
+        r["n_rule_settled"] = sum(e.get("evaluated_by") == "rule" for e in non_null)
+        r["n_llm_eval"] = sum(e.get("evaluated_by") != "rule" for e in non_null)
+        r["n_overridden"] = sum("confidence_note" in e and e.get("evaluated_by") != "rule" for e in non_null)
     errors = [r for r in latest.values() if r["status"] != "ok"]
 
     df, _ = load_split()

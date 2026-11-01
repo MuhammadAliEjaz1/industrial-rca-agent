@@ -115,11 +115,11 @@ def load_split():
     return df, tr.FEATURE_COLUMNS
 
 
-def results_suffix(tag=None, dev_only=False, no_maintenance=False) -> str:
-    """File-name suffix shared by the runner and the report, e.g. '' or '_dev' or '_v1_pilot_nomaint'."""
+def results_suffix(tag=None, dev_only=False, maintenance_evidence=False) -> str:
+    """File-name suffix shared by the runner and the report, e.g. '' or '_dev' or '_v1_pilot_withmaint'."""
     parts = [tag] if tag else (["dev"] if dev_only else [])
-    if no_maintenance:
-        parts.append("nomaint")
+    if maintenance_evidence:
+        parts.append("withmaint")
     return "_" + "_".join(parts) if parts else ""
 
 

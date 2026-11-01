@@ -94,6 +94,6 @@ lo, hi = wilson(60, 68); assert abs(lo - 0.785) < 0.002 and abs(hi - 0.939) < 0.
 # result-file names and the dev set
 from evaluation.common import results_suffix
 assert results_suffix() == "" and results_suffix("v1_pilot") == "_v1_pilot" and results_suffix(None, True, False) == "_dev"
-assert results_suffix(None, False, True) == "_nomaint" and results_suffix("x", False, True) == "_x_nomaint"
+assert results_suffix(None, False, True) == "_withmaint" and results_suffix("x", False, True) == "_x_withmaint"
 assert len(ra.DEV_CASE_IDS) == 12 and "inc-117" in ra.DEV_CASE_IDS
 print("ALL runner/report TESTS PASSED")

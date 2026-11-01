@@ -42,7 +42,7 @@ from tools.investigation_tools import (
 from graph.state import HypothesisList, HypothesisEvaluation, RootCauseDetermination
 from graph.checks import (
     ORDER, DOC_CONSTANTS_TEXT, FAULT_CATALOG, H_NO_FAULT, compute_limit_checks, limit_check_facts, near_tie,
-    is_health_check, is_null_hypothesis, rule_confidence, decide_confidence, decide_final, tool_wear_advisory, annotate_ungrounded,
+    is_health_check, is_null_hypothesis, rule_confidence, ml_agrees, decide_confidence, decide_final, tool_wear_advisory, annotate_ungrounded,
     finalize_hypotheses,
     drop_redundant_facts,
 )
@@ -111,6 +111,13 @@ def _shorten(text: str, limit: int = 160) -> str:
     if len(text) <= limit:
         return text
     return text[:limit].rsplit(" ", 1)[0].rstrip(",;:-\u2011") + " ..."
+
+
+def _maintenance_as_evidence() -> bool:
+    """The maintenance records in this project are RANDOM templates (Phase 1), so by default the model is not shown
+    them as evidence (they still appear in the report). Set MAINTENANCE_AS_EVIDENCE=1 to let it see them, e.g. for an
+    ablation, or in a deployment with real records."""
+    return os.getenv("MAINTENANCE_AS_EVIDENCE", "0") == "1"
 
 
 def _derived_gap_mean(stats: dict):
@@ -260,10 +267,14 @@ def investigate_hypotheses(state: dict) -> dict:
     checks = _checks_for(state)
     health = is_health_check(anomaly, _failure_reported(state), checks)
 
-    maintenance_text = "\n".join(
-        f"- {r['date']}: {r['maintenance_type']} - {r['description']}"
-        for r in state.get("maintenance_records", [])
-    ) or "(none)"
+    if _maintenance_as_evidence():
+        maintenance_text = "\n".join(
+            f"- {r['date']}: {r['maintenance_type']} - {r['description']}"
+            for r in state.get("maintenance_records", [])
+        ) or "(none)"
+    else:
+        maintenance_text = ("(not provided: the maintenance records in this system are randomly generated demo data "
+                            "and carry no information about this machine's condition)")
 
     similar_text = "\n".join(
         f"- Incident {r['incident_id']} ({r['machine_id']}, {r['date']}): {r['failure_type']} "
@@ -284,8 +295,10 @@ def investigate_hypotheses(state: dict) -> dict:
     for hyp in state.get("hypotheses", []):
         if health and hyp["cause"] == H_NO_FAULT:
             continue  # the health-check null hypothesis is evaluated by code below
+        basis = None
         if not is_null_hypothesis(hyp["cause"]):
             rule_conf, why = rule_confidence(hyp["cause"], checks, anomaly, _failure_reported(state))
+            basis = why
             if rule_conf == "low":
                 # The documented rules already settle this one and nothing the model says can raise it, so it is not
                 # sent to the model at all: that saves most of the tokens of a case.
@@ -293,7 +306,8 @@ def investigate_hypotheses(state: dict) -> dict:
                     "cause": hyp["cause"], "supporting_evidence": [],
                     "contradicting_evidence": [why[0].upper() + why[1:] + "."],
                     "reasoning": f"Not sent to the model (the documented rules already settle it): {why}.",
-                    "confidence": "low", "confidence_note": f"set to low by rule: {why}", "evaluated_by": "rule"})
+                    "confidence": "low", "confidence_note": f"set to low by rule: {why}", "evaluated_by": "rule",
+                    "confidence_basis": why})
                 n_rule += 1
                 continue
         docs = search_technical_documents.invoke({"query": hyp["cause"], "k": 3})
@@ -334,6 +348,8 @@ Evaluate: what supports this cause, what contradicts it, and how confident shoul
         ev = result.model_dump()
 
         ev["llm_confidence"] = ev["confidence"]
+        if basis:
+            ev["confidence_basis"] = basis
         new_conf, note = decide_confidence(ev["cause"], ev["confidence"], checks, anomaly, _failure_reported(state))
         if note:
             ev["confidence_note"] = note
@@ -485,6 +501,8 @@ Write the justification for this outcome and list the observed facts. Do not cha
 HYPOTHESIS EVALUATIONS:
 {evaluations_text}
 
+Do NOT discuss the confidence level or why it is not higher: the system adds the documented basis itself.
+
 COMPUTED LIMIT CHECKS (calculated in code - facts):
 {_facts_block(checks)}
 
@@ -511,6 +529,17 @@ that is always true. If the outcome is weakly supported, say so plainly."""
             f"the latest reading. None of the {len(non_null)} candidate faults reached more than low confidence. This "
             f"is an absence of evidence of a fault, not proof that none exists; the timestamps, maintenance records and "
             f"manuals are synthetic, which limits what can be concluded." + (f" ADVISORY: {advisory}" if advisory else ""))
+    elif decision["kind"] == "causes":
+        # the real reason for each confidence is written by code: the model's own account of it was unreliable
+        basis = "; ".join(f"{e['cause']} - {e['confidence_basis']}" for e in evaluations
+                          if e["cause"] in decision["causes"] and e.get("confidence_basis"))
+        if basis:
+            root["justification"] = f"{str(root.get('justification')).rstrip()} Confidence basis (set by documented rules): {basis}."
+        if not ml_agrees(decision["causes"], anomaly):
+            conf = anomaly.get("confidence")
+            conf_txt = f" (confidence {conf:.2f})" if isinstance(conf, (int, float)) else ""
+            root["justification"] += (f" Classifier disagreement: it predicts {anomaly.get('predicted_class')}{conf_txt}, "
+                                      f"which does not name {'this cause' if len(decision['causes']) == 1 else 'these causes'}.")
     elif decision["kind"] == "unexplained":
         root["justification"] = (
             "Every specific fault hypothesis stayed at low confidence and no documented limit is violated, so the "
@@ -566,7 +595,9 @@ def generate_report(state: dict) -> dict:
         "machine_condition": {
             "machine_id": state["machine_id"],
             "latest_reading": state["sensor_readings"][0] if state.get("sensor_readings") else None,
-            "sensor_statistics": state.get("sensor_statistics", {}).get("channels", {}),
+            # trend labels are left out: the readings are independent samples, so a 'trend' is not a real trend
+            "sensor_statistics": {ch: {k: v for k, v in st.items() if k != "trend"}
+                                  for ch, st in state.get("sensor_statistics", {}).get("channels", {}).items()},
         },
         "limit_checks": checks,
         "ml_analysis": {
