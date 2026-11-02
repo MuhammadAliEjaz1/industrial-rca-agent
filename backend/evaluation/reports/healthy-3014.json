@@ -1,0 +1,189 @@
+{
+ "incident_summary": "Routine automated check flagged this machine for investigation.",
+ "mode": "health_check",
+ "machine_condition": {
+  "machine_id": "M029",
+  "latest_reading": {
+   "timestamp": "2025-07-10 19:45:40.803319",
+   "air_temperature": 300.5,
+   "process_temperature": 309.6,
+   "rotational_speed": 1390.0,
+   "torque": 48.4,
+   "tool_wear": 194.0
+  },
+  "sensor_statistics": {
+   "air_temperature": {
+    "mean": 298.28,
+    "std": 1.146,
+    "min": 295.9,
+    "max": 300.8,
+    "latest": 300.5
+   },
+   "process_temperature": {
+    "mean": 308.562,
+    "std": 0.755,
+    "min": 306.4,
+    "max": 310.2,
+    "latest": 309.6
+   },
+   "rotational_speed": {
+    "mean": 1515.554,
+    "std": 160.519,
+    "min": 1207.0,
+    "max": 2216.0,
+    "latest": 1390.0
+   },
+   "torque": {
+    "mean": 40.931,
+    "std": 9.559,
+    "min": 16.8,
+    "max": 69.4,
+    "latest": 48.4
+   },
+   "tool_wear": {
+    "mean": 103.908,
+    "std": 60.924,
+    "min": 0.0,
+    "max": 214.0,
+    "latest": 194.0
+   }
+  }
+ },
+ "limit_checks": {
+  "n_readings": 20,
+  "latest": {
+   "temp_diff_k": 9.100000000000023,
+   "power_w": 7045.1262454302305,
+   "wear_x_torque": 9389.6,
+   "heat_dissipation": false,
+   "power_out_of_range": false,
+   "possible_overstrain": false,
+   "tool_wear_at_failure_range": false
+  },
+  "latest_raw": {
+   "timestamp": "2025-07-10 19:45:40.803319",
+   "air_temperature": 300.5,
+   "process_temperature": 309.6,
+   "rotational_speed": 1390.0,
+   "torque": 48.4,
+   "tool_wear": 194.0
+  },
+  "counts": {
+   "heat_dissipation": 0,
+   "power_out_of_range": 0,
+   "possible_overstrain": 0,
+   "tool_wear_at_failure_range": 0
+  },
+  "violated": []
+ },
+ "ml_analysis": {
+  "predicted_class": "No Failure",
+  "confidence": 0.9994757771492004,
+  "anomaly_score": 0.0005242228507995605,
+  "reliability_warning": false,
+  "reliability_note": null,
+  "close_second_class": "Overstrain Failure",
+  "close_second_margin": 0.9993
+ },
+ "maintenance_history": [],
+ "candidate_root_causes": [
+  {
+   "cause": "Heat dissipation failure",
+   "supporting_evidence": [],
+   "contradicting_evidence": [
+    "Its documented limit is not met by the latest reading."
+   ],
+   "reasoning": "Not sent to the model (the documented rules already settle it): its documented limit is not met by the latest reading.",
+   "confidence": "low",
+   "confidence_note": "set to low by rule: its documented limit is not met by the latest reading",
+   "evaluated_by": "rule",
+   "confidence_basis": "its documented limit is not met by the latest reading"
+  },
+  {
+   "cause": "Sensor fault or data-quality problem",
+   "supporting_evidence": [],
+   "contradicting_evidence": [
+    "A sensor fault cannot be established from this data (no independent cross-check)."
+   ],
+   "reasoning": "Not sent to the model (the documented rules already settle it): a sensor fault cannot be established from this data (no independent cross-check).",
+   "confidence": "low",
+   "confidence_note": "set to low by rule: a sensor fault cannot be established from this data (no independent cross-check)",
+   "evaluated_by": "rule",
+   "confidence_basis": "a sensor fault cannot be established from this data (no independent cross-check)"
+  },
+  {
+   "cause": "No fault: normal variation",
+   "supporting_evidence": [
+    "The classifier predicts No Failure (confidence 0.9995).",
+    "No documented operating limit is violated in the 20 recent readings."
+   ],
+   "contradicting_evidence": [],
+   "reasoning": "Set by code: 'medium' when every fault hypothesis stays at low confidence, otherwise 'low'. An absence of evidence of a fault, not proof that none exists.",
+   "confidence": "medium"
+  }
+ ],
+ "most_supported_cause": "No fault identified (ML predicts No Failure; no documented limit violated)",
+ "confidence_level": "medium",
+ "justification": "The classifier predicts No Failure and no documented operating limit is violated by the latest reading. None of the 2 candidate faults reached more than low confidence. This is an absence of evidence of a fault, not proof that none exists; the timestamps, maintenance records and manuals are synthetic, which limits what can be concluded.",
+ "observed_facts": [
+  "[computed] Latest reading: process minus air temperature = 9.1 K at 1390 rpm. Heat-dissipation failure needs the gap below 8.6 K AND speed below 1380 rpm (met: no).",
+  "[computed] Latest derived power = 7045 W (documented normal range 3500-9000 W; outside range: no).",
+  "[computed] Latest tool_wear x torque = 9390 (overstrain limits by product quality: L 11000, M 12000, H 13000; above the lowest limit: no).",
+  "[computed] Latest tool wear = 194 min (tool-wear failures are documented from about 200 min; at or above: no).",
+  "[computed] Note: the 20 readings loaded for this machine are independent samples with synthetic timestamps, not a time series. Decisions use the latest reading only.",
+  "20 recent readings are independent samples with synthetic timestamps"
+ ],
+ "ml_predictions": [
+  "PREDICTION: No Failure (confidence 0.9995) - reliability_warning: none"
+ ],
+ "advisories": [],
+ "unsupported_speculation": [
+  "Heat dissipation failure (confidence low): Its documented limit is not met by the latest reading.",
+  "Sensor fault or data-quality problem (confidence low): A sensor fault cannot be established from this data (no independent cross-check)."
+ ],
+ "evidence_sources": [
+  "Incident 266 (M036, 2025-12-07 11:33:31.349642)",
+  "Incident 265 (M038, 2026-02-14 01:04:54.854452)",
+  "Incident 76 (M035, 2025-08-26 12:26:50.310073)",
+  "Incident 71 (M023, 2025-06-29 07:34:20.130301)",
+  "Incident 145 (M021, 2025-10-06 01:56:02.799578)"
+ ],
+ "investigation_log": [
+  {
+   "step": "gather_context",
+   "status": "done",
+   "summary": "Loaded 20 recent readings for M029.",
+   "timestamp": "2026-11-01T10:10:14.123236+00:00"
+  },
+  {
+   "step": "run_anomaly_model",
+   "status": "done",
+   "summary": "Predicted: No Failure (confidence 1.00)",
+   "timestamp": "2026-11-01T10:10:14.138868+00:00"
+  },
+  {
+   "step": "gather_evidence",
+   "status": "done",
+   "summary": "0 maintenance records, 1 past incidents, 5 similar incidents.",
+   "timestamp": "2026-11-01T10:10:14.232623+00:00"
+  },
+  {
+   "step": "generate_hypotheses",
+   "status": "done",
+   "summary": "Mode: health check. Hypotheses: Heat dissipation failure, Sensor fault or data-quality problem, No fault: normal variation",
+   "timestamp": "2026-11-01T10:10:18.538597+00:00"
+  },
+  {
+   "step": "investigate_hypotheses",
+   "status": "done",
+   "summary": "Evaluated 3 hypotheses: Heat dissipation failure (low), Sensor fault or data-quality problem (low), No fault: normal variation (medium) | 2 settled by rule without the model",
+   "timestamp": "2026-11-01T10:10:18.538597+00:00"
+  },
+  {
+   "step": "determine_root_cause",
+   "status": "done",
+   "summary": "Most supported cause: No fault identified (ML predicts No Failure; no documented limit violated) (medium) | outcome decided by code (no_fault)",
+   "timestamp": "2026-11-01T10:10:27.143869+00:00"
+  }
+ ]
+}

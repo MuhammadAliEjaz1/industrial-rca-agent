@@ -1,0 +1,216 @@
+{
+ "incident_summary": "A failure was reported on this machine at 2025-09-02 01:09:21.463926. Investigate the root cause.",
+ "mode": "failure_investigation",
+ "machine_condition": {
+  "machine_id": "M039",
+  "latest_reading": {
+   "timestamp": "2025-09-02 01:09:21.463926",
+   "air_temperature": 300.6,
+   "process_temperature": 309.4,
+   "rotational_speed": 1380.0,
+   "torque": 47.6,
+   "tool_wear": 246.0
+  },
+  "sensor_statistics": {
+   "air_temperature": {
+    "mean": 298.176,
+    "std": 1.064,
+    "min": 295.6,
+    "max": 300.6,
+    "latest": 300.6
+   },
+   "process_temperature": {
+    "mean": 308.523,
+    "std": 0.795,
+    "min": 306.2,
+    "max": 310.1,
+    "latest": 309.4
+   },
+   "rotational_speed": {
+    "mean": 1517.089,
+    "std": 134.771,
+    "min": 1249.0,
+    "max": 1987.0,
+    "latest": 1380.0
+   },
+   "torque": {
+    "mean": 40.203,
+    "std": 8.479,
+    "min": 19.8,
+    "max": 62.8,
+    "latest": 47.6
+   },
+   "tool_wear": {
+    "mean": 112.911,
+    "std": 65.385,
+    "min": 2.0,
+    "max": 246.0,
+    "latest": 246.0
+   }
+  }
+ },
+ "limit_checks": {
+  "n_readings": 20,
+  "latest": {
+   "temp_diff_k": 8.799999999999955,
+   "power_w": 6878.831274300212,
+   "wear_x_torque": 11709.6,
+   "heat_dissipation": false,
+   "power_out_of_range": false,
+   "possible_overstrain": true,
+   "tool_wear_at_failure_range": true
+  },
+  "latest_raw": {
+   "timestamp": "2025-09-02 01:09:21.463926",
+   "air_temperature": 300.6,
+   "process_temperature": 309.4,
+   "rotational_speed": 1380.0,
+   "torque": 47.6,
+   "tool_wear": 246.0
+  },
+  "counts": {
+   "heat_dissipation": 0,
+   "power_out_of_range": 0,
+   "possible_overstrain": 2,
+   "tool_wear_at_failure_range": 3
+  },
+  "violated": [
+   "possible_overstrain"
+  ]
+ },
+ "ml_analysis": {
+  "predicted_class": "No Failure",
+  "confidence": 0.5778540372848511,
+  "anomaly_score": 0.4221459627151489,
+  "reliability_warning": false,
+  "reliability_note": null,
+  "close_second_class": "Tool Wear Failure",
+  "close_second_margin": 0.2844
+ },
+ "maintenance_history": [
+  {
+   "date": "2025-07-31 00:00:00",
+   "maintenance_type": "Scheduled",
+   "description": "Routine inspection and lubrication of bearing assembly.",
+   "technician": "T. Ahmed",
+   "parts_replaced": null
+  },
+  {
+   "date": "2025-05-07 00:00:00",
+   "maintenance_type": "Reactive",
+   "description": "Investigated abnormal temperature reading; cleaned cooling fan.",
+   "technician": "S. Malik",
+   "parts_replaced": null
+  }
+ ],
+ "candidate_root_causes": [
+  {
+   "cause": "Tool wear failure",
+   "supporting_evidence": [],
+   "contradicting_evidence": [
+    "A documented hard limit already explains the reading, and tool wear alone is a weak signal."
+   ],
+   "reasoning": "Not sent to the model (the documented rules already settle it): a documented hard limit already explains the reading, and tool wear alone is a weak signal.",
+   "confidence": "low",
+   "confidence_note": "set to low by rule: a documented hard limit already explains the reading, and tool wear alone is a weak signal",
+   "evaluated_by": "rule",
+   "confidence_basis": "a documented hard limit already explains the reading, and tool wear alone is a weak signal"
+  },
+  {
+   "cause": "Overstrain failure",
+   "supporting_evidence": [
+    "Latest tool_wear x torque = 11710, which is above the lowest overstrain limit L = 11000 (computed limit check).",
+    "Latest tool_wear = 246 min, which is above the documented tool-wear failure threshold of about 200 min.",
+    "Diagnostic manual states that exceeding the product limit indicates overstrain."
+   ],
+   "contradicting_evidence": [
+    "Heat-dissipation failure condition not met (gap 8.8 K > 8.6 K and speed 1380 rpm not below 1380) but this is unrelated to overstrain, not a contradiction.",
+    "No evidence of spindle bearing play, tool or holder deformation, or clamping issues in the provided data."
+   ],
+   "confidence": "high",
+   "reasoning": "The latest tool_wear x torque product (11710) exceeds the lowest overstrain limit (L = 11000), satisfying the primary diagnostic check for overstrain. Tool wear is also at the maximum observed value (246 min) and exceeds the documented failure onset (~200 min), further supporting excessive load on the tool. However, overstrain diagnosis also requires mechanical signs (deformation, bearing play, clamping rigidity) which are not present in the evidence, and other failure modes (e.g., tool wear) are also plausible given the high wear alone. Thus the evidence is supportive but not conclusive, leading to a medium confidence rating. [set to high by rule (the model said medium): its documented limit is met by the latest reading]",
+   "llm_confidence": "medium",
+   "confidence_basis": "its documented limit is met by the latest reading",
+   "confidence_note": "set to high by rule (the model said medium): its documented limit is met by the latest reading"
+  },
+  {
+   "cause": "Unexplained: random or undetected failure",
+   "supporting_evidence": [
+    "Latest temperature gap 8.8\u202fK is above the heat\u2011dissipation failure limit (8.6\u202fK) and speed 1380\u202frpm is not below limit, so heat\u2011dissipation failure is not supported",
+    "Latest derived power 6879\u202fW is within normal range (3500\u20119000\u202fW), so power\u2011related failure not supported",
+    "Random failures are documented to leave no sensor signature and occur about 0.1\u202f% of runs regardless of temperature, speed, torque or tool wear"
+   ],
+   "contradicting_evidence": [
+    "tool_wear x torque = 11710 exceeds the lowest overstrain limit (11000)",
+    "tool wear = 246 min is at or above documented tool-wear failure threshold (~200 min)",
+    "derived power = 6879\u202fW is within normal range, but other indicators (overstrain, tool wear) are flagged"
+   ],
+   "confidence": "medium",
+   "reasoning": "The manual directs reporting as unexplained only when every known mechanism is ruled out. The temperature gap and power are within acceptable ranges, satisfying that part of the rule. However, two computed checks (tool_wear\u202f\u00d7\u202ftorque and tool_wear time) exceed documented thresholds for over\u2011strain and tool\u2011wear failures, providing concrete sensor\u2011based evidence for those failure modes. Because there is clear evidence supporting a known cause, the unexplained label is less appropriate. The presence of some indicators that do not match any known failure (e.g., power normal) is insufficient to outweigh the specific over\u2011strain/tool\u2011wear flags. Therefore confidence that the root cause is truly \"unexplained\" is only medium.",
+   "llm_confidence": "medium"
+  }
+ ],
+ "most_supported_cause": "Overstrain failure",
+ "confidence_level": "high",
+ "justification": "The latest tool_wear \u00d7 torque product of 11710 exceeds the lowest overstrain limit L of 11000, satisfying the primary diagnostic criterion for overstrain. Additionally, the latest tool_wear duration of 246 minutes surpasses the documented tool\u2011wear failure threshold of approximately 200 minutes, confirming excessive load on the tool. These sensor\u2011based thresholds are met, and the diagnostic manual states that exceeding the product limit indicates overstrain. No contradictory evidence directly refutes overstrain, and the system rules elevate the confidence to high when a documented limit is met. Confidence basis (set by documented rules): Overstrain failure - its documented limit is met by the latest reading. Classifier disagreement: it predicts No Failure (confidence 0.58), which does not name this cause.",
+ "observed_facts": [
+  "[computed] Latest reading: process minus air temperature = 8.8 K at 1380 rpm. Heat-dissipation failure needs the gap below 8.6 K AND speed below 1380 rpm (met: no).",
+  "[computed] Latest derived power = 6879 W (documented normal range 3500-9000 W; outside range: no).",
+  "[computed] Latest tool_wear x torque = 11710 (overstrain limits by product quality: L 11000, M 12000, H 13000; above the lowest limit: yes).",
+  "[computed] Latest tool wear = 246 min (tool-wear failures are documented from about 200 min; at or above: yes).",
+  "[computed] Note: the 20 readings loaded for this machine are independent samples with synthetic timestamps, not a time series. Decisions use the latest reading only."
+ ],
+ "ml_predictions": [
+  "PREDICTION: No Failure (confidence 0.5779) - reliability_warning: none"
+ ],
+ "advisories": [],
+ "unsupported_speculation": [
+  "Tool wear failure (confidence low): A documented hard limit already explains the reading, and tool wear alone is a weak signal.",
+  "Unexplained: random or undetected failure (confidence medium): tool_wear x torque = 11710 exceeds the lowest overstrain limit (11000)"
+ ],
+ "evidence_sources": [
+  "Incident 71 (M023, 2025-06-29 07:34:20.130301)",
+  "Incident 266 (M036, 2025-12-07 11:33:31.349642)",
+  "Incident 265 (M038, 2026-02-14 01:04:54.854452)",
+  "Incident 158 (M014, 2025-11-16 22:19:47.653959)",
+  "Incident 68 (M010, 2025-08-11 09:34:11.665680)"
+ ],
+ "investigation_log": [
+  {
+   "step": "gather_context",
+   "status": "done",
+   "summary": "Loaded 20 recent readings for M039.",
+   "timestamp": "2026-11-01T10:13:26.422032+00:00"
+  },
+  {
+   "step": "run_anomaly_model",
+   "status": "done",
+   "summary": "Predicted: No Failure (confidence 0.58)",
+   "timestamp": "2026-11-01T10:13:26.437665+00:00"
+  },
+  {
+   "step": "gather_evidence",
+   "status": "done",
+   "summary": "2 maintenance records, 2 past incidents, 5 similar incidents.",
+   "timestamp": "2026-11-01T10:13:26.609575+00:00"
+  },
+  {
+   "step": "generate_hypotheses",
+   "status": "done",
+   "summary": "Mode: failure investigation. Hypotheses: Tool wear failure, Overstrain failure, Unexplained: random or undetected failure",
+   "timestamp": "2026-11-01T10:13:30.778991+00:00"
+  },
+  {
+   "step": "investigate_hypotheses",
+   "status": "done",
+   "summary": "Evaluated 3 hypotheses: Tool wear failure (low), Overstrain failure (high), Unexplained: random or undetected failure (medium) | 1 settled by rule without the model | RULE OVERRIDES: 'Overstrain failure' set to high by rule (the model said medium): its documented limit is met by the latest reading",
+   "timestamp": "2026-11-01T10:13:54.134880+00:00"
+  },
+  {
+   "step": "determine_root_cause",
+   "status": "done",
+   "summary": "Most supported cause: Overstrain failure (high) | outcome decided by code (causes)",
+   "timestamp": "2026-11-01T10:14:06.944277+00:00"
+  }
+ ]
+}

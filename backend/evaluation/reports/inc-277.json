@@ -1,0 +1,216 @@
+{
+ "incident_summary": "A failure was reported on this machine at 2026-02-23 21:18:52.320433. Investigate the root cause.",
+ "mode": "failure_investigation",
+ "machine_condition": {
+  "machine_id": "M023",
+  "latest_reading": {
+   "timestamp": "2026-02-23 21:18:52.320433",
+   "air_temperature": 300.8,
+   "process_temperature": 311.4,
+   "rotational_speed": 1322.0,
+   "torque": 67.2,
+   "tool_wear": 18.0
+  },
+  "sensor_statistics": {
+   "air_temperature": {
+    "mean": 300.608,
+    "std": 2.209,
+    "min": 296.1,
+    "max": 304.2,
+    "latest": 300.8
+   },
+   "process_temperature": {
+    "mean": 310.226,
+    "std": 1.536,
+    "min": 307.2,
+    "max": 313.4,
+    "latest": 311.4
+   },
+   "rotational_speed": {
+    "mean": 1542.088,
+    "std": 180.742,
+    "min": 1258.0,
+    "max": 2280.0,
+    "latest": 1322.0
+   },
+   "torque": {
+    "mean": 40.296,
+    "std": 10.975,
+    "min": 15.4,
+    "max": 69.4,
+    "latest": 67.2
+   },
+   "tool_wear": {
+    "mean": 113.287,
+    "std": 67.116,
+    "min": 0.0,
+    "max": 236.0,
+    "latest": 18.0
+   }
+  }
+ },
+ "limit_checks": {
+  "n_readings": 20,
+  "latest": {
+   "temp_diff_k": 10.599999999999966,
+   "power_w": 9303.135493222384,
+   "wear_x_torque": 1209.6000000000001,
+   "heat_dissipation": false,
+   "power_out_of_range": true,
+   "possible_overstrain": false,
+   "tool_wear_at_failure_range": false
+  },
+  "latest_raw": {
+   "timestamp": "2026-02-23 21:18:52.320433",
+   "air_temperature": 300.8,
+   "process_temperature": 311.4,
+   "rotational_speed": 1322.0,
+   "torque": 67.2,
+   "tool_wear": 18.0
+  },
+  "counts": {
+   "heat_dissipation": 0,
+   "power_out_of_range": 1,
+   "possible_overstrain": 1,
+   "tool_wear_at_failure_range": 3
+  },
+  "violated": [
+   "power_out_of_range"
+  ]
+ },
+ "ml_analysis": {
+  "predicted_class": "Power Failure",
+  "confidence": 0.9995883107185364,
+  "anomaly_score": 0.9999591708183289,
+  "reliability_warning": false,
+  "reliability_note": null,
+  "close_second_class": "Power Failure + Overstrain Failure",
+  "close_second_margin": 0.9994
+ },
+ "maintenance_history": [
+  {
+   "date": "2026-01-09 00:00:00",
+   "maintenance_type": "Scheduled",
+   "description": "Quarterly calibration check on torque and speed sensors.",
+   "technician": "S. Malik",
+   "parts_replaced": null
+  },
+  {
+   "date": "2025-10-31 00:00:00",
+   "maintenance_type": "Reactive",
+   "description": "Tightened loose motor mounting bolts.",
+   "technician": "R. Hussain",
+   "parts_replaced": null
+  }
+ ],
+ "candidate_root_causes": [
+  {
+   "cause": "Power failure",
+   "supporting_evidence": [
+    "Latest derived power = 9303\u202fW, which is above the documented normal range of 3500\u20119000\u202fW and exceeds the upper power\u2011failure threshold of 9,000\u202fW.",
+    "Similar past incidents with high sensor\u2011profile similarity (Incidents 261, 273, 256, 269) are all classified as Power Failure."
+   ],
+   "contradicting_evidence": [
+    "The derived power limit violation is an excess (9303\u202fW) but the documentation defines power failure as when derived power falls below 3,500\u202fW or rises above 9,000\u202fW, so the condition is met; however, no other sensor readings (e.g., torque, rotational speed) show abnormalities that typically accompany a drive issue.",
+    "Heat\u2011dissipation failure limits (temperature gap <8.6\u202fK and speed <1380\u202frpm) are not met, indicating the machine is not in a heat\u2011related shutdown state, which sometimes co\u2011occurs with power faults."
+   ],
+   "confidence": "high",
+   "reasoning": "The primary quantitative indicator for a power\u2011related fault is the derived power reading. The latest reading (9303\u202fW) breaches the upper bound of the normal operating range (9,000\u202fW) and matches the manual's definition of a power failure (derived power >9,000\u202fW). This is a clear, direct piece of evidence supporting the candidate cause. The similarity to several past power\u2011failure incidents further reinforces the association, although similarity alone is not proof. No contradictory sensor data directly refutes a power issue, but the absence of other abnormal readings (e.g., torque within normal limits, rotational speed not unusually low) means we cannot claim the fault is certain. Hence confidence is moderate. [set to high by rule (the model said medium): its documented limit is met by the latest reading]",
+   "llm_confidence": "medium",
+   "confidence_basis": "its documented limit is met by the latest reading",
+   "confidence_note": "set to high by rule (the model said medium): its documented limit is met by the latest reading"
+  },
+  {
+   "cause": "Sensor fault or data-quality problem",
+   "supporting_evidence": [],
+   "contradicting_evidence": [
+    "A sensor fault cannot be established from this data (no independent cross-check)."
+   ],
+   "reasoning": "Not sent to the model (the documented rules already settle it): a sensor fault cannot be established from this data (no independent cross-check).",
+   "confidence": "low",
+   "confidence_note": "set to low by rule: a sensor fault cannot be established from this data (no independent cross-check)",
+   "evaluated_by": "rule",
+   "confidence_basis": "a sensor fault cannot be established from this data (no independent cross-check)"
+  },
+  {
+   "cause": "Unexplained: random or undetected failure",
+   "supporting_evidence": [
+    "The manual states that random/unexplained failures leave no sensor signature and occur about 0.1% of runs regardless of temperature, speed, torque or tool wear; the latest sensor values are all within typical historical ranges (e.g., temperature gap mean 9.62\u202fK, latest 10.6\u202fK; speed 1322\u202frpm within historical min\u2011max).",
+    "No documented failure thresholds are met: heat\u2011dissipation gap is not below 8.6\u202fK, speed is not below 1380\u202frpm, tool wear is far below the 200\u202fmin failure onset, and over\u2011strain product is below the lowest limit.",
+    "Sensor statistics show the latest readings are typical (air 300.8\u202fK, process 311.4\u202fK, torque 67.2, speed 1322\u202frpm) and no clear anomaly is evident."
+   ],
+   "contradicting_evidence": [
+    "Derived power is 9303 W, which is outside the documented normal range (3500-9000 W), indicating a possible power-related issue.",
+    "The latest reading shows a temperature gap of 10.6 K, which is above the heat\u2011dissipation failure threshold (gap < 8.6 K), so heat\u2011dissipation failure is not triggered, but the elevated gap may still be abnormal.",
+    "Torque is high (67.2) and tool\u2011wear \u00d7 torque product is 1210, which is close to the lower over\u2011strain limit (11000) but still far below, suggesting no over\u2011strain, yet the high torque could be a contributing factor."
+   ],
+   "confidence": "medium",
+   "reasoning": "All known failure mechanisms have specific sensor thresholds. The latest reading does not satisfy any of those thresholds, and the sensor values lie within normal historical variability. The only out\u2011of\u2011range metric is power (9303\u202fW), but power failures are a separate documented failure mode, not the \"unexplained\" category. Because the manual directs reporting as unexplained only when no mechanism is supported by evidence, the lack of a matching threshold supports this cause. However, the presence of an out\u2011of\u2011range power reading introduces some doubt that the failure might be a power issue rather than truly random, lowering confidence to medium.",
+   "llm_confidence": "medium"
+  }
+ ],
+ "most_supported_cause": "Power failure",
+ "confidence_level": "high",
+ "justification": "The latest derived power reading is 9303\u202fW, which exceeds the documented upper threshold of 9,000\u202fW for a power failure. This directly satisfies the manual's definition of a power failure. Additionally, the incident shares high sensor\u2011profile similarity with several past incidents (261, 273, 256, 269) that were classified as Power Failure, reinforcing the association. Confidence basis (set by documented rules): Power failure - its documented limit is met by the latest reading.",
+ "observed_facts": [
+  "[computed] Latest reading: process minus air temperature = 10.6 K at 1322 rpm. Heat-dissipation failure needs the gap below 8.6 K AND speed below 1380 rpm (met: no).",
+  "[computed] Latest derived power = 9303 W (documented normal range 3500-9000 W; outside range: yes).",
+  "[computed] Latest tool_wear x torque = 1210 (overstrain limits by product quality: L 11000, M 12000, H 13000; above the lowest limit: no).",
+  "[computed] Latest tool wear = 18 min (tool-wear failures are documented from about 200 min; at or above: no).",
+  "[computed] Note: the 20 readings loaded for this machine are independent samples with synthetic timestamps, not a time series. Decisions use the latest reading only.",
+  "Past incidents 261, 273, 256, 269 are classified as Power Failure and have high sensor\u2011profile similarity to the current incident"
+ ],
+ "ml_predictions": [
+  "PREDICTION: Power Failure (confidence 0.9996) - reliability_warning: none"
+ ],
+ "advisories": [],
+ "unsupported_speculation": [
+  "Sensor fault or data-quality problem (confidence low): A sensor fault cannot be established from this data (no independent cross-check).",
+  "Unexplained: random or undetected failure (confidence medium): Derived power is 9303 W, which is outside the documented normal range (3500-9000 W), indicating a possible power-related issue."
+ ],
+ "evidence_sources": [
+  "Incident 261 (M031, 2026-02-23 11:37:17.901544)",
+  "Incident 273 (M008, 2026-01-28 04:57:40.602555)",
+  "Incident 256 (M017, 2026-02-06 00:41:29.645111)",
+  "Incident 118 (M029, 2025-09-03 03:27:15.496793)",
+  "Incident 269 (M019, 2026-03-28 21:04:08.509098)"
+ ],
+ "investigation_log": [
+  {
+   "step": "gather_context",
+   "status": "done",
+   "summary": "Loaded 20 recent readings for M023.",
+   "timestamp": "2026-11-01T10:08:36.218231+00:00"
+  },
+  {
+   "step": "run_anomaly_model",
+   "status": "done",
+   "summary": "Predicted: Power Failure (confidence 1.00)",
+   "timestamp": "2026-11-01T10:08:36.226808+00:00"
+  },
+  {
+   "step": "gather_evidence",
+   "status": "done",
+   "summary": "2 maintenance records, 10 past incidents, 5 similar incidents.",
+   "timestamp": "2026-11-01T10:08:36.446949+00:00"
+  },
+  {
+   "step": "generate_hypotheses",
+   "status": "done",
+   "summary": "Mode: failure investigation. Hypotheses: Power failure, Sensor fault or data-quality problem, Unexplained: random or undetected failure",
+   "timestamp": "2026-11-01T10:08:42.861476+00:00"
+  },
+  {
+   "step": "investigate_hypotheses",
+   "status": "done",
+   "summary": "Evaluated 3 hypotheses: Power failure (high), Sensor fault or data-quality problem (low), Unexplained: random or undetected failure (medium) | 1 settled by rule without the model | RULE OVERRIDES: 'Power failure' set to high by rule (the model said medium): its documented limit is met by the latest reading",
+   "timestamp": "2026-11-01T10:09:04.859280+00:00"
+  },
+  {
+   "step": "determine_root_cause",
+   "status": "done",
+   "summary": "Most supported cause: Power failure (high) | outcome decided by code (causes)",
+   "timestamp": "2026-11-01T10:09:19.602568+00:00"
+  }
+ ]
+}
