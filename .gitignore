@@ -4,3 +4,4 @@ venv/
 __pycache__/
 *.pyc
 rag/chroma_db/
+rag/vector_store/
