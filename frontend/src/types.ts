@@ -117,6 +117,16 @@ export interface InvestigationAccepted {
   events_url: string;
 }
 
+/** Extra facts about a RECORDED run (static demo only). */
+export interface DemoMeta {
+  kind: "incident" | "healthy" | "healthy_wear";
+  split: string;
+  recorded_label: string;
+  score: string;
+  as_of?: string | null;
+  incident_id?: number | null;
+}
+
 export interface InvestigationStatus {
   investigation_id: string;
   status: RunStatus;
@@ -129,6 +139,7 @@ export interface InvestigationStatus {
   report?: InvestigationReport | null;
   error?: string | null;
   error_kind?: string | null;
+  demo?: DemoMeta | null;
 }
 
 export interface InvestigationSummary {
@@ -139,4 +150,5 @@ export interface InvestigationSummary {
   finished_at?: string | null;
   most_supported_cause?: string | null;
   confidence_level?: string | null;
+  demo?: DemoMeta | null;
 }

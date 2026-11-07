@@ -10,10 +10,10 @@ import type { IncidentRecord, MachineDetail, MaintenanceRecord, SensorReading } 
 type Tab = "monitor" | "investigate" | "history";
 interface Loaded { detail: MachineDetail; readings: SensorReading[]; incidents: IncidentRecord[]; maintenance: MaintenanceRecord[] }
 
-export function MachineView({ machineId }: { machineId: string }) {
+export function MachineView({ machineId, openRun }: { machineId: string; openRun?: string | null }) {
   const [data, setData] = useState<Loaded | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [tab, setTab] = useState<Tab>("monitor");
+  const [tab, setTab] = useState<Tab>(openRun ? "investigate" : "monitor");
   const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
@@ -59,7 +59,7 @@ export function MachineView({ machineId }: { machineId: string }) {
           <section className="panel"><h3>Sensor channels (last {data.readings.length} readings)</h3><SensorCharts readings={data.readings} incidents={data.incidents} /></section>
         </>
       )}
-      {tab === "investigate" && <section className="panel"><h3>Investigate</h3><InvestigatePanel machineId={machineId} incidents={data.incidents} /></section>}
+      {tab === "investigate" && <section className="panel"><h3>Investigate</h3><InvestigatePanel machineId={machineId} incidents={data.incidents} initialRunId={openRun} /></section>}
       {tab === "history" && (
         <>
           <section className="panel">

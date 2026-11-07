@@ -6,6 +6,11 @@ import type {
 
 export const API_BASE: string = (import.meta.env.VITE_API_URL as string | undefined) ?? "http://localhost:8000";
 
+/** True in the recorded demo build (VITE_STATIC=1): no backend, data comes from JSON files, runs are replayed. */
+export const isStatic = (): boolean => import.meta.env.VITE_STATIC === "1";
+const demoUrl = (path: string) => `${import.meta.env.BASE_URL}demo-data/${path}`;
+export const REPLAY_STEP_MS = 700;
+
 export class ApiError extends Error {
   status: number;
   constructor(status: number, message: string) {
@@ -35,23 +40,51 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   return (await res.json()) as T;
 }
 
+async function demoGet<T>(path: string): Promise<T> {
+  let res: Response;
+  try {
+    res = await fetch(demoUrl(path));
+  } catch {
+    throw new ApiError(0, "Cannot load the demo data.");
+  }
+  if (!res.ok) throw new ApiError(res.status, "That is not part of the recorded demo.");
+  return (await res.json()) as T;
+}
+
 const enc = encodeURIComponent;
 
 export const api = {
-  machines: () => request<MachineSummary[]>("/machines"),
-  machine: (id: string) => request<MachineDetail>(`/machines/${enc(id)}`),
-  sensors: (id: string, limit = 300) => request<SensorSeries>(`/machines/${enc(id)}/sensors?limit=${limit}`),
-  maintenance: (id: string) => request<{ records: MaintenanceRecord[] }>(`/machines/${enc(id)}/maintenance`),
-  incidents: (id: string) => request<{ incidents: IncidentRecord[] }>(`/machines/${enc(id)}/incidents`),
-  start: (body: InvestigationRequest) =>
-    request<InvestigationAccepted>("/investigations", {
+  machines: () => (isStatic() ? demoGet<MachineSummary[]>("machines.json") : request<MachineSummary[]>("/machines")),
+  machine: (id: string) =>
+    isStatic() ? demoGet<MachineDetail>(`machines/${enc(id)}.json`) : request<MachineDetail>(`/machines/${enc(id)}`),
+  sensors: (id: string, limit = 300) =>
+    isStatic() ? demoGet<SensorSeries>(`sensors/${enc(id)}.json`) : request<SensorSeries>(`/machines/${enc(id)}/sensors?limit=${limit}`),
+  maintenance: (id: string) =>
+    isStatic()
+      ? demoGet<{ records: MaintenanceRecord[] }>(`maintenance/${enc(id)}.json`)
+      : request<{ records: MaintenanceRecord[] }>(`/machines/${enc(id)}/maintenance`),
+  incidents: (id: string) =>
+    isStatic()
+      ? demoGet<{ incidents: IncidentRecord[] }>(`incidents/${enc(id)}.json`)
+      : request<{ incidents: IncidentRecord[] }>(`/machines/${enc(id)}/incidents`),
+  start: (body: InvestigationRequest) => {
+    if (isStatic()) {
+      return Promise.reject(new ApiError(0, "This is a recorded demo: new investigations cannot be started here. Replay a recorded one instead."));
+    }
+    return request<InvestigationAccepted>("/investigations", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
-    }),
-  investigation: (id: string) => request<InvestigationStatus>(`/investigations/${enc(id)}`),
+    });
+  },
+  investigation: (id: string) =>
+    isStatic() ? demoGet<InvestigationStatus>(`investigations/${enc(id)}.json`) : request<InvestigationStatus>(`/investigations/${enc(id)}`),
   investigations: (machineId: string) =>
-    request<InvestigationSummary[]>(`/investigations?machine_id=${enc(machineId)}`),
+    isStatic()
+      ? demoGet<InvestigationSummary[]>("investigations/index.json").then((all) => all.filter((r) => r.machine_id === machineId))
+      : request<InvestigationSummary[]>(`/investigations?machine_id=${enc(machineId)}`),
+  /** Static demo only: every recorded run. */
+  runIndex: () => demoGet<InvestigationSummary[]>("investigations/index.json"),
   eventsUrl: (id: string, after: number) => `${API_BASE}/investigations/${enc(id)}/events?after=${after}`,
 };
 
@@ -68,6 +101,28 @@ export function useInvestigation(id: string | null) {
     setSteps([]);
     setProblem(null);
     if (!id) return;
+
+    if (isStatic()) {
+      // Recorded demo: load the saved run, then reveal its steps one by one so it feels like it is happening.
+      let cancelled = false;
+      const timers: number[] = [];
+      api
+        .investigation(id)
+        .then((rec) => {
+          if (cancelled) return;
+          setRun({ ...rec, status: "running", report: null });
+          rec.log.forEach((entry, i) =>
+            timers.push(window.setTimeout(() => setSteps((prev) => [...prev, entry]), REPLAY_STEP_MS * (i + 1))),
+          );
+          timers.push(window.setTimeout(() => setRun(rec), REPLAY_STEP_MS * (rec.log.length + 1)));
+        })
+        .catch((e) => !cancelled && setProblem(e instanceof Error ? e.message : String(e)));
+      return () => {
+        cancelled = true;
+        timers.forEach((t) => window.clearTimeout(t));
+      };
+    }
+
     let closed = false;
     let es: EventSource | null = null;
     let timer: number | undefined;

@@ -11,6 +11,7 @@ export function RunView({ runId, recordedLabel }: { runId: string; recordedLabel
     <div className="runview">
       <div className="runhead">
         <span className="muted small">Investigation {runId}</span>
+        {run?.demo && <span className="muted small"> · recorded run, replayed ({run.demo.split} set)</span>}
         {status === "queued" && steps.length === 0 && <span className="muted small"> · waiting in the queue (one investigation runs at a time)</span>}
         {running && steps.length > 0 && <span className="muted small"> · running</span>}
       </div>

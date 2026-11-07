@@ -1,14 +1,20 @@
 import { useEffect, useState } from "react";
-import { api } from "../api";
+import { api, isStatic } from "../api";
 import { clockTime } from "../lib/format";
 import type { IncidentRecord, InvestigationSummary } from "../types";
 import { Badge, ErrorBox } from "./ui";
 import { RunView } from "./RunView";
+import { RecordedRuns } from "./RecordedRuns";
 
-export function InvestigatePanel({ machineId, incidents }: { machineId: string; incidents: IncidentRecord[] }) {
+export function InvestigatePanel({ machineId, incidents, initialRunId }: { machineId: string; incidents: IncidentRecord[]; initialRunId?: string | null }) {
+  if (isStatic()) return <RecordedRuns machineId={machineId} initialRunId={initialRunId} />;
+  return <LiveInvestigate machineId={machineId} incidents={incidents} initialRunId={initialRunId} />;
+}
+
+function LiveInvestigate({ machineId, incidents, initialRunId }: { machineId: string; incidents: IncidentRecord[]; initialRunId?: string | null }) {
   const [reported, setReported] = useState(true);
   const [replay, setReplay] = useState<string>("");
-  const [runId, setRunId] = useState<string | null>(null);
+  const [runId, setRunId] = useState<string | null>(initialRunId ?? null);
   const [recorded, setRecorded] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
