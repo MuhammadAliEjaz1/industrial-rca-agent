@@ -8,6 +8,7 @@ and it answers **"unexplained"** when the evidence does not support a cause, ins
 > records and the technical manuals are **synthetic**. It is not for real plants, and the evaluation is **partial**.
 > See [Known limitations](#known-limitations) and [`docs/EVALUATION.md`](docs/EVALUATION.md).
 
+![Fleet overview: 39 machines](docs/images/fleet.png)
 ![Live investigation timeline](docs/images/timeline.png)
 ![Report: conclusion, hypotheses, evidence](docs/images/report.png)
 
