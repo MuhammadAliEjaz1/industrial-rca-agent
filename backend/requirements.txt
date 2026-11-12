@@ -1,0 +1,16 @@
+fastapi==0.162.0  # HTTP API
+uvicorn==0.54.0  # runs the API
+pydantic==2.13.5  # request/response and tool schemas
+httpx==0.28.1  # needed by the API tests (FastAPI TestClient)
+langgraph==1.2.12  # the agent graph
+langchain-core==1.6.6  # tool decorator, message types
+langchain-groq==1.1.3  # language model client (Groq)
+python-dotenv==1.2.4  # reads backend/.env
+pandas==3.0.6  # dataset loading and evaluation
+numpy==2.4.6  # vector store and numerics
+scikit-learn==1.9.1  # train/test split, metrics
+xgboost==3.2.0  # failure classifier
+joblib==1.6.0  # loads the saved classifier
+chromadb==0.6.3  # ONLY for its ONNX MiniLM embedding model; vector search itself is NumPy
+onnxruntime==1.19.2  # runs the embedding model (pulled in by chromadb)
+ucimlrepo==0.0.7  # downloads the AI4I 2020 dataset (database/01_setup_data.py)
